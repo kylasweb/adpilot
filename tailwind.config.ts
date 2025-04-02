@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,24 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// AdPilot custom colors
+				adpilot: {
+					primary: '#4F46E5',
+					secondary: '#6366F1',
+					accent: '#8B5CF6',
+					muted: '#E2E8F0',
+					hover: '#4338CA',
+					background: '#F8FAFC',
+					card: '#FFFFFF',
+					success: '#10B981',
+					warning: '#F59E0B',
+					danger: '#EF4444',
+					text: {
+						primary: '#1E293B',
+						secondary: '#64748B',
+						muted: '#94A3B8'
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +103,33 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					"0%": {
+						opacity: "0",
+						transform: "translateY(10px)"
+					},
+					"100%": {
+						opacity: "1",
+						transform: "translateY(0)"
+					}
+				},
+				'fade-out': {
+					"0%": {
+						opacity: "1",
+						transform: "translateY(0)"
+					},
+					"100%": {
+						opacity: "0",
+						transform: "translateY(10px)"
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'fade-out': 'fade-out 0.3s ease-out'
 			}
 		}
 	},
