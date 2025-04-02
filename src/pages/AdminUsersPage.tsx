@@ -105,6 +105,7 @@ const AdminUsersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [newTeamDialogOpen, setNewTeamDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("users");
   
   const filteredTeamMembers = teamMembers.filter(member => 
     member.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -155,146 +156,147 @@ const AdminUsersPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Tabs defaultValue="users">
-              <TabsList>
-                <TabsTrigger value="users">
-                  <Shield className="mr-2 h-4 w-4" />
-                  Users
-                </TabsTrigger>
-                <TabsTrigger value="teams">
-                  <Users className="mr-2 h-4 w-4" />
-                  Teams
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
           </div>
         </CardHeader>
         <CardContent>
-          <TabsContent value="users" className="space-y-4">
-            <div className="rounded-md border">
-              <div className="relative w-full overflow-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b">
-                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Last Active</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="[&_tr:last-child]:border-0">
-                    {filteredTeamMembers.map((member) => (
-                      <tr key={member.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                        <td className="p-4 align-middle">
-                          <div className="flex items-center gap-3">
-                            <Avatar>
-                              <AvatarFallback>{member.avatar}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <div className="font-medium">{member.name}</div>
-                              <div className="text-sm text-muted-foreground">{member.email}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-4 align-middle">{member.role}</td>
-                        <td className="p-4 align-middle">
-                          <Badge 
-                            variant={
-                              member.status === "Active" ? "default" : 
-                              member.status === "Inactive" ? "outline" : 
-                              "secondary"
-                            }
-                          >
-                            {member.status}
-                          </Badge>
-                        </td>
-                        <td className="p-4 align-middle">{member.lastActive}</td>
-                        <td className="p-4 align-middle">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Open menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>Edit User</DropdownMenuItem>
-                              <DropdownMenuItem>Change Role</DropdownMenuItem>
-                              <DropdownMenuItem>Reset Password</DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem className="text-red-600">Deactivate User</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="teams" className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <CardTitle className="text-lg">Teams</CardTitle>
-                <CardDescription>Manage teams and memberships</CardDescription>
-              </div>
-              <Button onClick={() => setNewTeamDialogOpen(true)} size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                New Team
-              </Button>
-            </div>
+          <Tabs defaultValue="users" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="users">
+                <Shield className="mr-2 h-4 w-4" />
+                Users
+              </TabsTrigger>
+              <TabsTrigger value="teams">
+                <Users className="mr-2 h-4 w-4" />
+                Teams
+              </TabsTrigger>
+            </TabsList>
             
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredTeams.map((team) => (
-                <Card key={team.id}>
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-base">{team.name}</CardTitle>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit Team</DropdownMenuItem>
-                          <DropdownMenuItem>View Members</DropdownMenuItem>
-                          <DropdownMenuItem>Manage Access</DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-red-600">Delete Team</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-sm space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Members:</span>
-                        <span>{team.members}</span>
+            <TabsContent value="users" className="space-y-4">
+              <div className="rounded-md border">
+                <div className="relative w-full overflow-auto">
+                  <table className="w-full caption-bottom text-sm">
+                    <thead className="[&_tr]:border-b">
+                      <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Last Active</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="[&_tr:last-child]:border-0">
+                      {filteredTeamMembers.map((member) => (
+                        <tr key={member.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                          <td className="p-4 align-middle">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarFallback>{member.avatar}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="font-medium">{member.name}</div>
+                                <div className="text-sm text-muted-foreground">{member.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-4 align-middle">{member.role}</td>
+                          <td className="p-4 align-middle">
+                            <Badge 
+                              variant={
+                                member.status === "Active" ? "default" : 
+                                member.status === "Inactive" ? "outline" : 
+                                "secondary"
+                              }
+                            >
+                              {member.status}
+                            </Badge>
+                          </td>
+                          <td className="p-4 align-middle">{member.lastActive}</td>
+                          <td className="p-4 align-middle">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Open menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>Edit User</DropdownMenuItem>
+                                <DropdownMenuItem>Change Role</DropdownMenuItem>
+                                <DropdownMenuItem>Reset Password</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="text-red-600">Deactivate User</DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="teams" className="space-y-4">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <CardTitle className="text-lg">Teams</CardTitle>
+                  <CardDescription>Manage teams and memberships</CardDescription>
+                </div>
+                <Button onClick={() => setNewTeamDialogOpen(true)} size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  New Team
+                </Button>
+              </div>
+              
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {filteredTeams.map((team) => (
+                  <Card key={team.id}>
+                    <CardHeader className="pb-2">
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-base">{team.name}</CardTitle>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>Edit Team</DropdownMenuItem>
+                            <DropdownMenuItem>View Members</DropdownMenuItem>
+                            <DropdownMenuItem>Manage Access</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-red-600">Delete Team</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Campaigns:</span>
-                        <span>{team.campaigns}</span>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-sm space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Members:</span>
+                          <span>{team.members}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Campaigns:</span>
+                          <span>{team.campaigns}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Created by:</span>
+                          <span>{team.createdBy}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Created:</span>
+                          <span>{team.createdAt}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Created by:</span>
-                        <span>{team.createdBy}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Created:</span>
-                        <span>{team.createdAt}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
       
