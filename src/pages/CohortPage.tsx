@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,9 +19,12 @@ import {
 } from "@/components/ui/tabs";
 import CohortList from "@/components/cohorts/CohortList";
 import PersonaList from "@/components/cohorts/PersonaList";
+import NewCohortForm from "@/components/cohorts/NewCohortForm";
 import { Plus, Filter, MoreVertical, Download } from "lucide-react";
 
 const CohortPage = () => {
+  const [showNewCohortForm, setShowNewCohortForm] = useState(false);
+
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
@@ -30,7 +33,7 @@ const CohortPage = () => {
           <p className="text-adpilot-text-secondary mt-1">Manage your audience segments and customer personas</p>
         </div>
         <div className="flex gap-3">
-          <Button>
+          <Button onClick={() => setShowNewCohortForm(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Cohort
           </Button>
@@ -102,6 +105,11 @@ const CohortPage = () => {
           </CardContent>
         </Tabs>
       </Card>
+
+      <NewCohortForm 
+        open={showNewCohortForm} 
+        onOpenChange={setShowNewCohortForm} 
+      />
     </AppLayout>
   );
 };

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CampaignList from "@/components/campaigns/CampaignList";
 import CampaignCalendar from "@/components/campaigns/CampaignCalendar";
 import BudgetOverview from "@/components/campaigns/BudgetOverview";
+import NewCampaignForm from "@/components/campaigns/NewCampaignForm";
 import { Plus, Calendar, List } from "lucide-react";
 
 const CampaignPage = () => {
+  const [showNewCampaignForm, setShowNewCampaignForm] = useState(false);
+
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
@@ -18,7 +21,7 @@ const CampaignPage = () => {
           <p className="text-adpilot-text-secondary mt-1">Plan, create, and manage your advertising campaigns</p>
         </div>
         <div className="flex gap-3">
-          <Button>
+          <Button onClick={() => setShowNewCampaignForm(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Campaign
           </Button>
@@ -96,6 +99,11 @@ const CampaignPage = () => {
           </CardContent>
         </Tabs>
       </Card>
+      
+      <NewCampaignForm 
+        open={showNewCampaignForm} 
+        onOpenChange={setShowNewCampaignForm} 
+      />
     </AppLayout>
   );
 };

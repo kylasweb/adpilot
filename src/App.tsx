@@ -10,6 +10,10 @@ import CohortPage from "./pages/CohortPage";
 import CampaignPage from "./pages/CampaignPage";
 import CreativePage from "./pages/CreativePage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
+import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
+import AdminSettingsPage from "./pages/AdminSettingsPage";
+import AdminActivityPage from "./pages/AdminActivityPage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +29,10 @@ const App = () => (
           <Route path="/campaigns" element={<CampaignPage />} />
           <Route path="/creative" element={<CreativePage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
+          <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/admin/activity" element={<AdminActivityPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

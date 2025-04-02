@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,9 +7,12 @@ import { Button } from "@/components/ui/button";
 import CreativeLibrary from "@/components/creative/CreativeLibrary";
 import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
+import NewCreativeForm from "@/components/creative/NewCreativeForm";
 import { Plus } from "lucide-react";
 
 const CreativePage = () => {
+  const [showNewCreativeForm, setShowNewCreativeForm] = useState(false);
+
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
@@ -18,7 +21,7 @@ const CreativePage = () => {
           <p className="text-adpilot-text-secondary mt-1">Design and manage your campaign creative assets</p>
         </div>
         <div className="flex gap-3">
-          <Button>
+          <Button onClick={() => setShowNewCreativeForm(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Creative
           </Button>
@@ -51,6 +54,11 @@ const CreativePage = () => {
           </CardContent>
         </Tabs>
       </Card>
+
+      <NewCreativeForm 
+        open={showNewCreativeForm} 
+        onOpenChange={setShowNewCreativeForm} 
+      />
     </AppLayout>
   );
 };
