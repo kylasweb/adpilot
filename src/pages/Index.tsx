@@ -65,13 +65,13 @@ const Index = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <TabsContent value="active" className="mt-0 pt-3">
+              <TabsContent value="active">
                 <ActiveCampaigns />
               </TabsContent>
-              <TabsContent value="draft" className="mt-0 pt-3">
+              <TabsContent value="draft">
                 <p className="text-sm text-center py-8 text-adpilot-text-muted">No draft campaigns yet</p>
               </TabsContent>
-              <TabsContent value="completed" className="mt-0 pt-3">
+              <TabsContent value="completed">
                 <p className="text-sm text-center py-8 text-adpilot-text-muted">No completed campaigns yet</p>
               </TabsContent>
             </CardContent>

@@ -42,13 +42,13 @@ const CreativePage = () => {
             <CardDescription>Manage and organize your creative assets</CardDescription>
           </CardHeader>
           <CardContent>
-            <TabsContent value="library" className="m-0">
+            <TabsContent value="library">
               <CreativeLibrary />
             </TabsContent>
-            <TabsContent value="message-frameworks" className="m-0">
+            <TabsContent value="message-frameworks">
               <MessageFrameworks />
             </TabsContent>
-            <TabsContent value="style-guide" className="m-0">
+            <TabsContent value="style-guide">
               <StyleGuide />
             </TabsContent>
           </CardContent>

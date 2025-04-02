@@ -87,13 +87,13 @@ const CampaignPage = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <TabsContent value="list" className="m-0">
+            <TabsContent value="list">
               <CampaignList />
             </TabsContent>
-            <TabsContent value="calendar" className="m-0">
+            <TabsContent value="calendar">
               <CampaignCalendar />
             </TabsContent>
-            <TabsContent value="budget" className="m-0">
+            <TabsContent value="budget">
               <BudgetOverview />
             </TabsContent>
           </CardContent>

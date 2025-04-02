@@ -229,39 +229,39 @@ const AdminIntegrationsPage = () => {
       </Card>
 
       <Card>
-        <CardHeader className="gap-2">
-          <CardTitle>Available Integrations</CardTitle>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs defaultValue="marketing" value={activeTab} onValueChange={setActiveTab}>
+          <CardHeader className="gap-2">
+            <CardTitle>Available Integrations</CardTitle>
             <TabsList>
               <TabsTrigger value="marketing">Marketing Platforms</TabsTrigger>
               <TabsTrigger value="data">Data Sources</TabsTrigger>
               <TabsTrigger value="payments">Payments</TabsTrigger>
             </TabsList>
-          </Tabs>
-        </CardHeader>
-        <CardContent>
-          <TabsContent value="marketing" className="m-0">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {marketingIntegrations.map(integration => 
-                renderIntegrationCard(integration)
-              )}
-            </div>
-          </TabsContent>
-          <TabsContent value="data" className="m-0">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {dataIntegrations.map(integration => 
-                renderIntegrationCard(integration)
-              )}
-            </div>
-          </TabsContent>
-          <TabsContent value="payments" className="m-0">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {paymentIntegrations.map(integration => 
-                renderIntegrationCard(integration)
-              )}
-            </div>
-          </TabsContent>
-        </CardContent>
+          </CardHeader>
+          <CardContent>
+            <TabsContent value="marketing">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {marketingIntegrations.map(integration => 
+                  renderIntegrationCard(integration)
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="data">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {dataIntegrations.map(integration => 
+                  renderIntegrationCard(integration)
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="payments">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {paymentIntegrations.map(integration => 
+                  renderIntegrationCard(integration)
+                )}
+              </div>
+            </TabsContent>
+          </CardContent>
+        </Tabs>
       </Card>
 
       {/* API Key Dialog */}

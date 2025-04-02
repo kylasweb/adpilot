@@ -76,15 +76,15 @@ const NewCampaignForm = ({ open, onOpenChange }: NewCampaignFormProps) => {
           <DialogTitle className="text-xl">Create New Campaign</DialogTitle>
         </DialogHeader>
         
-        <Tabs defaultValue="basic" className="w-full">
-          <TabsList className="grid grid-cols-3 mb-4">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="targeting">Targeting</TabsTrigger>
-            <TabsTrigger value="budget">Budget & Schedule</TabsTrigger>
-          </TabsList>
-          
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Tabs defaultValue="basic" className="w-full">
+              <TabsList className="grid grid-cols-3 mb-4">
+                <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                <TabsTrigger value="targeting">Targeting</TabsTrigger>
+                <TabsTrigger value="budget">Budget & Schedule</TabsTrigger>
+              </TabsList>
+              
               <TabsContent value="basic" className="space-y-4">
                 <FormField
                   control={form.control}
@@ -342,16 +342,16 @@ const NewCampaignForm = ({ open, onOpenChange }: NewCampaignFormProps) => {
                   </div>
                 </div>
               </TabsContent>
-              
-              <DialogFooter className="pt-4 border-t">
-                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Create Campaign</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </Tabs>
+            </Tabs>
+            
+            <DialogFooter className="pt-4 border-t">
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">Create Campaign</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

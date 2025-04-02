@@ -96,10 +96,10 @@ const CohortPage = () => {
               </div>
             </div>
 
-            <TabsContent value="cohorts" className="m-0">
+            <TabsContent value="cohorts">
               <CohortList />
             </TabsContent>
-            <TabsContent value="personas" className="m-0">
+            <TabsContent value="personas">
               <PersonaList />
             </TabsContent>
           </CardContent>

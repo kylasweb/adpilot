@@ -47,13 +47,13 @@ const AnalyticsPage = () => {
             <CardDescription>Data shown for {dateRange === "7d" ? "last 7 days" : dateRange === "30d" ? "last 30 days" : dateRange === "90d" ? "last 90 days" : "year to date"}</CardDescription>
           </CardHeader>
           <CardContent>
-            <TabsContent value="overview" className="m-0">
+            <TabsContent value="overview">
               <PerformanceOverview dateRange={dateRange} />
             </TabsContent>
-            <TabsContent value="campaigns" className="m-0">
+            <TabsContent value="campaigns">
               <CampaignMetrics dateRange={dateRange} />
             </TabsContent>
-            <TabsContent value="audience" className="m-0">
+            <TabsContent value="audience">
               <AudienceInsights dateRange={dateRange} />
             </TabsContent>
           </CardContent>
