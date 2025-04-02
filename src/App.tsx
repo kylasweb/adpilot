@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,29 +16,35 @@ import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
 import AdminSettingsPage from "./pages/AdminSettingsPage";
 import AdminActivityPage from "./pages/AdminActivityPage";
 
-const queryClient = new QueryClient();
+// Create a QueryClient instance inside the component
+const App = () => {
+  // Create a client instance inside the component
+  const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <BrowserRouter>
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/cohorts" element={<CohortPage />} />
-          <Route path="/campaigns" element={<CampaignPage />} />
-          <Route path="/creative" element={<CreativePage />} />
-          <Route path="/analytics" element={<AnalyticsPage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
-          <Route path="/admin/settings" element={<AdminSettingsPage />} />
-          <Route path="/admin/activity" element={<AdminActivityPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <BrowserRouter>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/cohorts" element={<CohortPage />} />
+              <Route path="/campaigns" element={<CampaignPage />} />
+              <Route path="/creative" element={<CreativePage />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
+              <Route path="/admin/settings" element={<AdminSettingsPage />} />
+              <Route path="/admin/activity" element={<AdminActivityPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+};
 
 export default App;
