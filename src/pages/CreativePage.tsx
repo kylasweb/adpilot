@@ -9,12 +9,22 @@ import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
 import ImageEditor from "@/components/creative/ImageEditor";
-import { Plus, Image, FileText } from "lucide-react";
+import { Plus, Image, FileText, Palette } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 const CreativePage = () => {
   const [showNewCreativeForm, setShowNewCreativeForm] = useState(false);
   const [showImageEditor, setShowImageEditor] = useState(false);
+
+  const handleCreateNewImage = () => {
+    setShowImageEditor(true);
+    toast.info("Starting new design in Creative Studio");
+  };
+
+  const handleCreateNewCreative = () => {
+    setShowNewCreativeForm(true);
+  };
 
   return (
     <AppLayout>
@@ -32,13 +42,17 @@ const CreativePage = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setShowNewCreativeForm(true)}>
+              <DropdownMenuItem onClick={handleCreateNewCreative}>
                 <FileText className="mr-2 h-4 w-4" />
                 New Creative Asset
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowImageEditor(true)}>
+              <DropdownMenuItem onClick={handleCreateNewImage}>
                 <Image className="mr-2 h-4 w-4" />
                 Create Image
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toast.info("Style guide editor coming soon")}>
+                <Palette className="mr-2 h-4 w-4" />
+                Edit Style Guide
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
