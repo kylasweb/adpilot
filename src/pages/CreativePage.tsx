@@ -8,7 +8,7 @@ import CreativeLibrary from "@/components/creative/CreativeLibrary";
 import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
-import ImageEditor from "@/components/creative/ImageEditor";
+import ImageEditor from "@/components/creative/image-editor";
 import { Plus, Image, FileText, Palette } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
