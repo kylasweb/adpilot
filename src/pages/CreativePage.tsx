@@ -8,10 +8,13 @@ import CreativeLibrary from "@/components/creative/CreativeLibrary";
 import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
-import { Plus } from "lucide-react";
+import ImageEditor from "@/components/creative/ImageEditor";
+import { Plus, Image, FileText } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const CreativePage = () => {
   const [showNewCreativeForm, setShowNewCreativeForm] = useState(false);
+  const [showImageEditor, setShowImageEditor] = useState(false);
 
   return (
     <AppLayout>
@@ -21,10 +24,24 @@ const CreativePage = () => {
           <p className="text-adpilot-text-secondary mt-1">Design and manage your campaign creative assets</p>
         </div>
         <div className="flex gap-3">
-          <Button onClick={() => setShowNewCreativeForm(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Creative
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                New Creative
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setShowNewCreativeForm(true)}>
+                <FileText className="mr-2 h-4 w-4" />
+                New Creative Asset
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowImageEditor(true)}>
+                <Image className="mr-2 h-4 w-4" />
+                Create Image
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -58,6 +75,11 @@ const CreativePage = () => {
       <NewCreativeForm 
         open={showNewCreativeForm} 
         onOpenChange={setShowNewCreativeForm} 
+      />
+      
+      <ImageEditor 
+        open={showImageEditor} 
+        onOpenChange={setShowImageEditor} 
       />
     </AppLayout>
   );

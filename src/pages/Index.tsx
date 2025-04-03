@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,9 +9,12 @@ import ActiveCampaigns from "@/components/dashboard/ActiveCampaigns";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import TopCohorts from "@/components/dashboard/TopCohorts";
 import RecentActivity from "@/components/dashboard/RecentActivity";
+import NewCampaignForm from "@/components/campaigns/NewCampaignForm";
 import { Plus } from "lucide-react";
 
 const Index = () => {
+  const [showNewCampaignForm, setShowNewCampaignForm] = useState(false);
+
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
@@ -20,7 +23,7 @@ const Index = () => {
           <p className="text-adpilot-text-secondary mt-1">Welcome to AdPilot - Your campaign management platform</p>
         </div>
         <div className="flex gap-3">
-          <Button>
+          <Button onClick={() => setShowNewCampaignForm(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Campaign
           </Button>
@@ -88,6 +91,11 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
+
+      <NewCampaignForm
+        open={showNewCampaignForm}
+        onOpenChange={setShowNewCampaignForm}
+      />
     </AppLayout>
   );
 };
