@@ -9,13 +9,15 @@ import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
 import ImageEditor from "@/components/creative/image-editor";
-import { Plus, Image, FileText, Palette } from "lucide-react";
+import ContentCreator from "@/components/creative/ai-content-creator";
+import { Plus, Image, FileText, Palette, Sparkles } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 const CreativePage = () => {
   const [showNewCreativeForm, setShowNewCreativeForm] = useState(false);
   const [showImageEditor, setShowImageEditor] = useState(false);
+  const [showContentCreator, setShowContentCreator] = useState(false);
 
   const handleCreateNewImage = () => {
     setShowImageEditor(true);
@@ -26,6 +28,11 @@ const CreativePage = () => {
     setShowNewCreativeForm(true);
   };
 
+  const handleOpenContentCreator = () => {
+    setShowContentCreator(true);
+    toast.info("Opening AI Content Creator");
+  };
+
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
@@ -34,6 +41,14 @@ const CreativePage = () => {
           <p className="text-adpilot-text-secondary mt-1">Design and manage your campaign creative assets</p>
         </div>
         <div className="flex gap-3">
+          <Button 
+            variant="outline" 
+            onClick={handleOpenContentCreator}
+            className="gap-2"
+          >
+            <Sparkles className="h-4 w-4" />
+            AI Content Creator
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button>
@@ -94,6 +109,11 @@ const CreativePage = () => {
       <ImageEditor 
         open={showImageEditor} 
         onOpenChange={setShowImageEditor} 
+      />
+      
+      <ContentCreator 
+        open={showContentCreator} 
+        onOpenChange={setShowContentCreator} 
       />
     </AppLayout>
   );
