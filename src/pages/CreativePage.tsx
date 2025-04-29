@@ -1,120 +1,76 @@
 
 import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import CreativeLibrary from "@/components/creative/CreativeLibrary";
-import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import StyleGuide from "@/components/creative/StyleGuide";
+import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
-import ImageEditor from "@/components/creative/image-editor";
 import ContentCreator from "@/components/creative/ai-content-creator";
-import { Plus, Image, FileText, Palette, Sparkles } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
+import ImageEditor from "@/components/creative/image-editor";
+import DocumentCreator from "@/components/creative/document-creator";
 
 const CreativePage = () => {
-  const [showNewCreativeForm, setShowNewCreativeForm] = useState(false);
-  const [showImageEditor, setShowImageEditor] = useState(false);
-  const [showContentCreator, setShowContentCreator] = useState(false);
-
-  const handleCreateNewImage = () => {
-    setShowImageEditor(true);
-    toast.info("Starting new design in Creative Studio");
-  };
-
-  const handleCreateNewCreative = () => {
-    setShowNewCreativeForm(true);
-  };
-
-  const handleOpenContentCreator = () => {
-    setShowContentCreator(true);
-    toast.info("Opening AI Content Creator");
-  };
+  const [activeTab, setActiveTab] = useState("library");
 
   return (
     <AppLayout>
-      <div className="flex items-center justify-between mb-6">
+      <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Creative Studio</h1>
-          <p className="text-adpilot-text-secondary mt-1">Design and manage your campaign creative assets</p>
+          <h1 className="text-3xl font-semibold">Creative Studio</h1>
+          <p className="text-adpilot-text-secondary mt-1">
+            Create, manage, and organize your marketing creative assets.
+          </p>
         </div>
-        <div className="flex gap-3">
-          <Button 
-            variant="outline" 
-            onClick={handleOpenContentCreator}
-            className="gap-2"
-          >
-            <Sparkles className="h-4 w-4" />
-            AI Content Creator
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                New Creative
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleCreateNewCreative}>
-                <FileText className="mr-2 h-4 w-4" />
-                New Creative Asset
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleCreateNewImage}>
-                <Image className="mr-2 h-4 w-4" />
-                Create Image
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => toast.info("Style guide editor coming soon")}>
-                <Palette className="mr-2 h-4 w-4" />
-                Edit Style Guide
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
 
-      <Card>
-        <Tabs defaultValue="library">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Creative Assets</CardTitle>
-              <TabsList>
-                <TabsTrigger value="library">Library</TabsTrigger>
-                <TabsTrigger value="message-frameworks">Message Frameworks</TabsTrigger>
-                <TabsTrigger value="style-guide">Style Guide</TabsTrigger>
-              </TabsList>
-            </div>
-            <CardDescription>Manage and organize your creative assets</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TabsContent value="library">
+        <Tabs 
+          defaultValue={activeTab} 
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <div className="flex overflow-auto pb-2">
+            <TabsList className="inline-flex w-auto">
+              <TabsTrigger value="library">Creative Library</TabsTrigger>
+              <TabsTrigger value="styleguide">Style Guide</TabsTrigger>
+              <TabsTrigger value="frameworks">Message Frameworks</TabsTrigger>
+              <TabsTrigger value="content-creator">AI Content Creator</TabsTrigger>
+              <TabsTrigger value="image-editor">Image Editor</TabsTrigger>
+              <TabsTrigger value="document-creator">Document Creator</TabsTrigger>
+            </TabsList>
+          </div>
+
+          <div className="mt-6">
+            <TabsContent value="library" className="mt-0">
+              <div className="flex justify-between mb-6">
+                <h2 className="text-xl font-semibold">Creative Assets</h2>
+                <NewCreativeForm />
+              </div>
               <CreativeLibrary />
             </TabsContent>
-            <TabsContent value="message-frameworks">
-              <MessageFrameworks />
-            </TabsContent>
-            <TabsContent value="style-guide">
+
+            <TabsContent value="styleguide" className="mt-0">
               <StyleGuide />
             </TabsContent>
-          </CardContent>
-        </Tabs>
-      </Card>
 
-      <NewCreativeForm 
-        open={showNewCreativeForm} 
-        onOpenChange={setShowNewCreativeForm} 
-      />
-      
-      <ImageEditor 
-        open={showImageEditor} 
-        onOpenChange={setShowImageEditor} 
-      />
-      
-      <ContentCreator 
-        open={showContentCreator} 
-        onOpenChange={setShowContentCreator} 
-      />
+            <TabsContent value="frameworks" className="mt-0">
+              <MessageFrameworks />
+            </TabsContent>
+
+            <TabsContent value="content-creator" className="mt-0">
+              <ContentCreator />
+            </TabsContent>
+
+            <TabsContent value="image-editor" className="mt-0">
+              <ImageEditor />
+            </TabsContent>
+
+            <TabsContent value="document-creator" className="mt-0">
+              <DocumentCreator />
+            </TabsContent>
+          </div>
+        </Tabs>
+      </div>
     </AppLayout>
   );
 };

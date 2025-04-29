@@ -1,4 +1,3 @@
-
 export type ContentType = "social" | "website" | "seo" | "branding";
 
 export type AIModel = "deepseek-coder" | "gemini-pro" | "llama3-70b" | "mixtral-8x7b" | "claude-3-opus";
@@ -167,3 +166,49 @@ export const contentTemplates: Record<ContentType, ContentTemplate[]> = {
     }
   ]
 };
+
+// Document creator types
+export type DocumentType = 'quotation' | 'proposal' | 'invoice';
+
+export type ServiceCategory = 
+  | 'digital-marketing' 
+  | 'web-design' 
+  | 'social-media' 
+  | 'seo' 
+  | 'content-creation'
+  | 'branding'
+  | 'other';
+
+export interface ClientInfo {
+  name: string;
+  email: string;
+  company?: string;
+  address?: string;
+  phone?: string;
+}
+
+export interface ServiceItem {
+  id: string;
+  name: string;
+  description: string;
+  quantity: number;
+  price: number;
+  category: ServiceCategory;
+}
+
+export interface DocumentDetails {
+  id: string;
+  type: DocumentType;
+  title: string;
+  date: string;
+  dueDate?: string;
+  clientInfo: ClientInfo;
+  items: ServiceItem[];
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  notes: string;
+  terms: string;
+  status: 'draft' | 'sent' | 'accepted' | 'rejected' | 'paid';
+}
