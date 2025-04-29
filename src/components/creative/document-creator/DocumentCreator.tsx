@@ -86,6 +86,18 @@ export const DocumentCreator: React.FC = () => {
     setActiveTab('create');
   };
 
+  const handleDuplicateDocument = (doc: DocumentDetails) => {
+    const duplicatedDoc: DocumentDetails = {
+      ...doc,
+      id: uuidv4(),
+      title: `${doc.title} (Copy)`,
+      status: 'draft'
+    };
+    setDocuments([...documents, duplicatedDoc]);
+    setCurrentDocument(duplicatedDoc);
+    setActiveTab('preview');
+  };
+
   return (
     <div className="w-full h-full flex flex-col border rounded-lg bg-white shadow-sm">
       <div className="border-b p-4 flex justify-between items-center">
@@ -133,16 +145,7 @@ export const DocumentCreator: React.FC = () => {
             <DocumentPreview 
               document={currentDocument} 
               onEdit={() => setActiveTab('create')}
-              onDuplicate={() => {
-                const duplicatedDoc = {
-                  ...currentDocument,
-                  id: uuidv4(),
-                  title: `${currentDocument.title} (Copy)`,
-                  status: 'draft'
-                };
-                setDocuments([...documents, duplicatedDoc]);
-                setCurrentDocument(duplicatedDoc);
-              }}
+              onDuplicate={() => handleDuplicateDocument(currentDocument)}
             />
           </TabsContent>
           
@@ -158,15 +161,7 @@ export const DocumentCreator: React.FC = () => {
               documents={documents}
               onEdit={handleEditDocument}
               onDelete={handleDeleteDocument}
-              onDuplicate={(doc) => {
-                const duplicatedDoc = {
-                  ...doc,
-                  id: uuidv4(),
-                  title: `${doc.title} (Copy)`,
-                  status: 'draft'
-                };
-                setDocuments([...documents, duplicatedDoc]);
-              }}
+              onDuplicate={handleDuplicateDocument}
             />
           </TabsContent>
         </div>

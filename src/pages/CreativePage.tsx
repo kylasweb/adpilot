@@ -12,6 +12,8 @@ import DocumentCreator from "@/components/creative/document-creator";
 
 const CreativePage = () => {
   const [activeTab, setActiveTab] = useState("library");
+  // Add states for modal control
+  const [newCreativeOpen, setNewCreativeOpen] = useState(false);
 
   return (
     <AppLayout>
@@ -44,7 +46,7 @@ const CreativePage = () => {
             <TabsContent value="library" className="mt-0">
               <div className="flex justify-between mb-6">
                 <h2 className="text-xl font-semibold">Creative Assets</h2>
-                <NewCreativeForm />
+                <NewCreativeForm open={newCreativeOpen} onOpenChange={setNewCreativeOpen} />
               </div>
               <CreativeLibrary />
             </TabsContent>
@@ -58,11 +60,11 @@ const CreativePage = () => {
             </TabsContent>
 
             <TabsContent value="content-creator" className="mt-0">
-              <ContentCreator />
+              <ContentCreator open={false} onOpenChange={() => {}} />
             </TabsContent>
 
             <TabsContent value="image-editor" className="mt-0">
-              <ImageEditor />
+              <ImageEditor open={false} onOpenChange={() => {}} />
             </TabsContent>
 
             <TabsContent value="document-creator" className="mt-0">

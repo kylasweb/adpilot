@@ -130,12 +130,28 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
       // Mock AI-generated document
       const mockAIResponse = generateMockDocument(documentType, category, clientName, budget);
       
-      onGenerate({
-        ...mockAIResponse,
+      // Make sure all required properties are present before passing to onGenerate
+      const completeDocument: DocumentDetails = {
         id: uuidv4(),
         type: documentType,
+        title: mockAIResponse.title || `New ${documentType.charAt(0).toUpperCase() + documentType.slice(1)}`,
+        date: mockAIResponse.date || new Date().toISOString().split('T')[0],
+        dueDate: mockAIResponse.dueDate,
+        clientInfo: mockAIResponse.clientInfo || {
+          name: clientName || 'Client',
+          email: 'client@example.com',
+        },
+        items: mockAIResponse.items || [],
+        subtotal: mockAIResponse.subtotal || 0,
+        tax: mockAIResponse.tax || 0,
+        discount: mockAIResponse.discount || 0,
+        total: mockAIResponse.total || 0,
+        notes: mockAIResponse.notes || '',
+        terms: mockAIResponse.terms || '',
         status: 'draft'
-      });
+      };
+      
+      onGenerate(completeDocument);
       
       toast.success(`${documentType.charAt(0).toUpperCase() + documentType.slice(1)} generated successfully!`);
     } catch (error) {
