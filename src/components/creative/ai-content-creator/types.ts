@@ -179,22 +179,77 @@ export type ServiceCategory =
   | 'branding'
   | 'other';
 
-export interface ClientInfo {
-  name: string;
-  email: string;
-  company?: string;
-  address?: string;
-  phone?: string;
+export type ContentTone = 
+  | "professional"
+  | "casual" 
+  | "friendly" 
+  | "authoritative" 
+  | "persuasive" 
+  | "humorous" 
+  | "formal"
+  | "technical"
+  | "empathetic"
+  | "urgent";
+
+export type ContentStyle =
+  | "informative"
+  | "storytelling"
+  | "conversational"
+  | "promotional"
+  | "educational"
+  | "analytical"
+  | "narrative"
+  | "descriptive"
+  | "instructional";
+
+export type ContentUseCase =
+  | "lead_generation"
+  | "brand_awareness"
+  | "customer_retention"
+  | "product_launch"
+  | "event_promotion"
+  | "customer_education"
+  | "thought_leadership";
+
+export type ContentLanguage =
+  | "english"
+  | "spanish"
+  | "french"
+  | "german"
+  | "italian"
+  | "portuguese"
+  | "russian"
+  | "arabic"
+  | "hindi"
+  | "chinese"
+  | "japanese"
+  | "korean"
+  | "malayalam"
+  | "tamil"
+  | "telugu";
+
+export interface AdvancedContentSettings {
+  tone: ContentTone;
+  style: ContentStyle;
+  useCase?: ContentUseCase;
+  language: ContentLanguage;
+  targetAudience?: string;
+  keyPhrases?: string[];
+  contentLength?: "short" | "medium" | "long";
 }
 
-export interface ServiceItem {
-  id: string;
-  name: string;
-  description: string;
-  quantity: number;
-  price: number;
-  category: ServiceCategory;
-}
+// Document types extension
+export type DocumentCurrency = 
+  | "USD" 
+  | "EUR" 
+  | "GBP" 
+  | "INR" 
+  | "AUD" 
+  | "CAD"
+  | "SGD" 
+  | "JPY" 
+  | "CNY" 
+  | "AED";
 
 export interface DocumentDetails {
   id: string;
@@ -210,5 +265,25 @@ export interface DocumentDetails {
   total: number;
   notes: string;
   terms: string;
-  status: 'draft' | 'sent' | 'accepted' | 'rejected' | 'paid';
+  status: "draft" | "sent" | "accepted" | "rejected" | "paid";
+  language?: ContentLanguage;
+  currency?: DocumentCurrency;
+  currencySymbol?: string;
+}
+
+export interface ClientInfo {
+  name: string;
+  email: string;
+  company?: string;
+  address?: string;
+  phone?: string;
+}
+
+export interface ServiceItem {
+  id: string;
+  name: string;
+  description: string;
+  quantity: number;
+  price: number;
+  category: ServiceCategory;
 }

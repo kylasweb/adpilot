@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ContentType, ContentTemplate, AIModel, AISuggestion } from "../types";
+import { ContentType, ContentTemplate, AIModel, AISuggestion, AdvancedContentSettings } from "../types";
 import { getOpenRouterModel } from "../utils/aiModelMapping";
 import { toast } from "sonner";
 
@@ -23,18 +23,45 @@ export const useAIGenerator = () => {
     prompt: string,
     model: AIModel,
     contentType: ContentType,
-    template: ContentTemplate | null
+    template: ContentTemplate | null,
+    advancedSettings?: AdvancedContentSettings
   ): Promise<string> => {
     setIsGenerating(true);
     try {
-      // Enhance the prompt with the content type and template
+      // Enhance the prompt with the content type, template, and advanced settings
       let enhancedPrompt = prompt;
       
-      if (template) {
-        enhancedPrompt = `I need to create ${contentType} content using the "${template.name}" template. 
-        ${template.promptGuide ? `Note: ${template.promptGuide}` : ''}
+      if (template || advancedSettings) {
+        enhancedPrompt = `I need to create ${contentType} content`;
         
-        Here's my content description:
+        if (template) {
+          enhancedPrompt += ` using the "${template.name}" template. 
+          ${template.promptGuide ? `Note: ${template.promptGuide}` : ''}`;
+        }
+        
+        if (advancedSettings) {
+          enhancedPrompt += `\n\nThe content should be written in ${advancedSettings.language} with a ${advancedSettings.tone} tone and ${advancedSettings.style} style.`;
+          
+          if (advancedSettings.useCase) {
+            enhancedPrompt += `\nThe purpose of this content is for ${advancedSettings.useCase.replace("_", " ")}.`;
+          }
+          
+          if (advancedSettings.targetAudience) {
+            enhancedPrompt += `\nThe target audience is ${advancedSettings.targetAudience}.`;
+          }
+          
+          if (advancedSettings.keyPhrases && advancedSettings.keyPhrases.length > 0) {
+            enhancedPrompt += `\nPlease include these key phrases naturally in the content: ${advancedSettings.keyPhrases.join(", ")}.`;
+          }
+          
+          if (advancedSettings.contentLength) {
+            const wordCount = advancedSettings.contentLength === "short" ? "about 300" : 
+                             advancedSettings.contentLength === "medium" ? "about 600" : "at least 1000";
+            enhancedPrompt += `\nThe content should be ${wordCount} words in length.`;
+          }
+        }
+        
+        enhancedPrompt += `\n\nHere's my content description:
         ${prompt}
         
         Format the output accordingly and provide well-structured content that follows best practices for ${contentType} content.`;

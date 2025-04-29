@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { DocumentDetails, DocumentType, ServiceCategory } from "@/components/creative/ai-content-creator/types";
+import { DocumentDetails, DocumentType, ServiceCategory, ContentLanguage, DocumentCurrency } from "@/components/creative/ai-content-creator/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { Sparkles, FileCheck, Loader2 } from "lucide-react";
+import { Sparkles, FileCheck, Loader2, Globe, Building } from "lucide-react";
 import { getOpenRouterModel } from '@/components/creative/ai-content-creator/utils/aiModelMapping';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -17,6 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface DocumentAIAssistantProps {
   onGenerate: (document: DocumentDetails) => void;
@@ -40,6 +41,37 @@ const aiModels = [
   { value: 'claude-3-opus', label: 'Claude 3 Opus' }
 ];
 
+const languageOptions = [
+  { value: 'english', label: 'English' },
+  { value: 'spanish', label: 'Spanish' },
+  { value: 'french', label: 'French' },
+  { value: 'german', label: 'German' },
+  { value: 'italian', label: 'Italian' },
+  { value: 'portuguese', label: 'Portuguese' },
+  { value: 'russian', label: 'Russian' },
+  { value: 'arabic', label: 'Arabic' },
+  { value: 'hindi', label: 'Hindi' },
+  { value: 'chinese', label: 'Chinese' },
+  { value: 'japanese', label: 'Japanese' },
+  { value: 'korean', label: 'Korean' },
+  { value: 'malayalam', label: 'Malayalam' },
+  { value: 'tamil', label: 'Tamil' },
+  { value: 'telugu', label: 'Telugu' }
+];
+
+const currencyOptions = [
+  { value: 'USD', label: 'US Dollar', symbol: '$' },
+  { value: 'EUR', label: 'Euro', symbol: '€' },
+  { value: 'GBP', label: 'British Pound', symbol: '£' },
+  { value: 'INR', label: 'Indian Rupee', symbol: '₹' },
+  { value: 'AUD', label: 'Australian Dollar', symbol: 'A$' },
+  { value: 'CAD', label: 'Canadian Dollar', symbol: 'C$' },
+  { value: 'SGD', label: 'Singapore Dollar', symbol: 'S$' },
+  { value: 'JPY', label: 'Japanese Yen', symbol: '¥' },
+  { value: 'CNY', label: 'Chinese Yuan', symbol: '¥' },
+  { value: 'AED', label: 'UAE Dirham', symbol: 'د.إ' }
+];
+
 const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
   onGenerate,
   documentType
@@ -50,27 +82,38 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
   const [budget, setBudget] = useState('');
   const [loading, setLoading] = useState(false);
   const [model, setModel] = useState('deepseek-coder');
+  const [language, setLanguage] = useState<ContentLanguage>('english');
+  const [currency, setCurrency] = useState<DocumentCurrency>('USD');
+  const [activeTab, setActiveTab] = useState<"basic" | "advanced">("basic");
 
-  // Dummy suggestions based on document type
+  // Get currency symbol from currency code
+  const getCurrencySymbol = (currencyCode: DocumentCurrency = 'USD') => {
+    const found = currencyOptions.find(c => c.value === currencyCode);
+    return found ? found.symbol : '$';
+  };
+
+  // Dummy suggestions based on document type and language
   const getSuggestions = () => {
+    const langPrefix = language !== 'english' ? `in ${languageOptions.find(l => l.value === language)?.label || 'the selected language'}` : '';
+    
     switch (documentType) {
       case 'quotation':
         return [
-          `Create a detailed ${category} quotation for a small business with a budget of $5000`,
-          `Generate a competitive ${category} quotation with standard industry rates`,
-          `Create a quotation for a monthly ${category} retainer service`
+          `Create a detailed ${category} quotation ${langPrefix} for a small business with a budget of ${getCurrencySymbol(currency)}5000`,
+          `Generate a competitive ${category} quotation ${langPrefix} with standard industry rates`,
+          `Create a quotation ${langPrefix} for a monthly ${category} retainer service`
         ];
       case 'proposal':
         return [
-          `Create a comprehensive ${category} proposal for a new client`,
-          `Generate a 3-month ${category} campaign proposal with measurable KPIs`,
-          `Write a proposal for redesigning a client's website and brand identity`
+          `Create a comprehensive ${category} proposal ${langPrefix} for a new client`,
+          `Generate a 3-month ${category} campaign proposal ${langPrefix} with measurable KPIs`,
+          `Write a proposal ${langPrefix} for redesigning a client's website and brand identity`
         ];
       case 'invoice':
         return [
-          `Create an invoice for completed ${category} services`,
-          `Generate a detailed invoice for a web design project with multiple deliverables`,
-          `Create a monthly recurring invoice for ongoing ${category} services`
+          `Create an invoice ${langPrefix} for completed ${category} services`,
+          `Generate a detailed invoice ${langPrefix} for a web design project with multiple deliverables`,
+          `Create a monthly recurring invoice ${langPrefix} for ongoing ${category} services`
         ];
       default:
         return [];
@@ -86,10 +129,11 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
       const openRouterModel = getOpenRouterModel(model as any);
       
       const finalPrompt = `
-        Create a complete ${documentType} for ${category} services.
+        Create a complete ${documentType} for ${category} services in ${languageOptions.find(l => l.value === language)?.label || 'English'}.
         ${clientName ? `The client's name is "${clientName}".` : ''}
-        ${budget ? `The budget is around ${budget}.` : ''}
+        ${budget ? `The budget is around ${getCurrencySymbol(currency)}${budget}.` : ''}
         ${prompt ? `Additional requirements: ${prompt}` : ''}
+        Use ${currencyOptions.find(c => c.value === currency)?.label || 'US Dollar'} as the currency.
         
         The response should be in JSON format with the following structure:
         {
@@ -122,13 +166,15 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
       
       console.log("Generating document with OpenRouter API...");
       console.log("Using model:", openRouterModel);
+      console.log("Using language:", language);
+      console.log("Using currency:", currency);
       
       // In a real implementation, you'd make an actual API call
       // For demo purposes, we'll simulate a delay and return a mock response
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Mock AI-generated document
-      const mockAIResponse = generateMockDocument(documentType, category, clientName, budget);
+      const mockAIResponse = generateMockDocument(documentType, category, clientName, budget, language, currency);
       
       // Make sure all required properties are present before passing to onGenerate
       const completeDocument: DocumentDetails = {
@@ -148,7 +194,10 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
         total: mockAIResponse.total || 0,
         notes: mockAIResponse.notes || '',
         terms: mockAIResponse.terms || '',
-        status: 'draft'
+        status: 'draft',
+        language: language,
+        currency: currency,
+        currencySymbol: getCurrencySymbol(currency)
       };
       
       onGenerate(completeDocument);
@@ -167,7 +216,9 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
     type: DocumentType, 
     serviceCategory: ServiceCategory,
     clientNameValue: string,
-    budgetValue: string
+    budgetValue: string,
+    documentLanguage: ContentLanguage,
+    documentCurrency: DocumentCurrency
   ): Partial<DocumentDetails> => {
     const currentDate = new Date().toISOString().split('T')[0];
     let dueDate = new Date();
@@ -175,9 +226,13 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
     
     const clientCompany = clientNameValue ? `${clientNameValue}'s Company` : "Acme Corporation";
     const actualClientName = clientNameValue || "John Smith";
+    const currencySymbol = getCurrencySymbol(documentCurrency);
     
     // Create items based on service category
     const items = [];
+    const multiplier = documentCurrency === 'INR' ? 75 : 
+                      documentCurrency === 'JPY' ? 150 :
+                      documentCurrency === 'EUR' ? 0.9 : 1;
     
     switch (serviceCategory) {
       case 'digital-marketing':
@@ -186,7 +241,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Digital Marketing Strategy",
           description: "Comprehensive digital marketing strategy tailored to your business goals",
           quantity: 1,
-          price: 1500,
+          price: 1500 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -194,7 +249,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "PPC Campaign Management",
           description: "Setup and management of Google Ads campaigns for 3 months",
           quantity: 3,
-          price: 800,
+          price: 800 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -202,7 +257,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Analytics Setup & Reporting",
           description: "Setup of analytics tools and monthly performance reporting",
           quantity: 1,
-          price: 600,
+          price: 600 * multiplier,
           category: serviceCategory
         });
         break;
@@ -213,7 +268,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Custom Website Design",
           description: "Professional design of a responsive website with up to 5 pages",
           quantity: 1,
-          price: 2500,
+          price: 2500 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -221,7 +276,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "CMS Implementation",
           description: "Setup of content management system for easy updates",
           quantity: 1,
-          price: 800,
+          price: 800 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -229,7 +284,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Website Hosting (Annual)",
           description: "Secure hosting with 99.9% uptime guarantee",
           quantity: 1,
-          price: 240,
+          price: 240 * multiplier,
           category: serviceCategory
         });
         break;
@@ -240,7 +295,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Social Media Strategy",
           description: "Comprehensive strategy for all social platforms",
           quantity: 1,
-          price: 1200,
+          price: 1200 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -248,7 +303,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Content Creation & Posting",
           description: "Creation and scheduling of 15 posts per month",
           quantity: 3,
-          price: 600,
+          price: 600 * multiplier,
           category: serviceCategory
         });
         items.push({
@@ -256,7 +311,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: "Community Management",
           description: "Daily engagement and response to audience interactions",
           quantity: 3,
-          price: 400,
+          price: 400 * multiplier,
           category: serviceCategory
         });
         break;
@@ -267,7 +322,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           name: `${serviceCategory.charAt(0).toUpperCase() + serviceCategory.slice(1).replace('-', ' ')} Services`,
           description: "Professional services tailored to your needs",
           quantity: 1,
-          price: 1000,
+          price: 1000 * multiplier,
           category: serviceCategory
         });
     }
@@ -318,7 +373,10 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
       discount,
       total,
       notes,
-      terms
+      terms,
+      language: documentLanguage,
+      currency: documentCurrency,
+      currencySymbol
     };
   };
 
@@ -329,77 +387,247 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
         <h3 className="text-xl font-medium">AI Document Generator</h3>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+        <TabsList className="mb-6">
+          <TabsTrigger value="basic">Basic</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced Settings</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="basic">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <Card className="p-6">
+                <div className="mb-6">
+                  <h4 className="text-lg font-medium mb-4">Document Details</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label htmlFor="ai-category">Service Category</Label>
+                      <Select value={category} onValueChange={value => setCategory(value as ServiceCategory)}>
+                        <SelectTrigger id="ai-category">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {serviceCategories.map(cat => (
+                            <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="ai-model">AI Model</Label>
+                      <Select value={model} onValueChange={setModel}>
+                        <SelectTrigger id="ai-model">
+                          <SelectValue placeholder="Select AI model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {aiModels.map(m => (
+                            <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label htmlFor="client-name">Client Name (Optional)</Label>
+                      <Input 
+                        id="client-name"
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        placeholder="Enter client name"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="budget">Budget (Optional)</Label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                          <span className="text-gray-500">{getCurrencySymbol(currency)}</span>
+                        </div>
+                        <Input 
+                          id="budget"
+                          value={budget}
+                          onChange={(e) => setBudget(e.target.value)}
+                          placeholder="e.g. 5,000"
+                          className="pl-7"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="ai-prompt">Tell AI what you need</Label>
+                    <Textarea
+                      id="ai-prompt"
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder={`Describe what you want in your ${documentType}...`}
+                      className="min-h-[120px]"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button 
+                    onClick={handleGenerateDocument}
+                    disabled={loading}
+                    className="flex items-center gap-2"
+                  >
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
+                    {loading ? "Generating..." : `Generate ${documentType}`}
+                  </Button>
+                </div>
+              </Card>
+            </div>
+            
+            <div>
+              <Card className="p-6 h-full">
+                <h4 className="text-lg font-medium mb-4">AI Suggestions</h4>
+                <p className="text-sm text-gray-600 mb-4">
+                  Try one of these prompts to get started quickly:
+                </p>
+                
+                <div className="space-y-3">
+                  {getSuggestions().map((suggestion, index) => (
+                    <div 
+                      key={index} 
+                      className="p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => setPrompt(suggestion)}
+                    >
+                      <div className="flex items-center mb-1">
+                        <FileCheck className="h-4 w-4 mr-2 text-adpilot-primary" />
+                        <span className="text-sm font-medium">Suggestion {index + 1}</span>
+                      </div>
+                      <p className="text-sm text-gray-600">{suggestion}</p>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <p className="text-sm text-blue-700">
+                    <strong>Tip:</strong> Provide specific details about the services, 
+                    pricing strategy, and any special terms to get more accurate results.
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+      
+        <TabsContent value="advanced">
           <Card className="p-6">
-            <div className="mb-6">
-              <h4 className="text-lg font-medium mb-4">Document Details</h4>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <Label htmlFor="ai-category">Service Category</Label>
-                  <Select value={category} onValueChange={value => setCategory(value as ServiceCategory)}>
-                    <SelectTrigger id="ai-category">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {serviceCategories.map(cat => (
-                        <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <div className="flex items-center mb-4">
+                  <Globe className="h-5 w-5 mr-2 text-adpilot-primary" />
+                  <h4 className="text-lg font-medium">Language & Localization</h4>
                 </div>
                 
-                <div>
-                  <Label htmlFor="ai-model">AI Model</Label>
-                  <Select value={model} onValueChange={setModel}>
-                    <SelectTrigger id="ai-model">
-                      <SelectValue placeholder="Select AI model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {aiModels.map(m => (
-                        <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <Label htmlFor="client-name">Client Name (Optional)</Label>
-                  <Input 
-                    id="client-name"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    placeholder="Enter client name"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="budget">Budget (Optional)</Label>
-                  <Input 
-                    id="budget"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    placeholder="e.g. $5,000"
-                  />
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <Label htmlFor="document-language">Document Language</Label>
+                    <Select value={language} onValueChange={value => setLanguage(value as ContentLanguage)}>
+                      <SelectTrigger id="document-language">
+                        <SelectValue placeholder="Select language" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {languageOptions.map(lang => (
+                          <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      The AI will generate document content in this language
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="document-currency">Currency</Label>
+                    <Select value={currency} onValueChange={value => setCurrency(value as DocumentCurrency)}>
+                      <SelectTrigger id="document-currency">
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {currencyOptions.map(curr => (
+                          <SelectItem key={curr.value} value={curr.value}>
+                            {curr.symbol} {curr.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      All monetary values will use this currency
+                    </p>
+                  </div>
                 </div>
               </div>
               
               <div>
-                <Label htmlFor="ai-prompt">Tell AI what you need</Label>
-                <Textarea
-                  id="ai-prompt"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder={`Describe what you want in your ${documentType}...`}
-                  className="min-h-[120px]"
-                />
+                <div className="flex items-center mb-4">
+                  <Building className="h-5 w-5 mr-2 text-adpilot-primary" />
+                  <h4 className="text-lg font-medium">Business Context</h4>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="target-audience">Target Industry</Label>
+                    <Select defaultValue="general">
+                      <SelectTrigger id="target-audience">
+                        <SelectValue placeholder="Select industry" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">General</SelectItem>
+                        <SelectItem value="ecommerce">E-commerce</SelectItem>
+                        <SelectItem value="saas">SaaS / Technology</SelectItem>
+                        <SelectItem value="healthcare">Healthcare</SelectItem>
+                        <SelectItem value="education">Education</SelectItem>
+                        <SelectItem value="finance">Finance</SelectItem>
+                        <SelectItem value="retail">Retail</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="business-size">Client Business Size</Label>
+                    <Select defaultValue="small">
+                      <SelectTrigger id="business-size">
+                        <SelectValue placeholder="Select business size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="startup">Startup</SelectItem>
+                        <SelectItem value="small">Small Business</SelectItem>
+                        <SelectItem value="medium">Medium Business</SelectItem>
+                        <SelectItem value="enterprise">Enterprise</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="complexity">Document Complexity</Label>
+                    <Select defaultValue="standard">
+                      <SelectTrigger id="complexity">
+                        <SelectValue placeholder="Select complexity" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="simple">Simple</SelectItem>
+                        <SelectItem value="standard">Standard</SelectItem>
+                        <SelectItem value="detailed">Detailed</SelectItem>
+                        <SelectItem value="comprehensive">Comprehensive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </div>
             </div>
             
-            <div className="flex justify-end">
+            <div className="mt-6 flex justify-end">
               <Button 
                 onClick={handleGenerateDocument}
                 disabled={loading}
@@ -414,40 +642,8 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
               </Button>
             </div>
           </Card>
-        </div>
-        
-        <div>
-          <Card className="p-6 h-full">
-            <h4 className="text-lg font-medium mb-4">AI Suggestions</h4>
-            <p className="text-sm text-gray-600 mb-4">
-              Try one of these prompts to get started quickly:
-            </p>
-            
-            <div className="space-y-3">
-              {getSuggestions().map((suggestion, index) => (
-                <div 
-                  key={index} 
-                  className="p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => setPrompt(suggestion)}
-                >
-                  <div className="flex items-center mb-1">
-                    <FileCheck className="h-4 w-4 mr-2 text-adpilot-primary" />
-                    <span className="text-sm font-medium">Suggestion {index + 1}</span>
-                  </div>
-                  <p className="text-sm text-gray-600">{suggestion}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-700">
-                <strong>Tip:</strong> Provide specific details about the services, 
-                pricing strategy, and any special terms to get more accurate results.
-              </p>
-            </div>
-          </Card>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

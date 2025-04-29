@@ -4,11 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import ContentTypeSelector from "./ContentTypeSelector";
 import AIConfigPanel from "./AIConfigPanel";
 import ContentEditor from "./ContentEditor";
-import { ContentType, AIModel, ContentTemplate } from "./types";
+import { ContentType, AIModel, ContentTemplate, AdvancedContentSettings } from "./types";
 import { useAIGenerator } from "./hooks/useAIGenerator";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Save, Download, Copy } from "lucide-react";
+import { Loader2, Save, Download, Copy, Languages } from "lucide-react";
 import { toast } from "sonner";
 
 interface ContentCreatorProps {
@@ -23,6 +23,15 @@ export const ContentCreator = ({ open, onOpenChange }: ContentCreatorProps) => {
   const [prompt, setPrompt] = useState("");
   const [generatedContent, setGeneratedContent] = useState("");
   const [activeTab, setActiveTab] = useState("create");
+  const [advancedSettings, setAdvancedSettings] = useState<AdvancedContentSettings>({
+    tone: "professional",
+    style: "informative",
+    language: "english",
+    useCase: undefined,
+    targetAudience: "",
+    keyPhrases: [],
+    contentLength: "medium"
+  });
   
   const { 
     generateContent, 
@@ -39,7 +48,13 @@ export const ContentCreator = ({ open, onOpenChange }: ContentCreatorProps) => {
     }
 
     try {
-      const content = await generateContent(prompt, selectedModel, contentType, selectedTemplate);
+      const content = await generateContent(
+        prompt, 
+        selectedModel, 
+        contentType, 
+        selectedTemplate,
+        advancedSettings
+      );
       setGeneratedContent(content);
       setActiveTab("preview");
       toast.success("Content generated successfully!");
@@ -116,6 +131,8 @@ export const ContentCreator = ({ open, onOpenChange }: ContentCreatorProps) => {
                   setPrompt={setPrompt} 
                   contentType={contentType}
                   selectedTemplate={selectedTemplate}
+                  advancedSettings={advancedSettings}
+                  setAdvancedSettings={setAdvancedSettings}
                 />
                 
                 <div className="mt-6 flex justify-end">
@@ -137,6 +154,12 @@ export const ContentCreator = ({ open, onOpenChange }: ContentCreatorProps) => {
               </TabsContent>
               
               <TabsContent value="preview" className="flex-1 flex flex-col overflow-hidden p-0 m-0">
+                <div className="flex items-center px-6 py-2 border-b">
+                  <Languages className="h-4 w-4 mr-2" />
+                  <span className="text-sm font-medium capitalize">
+                    {advancedSettings.language} | {advancedSettings.tone} | {advancedSettings.style}
+                  </span>
+                </div>
                 <div className="flex-1 p-6 overflow-y-auto">
                   <div className="prose max-w-none">
                     {generatedContent ? (

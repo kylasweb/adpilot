@@ -8,10 +8,12 @@ import {
   DocumentType, 
   ServiceItem,
   ClientInfo,
-  ServiceCategory
+  ServiceCategory,
+  ContentLanguage,
+  DocumentCurrency
 } from "@/components/creative/ai-content-creator/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle, Trash2, Receipt } from "lucide-react";
+import { PlusCircle, Trash2, Receipt, Languages, CurrencyIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { 
   Select,
@@ -39,13 +41,44 @@ const serviceCategoryOptions: { value: ServiceCategory; label: string }[] = [
   { value: 'other', label: 'Other' }
 ];
 
+const languageOptions: { value: ContentLanguage; label: string }[] = [
+  { value: 'english', label: 'English' },
+  { value: 'spanish', label: 'Spanish' },
+  { value: 'french', label: 'French' },
+  { value: 'german', label: 'German' },
+  { value: 'italian', label: 'Italian' },
+  { value: 'portuguese', label: 'Portuguese' },
+  { value: 'russian', label: 'Russian' },
+  { value: 'arabic', label: 'Arabic' },
+  { value: 'hindi', label: 'Hindi' },
+  { value: 'chinese', label: 'Chinese' },
+  { value: 'japanese', label: 'Japanese' },
+  { value: 'korean', label: 'Korean' },
+  { value: 'malayalam', label: 'Malayalam' },
+  { value: 'tamil', label: 'Tamil' },
+  { value: 'telugu', label: 'Telugu' },
+];
+
+const currencyOptions: { value: DocumentCurrency; label: string; symbol: string }[] = [
+  { value: 'USD', label: 'US Dollar', symbol: '$' },
+  { value: 'EUR', label: 'Euro', symbol: '€' },
+  { value: 'GBP', label: 'British Pound', symbol: '£' },
+  { value: 'INR', label: 'Indian Rupee', symbol: '₹' },
+  { value: 'AUD', label: 'Australian Dollar', symbol: 'A$' },
+  { value: 'CAD', label: 'Canadian Dollar', symbol: 'C$' },
+  { value: 'SGD', label: 'Singapore Dollar', symbol: 'S$' },
+  { value: 'JPY', label: 'Japanese Yen', symbol: '¥' },
+  { value: 'CNY', label: 'Chinese Yuan', symbol: '¥' },
+  { value: 'AED', label: 'UAE Dirham', symbol: 'د.إ' },
+];
+
 const DocumentForm: React.FC<DocumentFormProps> = ({
   document,
   documentType,
   onSave
 }) => {
   const [formData, setFormData] = useState<DocumentDetails>({ ...document });
-  const [activeTab, setActiveTab] = useState<"details" | "items" | "terms">("details");
+  const [activeTab, setActiveTab] = useState<"details" | "items" | "terms" | "settings">("details");
 
   useEffect(() => {
     setFormData({ ...document });
@@ -126,11 +159,25 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
     }));
   };
 
+  const handleCurrencyChange = (currency: DocumentCurrency) => {
+    const selectedCurrency = currencyOptions.find(c => c.value === currency);
+    
+    setFormData(prev => ({
+      ...prev,
+      currency,
+      currencySymbol: selectedCurrency?.symbol || '$'
+    }));
+  };
+
   const handleSave = () => {
     onSave({
       ...formData,
       type: documentType
     });
+  };
+
+  const getCurrencySymbol = () => {
+    return formData.currencySymbol || '$';
   };
 
   return (
@@ -139,10 +186,26 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
         <h3 className="text-xl font-medium capitalize">
           {formData.title || `New ${documentType}`}
         </h3>
-        <Button onClick={handleSave} className="flex items-center gap-2">
-          <Receipt className="h-4 w-4" />
-          Save {documentType}
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center mr-4 text-sm">
+            {formData.language && (
+              <div className="flex items-center text-muted-foreground mr-2">
+                <Languages className="h-4 w-4 mr-1" />
+                <span className="capitalize">{formData.language}</span>
+              </div>
+            )}
+            {formData.currency && (
+              <div className="flex items-center text-muted-foreground">
+                <CurrencyIcon className="h-4 w-4 mr-1" />
+                <span>{formData.currency}</span>
+              </div>
+            )}
+          </div>
+          <Button onClick={handleSave} className="flex items-center gap-2">
+            <Receipt className="h-4 w-4" />
+            Save {documentType}
+          </Button>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
@@ -150,6 +213,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
           <TabsTrigger value="details">Document Details</TabsTrigger>
           <TabsTrigger value="items">Service Items</TabsTrigger>
           <TabsTrigger value="terms">Terms & Notes</TabsTrigger>
+          <TabsTrigger value="settings">Language & Currency</TabsTrigger>
         </TabsList>
         
         <TabsContent value="details" className="space-y-6">
@@ -352,19 +416,25 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                         
                         <div>
                           <Label htmlFor={`item-price-${item.id}`}>Price</Label>
-                          <Input 
-                            id={`item-price-${item.id}`}
-                            type="number"
-                            value={item.price}
-                            min={0}
-                            step="0.01"
-                            onChange={(e) => handleItemChange(item.id, 'price', e.target.value)}
-                          />
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                              <span className="text-gray-500">{getCurrencySymbol()}</span>
+                            </div>
+                            <Input 
+                              id={`item-price-${item.id}`}
+                              type="number"
+                              value={item.price}
+                              min={0}
+                              step="0.01"
+                              onChange={(e) => handleItemChange(item.id, 'price', e.target.value)}
+                              className="pl-7"
+                            />
+                          </div>
                         </div>
                       </div>
                       
                       <div className="text-right mt-2 text-sm font-medium">
-                        Item Total: ${(item.price * item.quantity).toFixed(2)}
+                        Item Total: {getCurrencySymbol()}{(item.price * item.quantity).toFixed(2)}
                       </div>
                     </div>
                   ))}
@@ -404,22 +474,22 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                   <div className="space-y-2 text-right">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Subtotal:</span>
-                      <span>${formData.subtotal.toFixed(2)}</span>
+                      <span>{getCurrencySymbol()}{formData.subtotal.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tax ({formData.tax}%):</span>
-                      <span>${((formData.subtotal * formData.tax) / 100).toFixed(2)}</span>
+                      <span>{getCurrencySymbol()}{((formData.subtotal * formData.tax) / 100).toFixed(2)}</span>
                     </div>
                     
                     <div className="flex justify-between">
                       <span className="text-gray-600">Discount ({formData.discount}%):</span>
-                      <span>-${((formData.subtotal * formData.discount) / 100).toFixed(2)}</span>
+                      <span>-{getCurrencySymbol()}{((formData.subtotal * formData.discount) / 100).toFixed(2)}</span>
                     </div>
                     
                     <div className="flex justify-between pt-2 border-t font-medium text-lg">
                       <span>Total:</span>
-                      <span>${formData.total.toFixed(2)}</span>
+                      <span>{getCurrencySymbol()}{formData.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -454,6 +524,100 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                     placeholder="Terms and conditions for this document"
                     rows={6}
                   />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="font-medium">Language Settings</h4>
+                  
+                  <div>
+                    <Label htmlFor="document-language">Document Language</Label>
+                    <Select 
+                      value={formData.language || 'english'}
+                      onValueChange={(value) => setFormData({...formData, language: value as ContentLanguage})}
+                    >
+                      <SelectTrigger id="document-language">
+                        <SelectValue placeholder="Select language" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {languageOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      This affects AI generated content and document translations.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="font-medium">Currency Settings</h4>
+                  
+                  <div>
+                    <Label htmlFor="document-currency">Currency</Label>
+                    <Select 
+                      value={formData.currency || 'USD'}
+                      onValueChange={(value) => handleCurrencyChange(value as DocumentCurrency)}
+                    >
+                      <SelectTrigger id="document-currency">
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {currencyOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.symbol} {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      This will update the currency symbol throughout the document.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 border-t pt-4">
+                <h4 className="font-medium mb-2">Display Settings</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="show-currency-code">Show Currency Code</Label>
+                    <Select 
+                      defaultValue="symbol"
+                    >
+                      <SelectTrigger id="show-currency-code">
+                        <SelectValue placeholder="Select display option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="symbol">Symbol Only ({getCurrencySymbol()})</SelectItem>
+                        <SelectItem value="code">Currency Code ({formData.currency})</SelectItem>
+                        <SelectItem value="both">Both ({getCurrencySymbol()} {formData.currency})</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="decimal-places">Decimal Places</Label>
+                    <Select defaultValue="2">
+                      <SelectTrigger id="decimal-places">
+                        <SelectValue placeholder="Select decimal places" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="0">0 (1234)</SelectItem>
+                        <SelectItem value="2">2 (1234.56)</SelectItem>
+                        <SelectItem value="3">3 (1234.567)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
             </CardContent>
