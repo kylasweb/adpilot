@@ -14,7 +14,15 @@ import {
   FileText, 
   Database, 
   Activity,
-  X
+  X,
+  Edit,
+  Lightbulb,
+  Image,
+  FileText2,
+  Search,
+  Globe,
+  LineChart,
+  Link as LinkIcon
 } from "lucide-react";
 
 interface AppSidebarProps {
@@ -49,9 +57,55 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
       icon: FileText,
     },
     {
+      title: "SEO Tools",
+      href: "/seo",
+      icon: Search,
+    },
+    {
       title: "Analytics",
       href: "/analytics",
       icon: BarChart,
+    },
+  ];
+  
+  const creativeTools = [
+    {
+      title: "AI Content Creator",
+      href: "/tools/content-creator",
+      icon: Edit,
+    },
+    {
+      title: "Document Creator",
+      href: "/tools/document-creator",
+      icon: FileText2,
+    },
+    {
+      title: "Image Editor",
+      href: "/tools/image-editor",
+      icon: Image,
+    },
+  ];
+  
+  const seoTools = [
+    {
+      title: "Keyword Research",
+      href: "/seo/keywords",
+      icon: Search,
+    },
+    {
+      title: "Content Analyzer",
+      href: "/seo/analyzer",
+      icon: LineChart,
+    },
+    {
+      title: "SEO Audit",
+      href: "/seo/audit",
+      icon: Globe,
+    },
+    {
+      title: "Backlink Manager",
+      href: "/seo/backlinks",
+      icon: LinkIcon,
     },
   ];
   
@@ -138,6 +192,52 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
             </div>
             <nav className="space-y-1">
               {mainNavItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                    location.pathname === item.href
+                      ? "bg-adpilot-primary text-white"
+                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
+              Creative Tools
+            </div>
+            <nav className="space-y-1">
+              {creativeTools.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                    location.pathname === item.href
+                      ? "bg-adpilot-primary text-white"
+                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-2">
+            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
+              SEO Tools
+            </div>
+            <nav className="space-y-1">
+              {seoTools.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}

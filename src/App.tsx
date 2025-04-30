@@ -15,6 +15,14 @@ import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
 import AdminSettingsPage from "./pages/AdminSettingsPage";
 import AdminActivityPage from "./pages/AdminActivityPage";
+import ContentCreatorPage from "./pages/tools/ContentCreatorPage";
+import DocumentCreatorPage from "./pages/tools/DocumentCreatorPage";
+import ImageEditorPage from "./pages/tools/ImageEditorPage";
+import SeoPage from "./pages/SeoPage";
+import SeoKeywordsPage from "./pages/seo/SeoKeywordsPage";
+import SeoAnalyzerPage from "./pages/seo/SeoAnalyzerPage";
+import SeoAuditPage from "./pages/seo/SeoAuditPage";
+import SeoBacklinksPage from "./pages/seo/SeoBacklinksPage";
 
 // Create a QueryClient instance inside the component
 const App = () => {
@@ -34,6 +42,20 @@ const App = () => {
               <Route path="/campaigns" element={<CampaignPage />} />
               <Route path="/creative" element={<CreativePage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
+              
+              {/* Tool Routes */}
+              <Route path="/tools/content-creator" element={<ContentCreatorPage />} />
+              <Route path="/tools/document-creator" element={<DocumentCreatorPage />} />
+              <Route path="/tools/image-editor" element={<ImageEditorPage />} />
+              
+              {/* SEO Routes */}
+              <Route path="/seo" element={<SeoPage />} />
+              <Route path="/seo/keywords" element={<SeoKeywordsPage />} />
+              <Route path="/seo/analyzer" element={<SeoAnalyzerPage />} />
+              <Route path="/seo/audit" element={<SeoAuditPage />} />
+              <Route path="/seo/backlinks" element={<SeoBacklinksPage />} />
+              
+              {/* Admin Routes */}
               <Route path="/admin/users" element={<AdminUsersPage />} />
               <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
               <Route path="/admin/settings" element={<AdminSettingsPage />} />
