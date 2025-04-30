@@ -1,491 +1,258 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { 
-  BarChart, 
-  Calendar, 
-  Settings, 
-  Users, 
-  LayoutDashboard, 
-  FileText, 
-  Database, 
-  Activity,
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import {
   X,
-  Edit,
-  Lightbulb,
-  Image,
-  Search,
+  PieChart,
+  Users,
+  MessageSquare,
+  BarChart2,
+  Settings,
+  Shield,
+  Radio,
+  FileText,
+  Paintbrush,
   Globe,
-  LineChart,
-  Link as LinkIcon,
   Mail,
   Briefcase,
-  MessageSquare,
-  Target,
-  Send,
-  PieChart,
-  TrendingUp,
-  UserCheck,
-  Clock,
-  Clipboard,
-  Filter,
-  Inbox,
-  BarChart2
+  Layers,
+  Activity,
+  Database,
+  LayoutDashboard,
 } from "lucide-react";
 
 interface AppSidebarProps {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (open: boolean) => void;
 }
 
 const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
   const location = useLocation();
-  const isMobile = useIsMobile();
+  const { user } = useAuth();
   
-  // Define navigation items
-  const mainNavItems = [
-    {
-      title: "Dashboard",
-      href: "/",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Cohorts & Personas",
-      href: "/cohorts",
-      icon: Users,
-    },
-    {
-      title: "Campaign Planner",
-      href: "/campaigns",
-      icon: Calendar,
-    },
-    {
-      title: "Creative Studio",
-      href: "/creative",
-      icon: FileText,
-    },
-    {
-      title: "Digital Marketing",
-      href: "/digital-marketing",
-      icon: Target,
-    },
-    {
-      title: "Freelancer Hub",
-      href: "/freelancer",
-      icon: Briefcase,
-    },
-    {
-      title: "Email Marketing",
-      href: "/email-marketing",
-      icon: Mail,
-    },
-    {
-      title: "SEO Tools",
-      href: "/seo",
-      icon: Search,
-    },
-    {
-      title: "Analytics",
-      href: "/analytics",
-      icon: BarChart,
-    },
-  ];
-  
-  const creativeTools = [
-    {
-      title: "AI Content Creator",
-      href: "/tools/content-creator",
-      icon: Edit,
-    },
-    {
-      title: "Document Creator",
-      href: "/tools/document-creator",
-      icon: FileText,
-    },
-    {
-      title: "Image Editor",
-      href: "/tools/image-editor",
-      icon: Image,
-    },
-  ];
-  
-  const seoTools = [
-    {
-      title: "Keyword Research",
-      href: "/seo/keywords",
-      icon: Search,
-    },
-    {
-      title: "Content Analyzer",
-      href: "/seo/analyzer",
-      icon: LineChart,
-    },
-    {
-      title: "SEO Audit",
-      href: "/seo/audit",
-      icon: Globe,
-    },
-    {
-      title: "Backlink Manager",
-      href: "/seo/backlinks",
-      icon: LinkIcon,
-    },
-  ];
-  
-  const digitalMarketingTools = [
-    {
-      title: "Ad Campaign Manager",
-      href: "/digital-marketing/ad-manager",
-      icon: Target,
-    },
-    {
-      title: "Social Media Planner",
-      href: "/digital-marketing/social-planner",
-      icon: MessageSquare,
-    },
-    {
-      title: "Analytics Dashboard",
-      href: "/digital-marketing/analytics",
-      icon: PieChart,
-    },
-    {
-      title: "Marketing Automation",
-      href: "/digital-marketing/automation",
-      icon: TrendingUp,
-    },
-  ];
-  
-  const freelancerTools = [
-    {
-      title: "Client Manager",
-      href: "/freelancer/clients",
-      icon: UserCheck,
-    },
-    {
-      title: "Time Tracking",
-      href: "/freelancer/time-tracking",
-      icon: Clock,
-    },
-    {
-      title: "Project Management",
-      href: "/freelancer/projects",
-      icon: Clipboard,
-    },
-    {
-      title: "Proposal Generator",
-      href: "/freelancer/proposals",
-      icon: FileText,
-    },
-    {
-      title: "Invoice Creator",
-      href: "/freelancer/invoices",
-      icon: Database,
-    },
-  ];
-  
-  const emailMarketingTools = [
-    {
-      title: "Campaign Builder",
-      href: "/email-marketing/campaigns",
-      icon: Mail,
-    },
-    {
-      title: "Email Templates",
-      href: "/email-marketing/templates",
-      icon: FileText,
-    },
-    {
-      title: "Email List Manager",
-      href: "/email-marketing/lists",
-      icon: Filter,
-    },
-    {
-      title: "Web Scraping",
-      href: "/email-marketing/scraping",
-      icon: Globe,
-    },
-    {
-      title: "Email Analytics",
-      href: "/email-marketing/analytics",
-      icon: BarChart2,
-    },
-    {
-      title: "Email Sync",
-      href: "/email-marketing/sync",
-      icon: Inbox,
-    },
-  ];
-  
-  const adminNavItems = [
-    {
-      title: "Users & Teams",
-      href: "/admin/users",
-      icon: Users,
-    },
-    {
-      title: "Integrations",
-      href: "/admin/integrations",
-      icon: Database,
-    },
-    {
-      title: "Activity Log",
-      href: "/admin/activity",
-      icon: Activity,
-    },
-    {
-      title: "Settings",
-      href: "/admin/settings",
-      icon: Settings,
-    },
-  ];
+  const isAdmin = user?.role === 'admin';
+  const organizationId = user?.organizationId;
 
-  if (!isOpen) {
-    return (
-      <div className="w-16 border-r bg-white flex flex-col items-center py-4">
-        {mainNavItems.map((item) => (
-          <Button
-            key={item.href}
-            variant="ghost"
-            size="icon"
-            asChild
-            className="mb-2"
-          >
-            <Link to={item.href}>
-              <item.icon className={cn(
-                "h-5 w-5",
-                location.pathname === item.href ? "text-adpilot-primary" : "text-adpilot-text-secondary"
-              )} />
-            </Link>
-          </Button>
-        ))}
-        <div className="mt-auto">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsOpen(true)}
-          >
-            <Settings className="h-5 w-5 text-adpilot-text-secondary" />
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
-  const sidebarContent = (
-    <div className={cn(
-      "flex h-full w-64 flex-col border-r bg-white",
-      isMobile && "fixed inset-y-0 left-0 z-50"
-    )}>
-      <div className="flex items-center justify-between px-4 py-2 h-16 border-b">
-        <div className="flex items-center">
+  return (
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:z-auto", 
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}
+    >
+      <div className="flex h-16 items-center justify-between border-b px-4 lg:px-6">
+        <Link to="/" className="flex items-center">
           <span className="text-xl font-semibold text-adpilot-primary">AdPilot</span>
-        </div>
-        {isMobile && (
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setIsOpen(false)}
-          >
-            <X className="h-5 w-5" />
-          </Button>
-        )}
+        </Link>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setIsOpen(false)}
+          className="lg:hidden"
+        >
+          <X className="h-5 w-5" />
+        </Button>
       </div>
-      
-      <ScrollArea className="flex-1 px-3 py-4">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Main
-            </div>
-            <nav className="space-y-1">
-              {mainNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
-                </Link>
-              ))}
-            </nav>
+
+      <ScrollArea className="h-[calc(100vh-4rem)] py-4">
+        <div className="px-4 lg:px-6 space-y-6">
+          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+            Core
           </div>
+          <nav className="space-y-1">
+            <Link to="/">
+              <Button
+                variant={isActive("/") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
+            <Link to="/cohorts">
+              <Button
+                variant={isActive("/cohorts") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Audience
+              </Button>
+            </Link>
+            <Link to="/campaigns">
+              <Button
+                variant={isActive("/campaigns") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Radio className="mr-2 h-4 w-4" />
+                Campaigns
+              </Button>
+            </Link>
+            <Link to="/creative">
+              <Button
+                variant={isActive("/creative") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Creative
+              </Button>
+            </Link>
+            <Link to="/analytics">
+              <Button
+                variant={isActive("/analytics") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <BarChart2 className="mr-2 h-4 w-4" />
+                Analytics
+              </Button>
+            </Link>
+          </nav>
+
+          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+            Tools
+          </div>
+          <nav className="space-y-1">
+            <Link to="/tools/content-creator">
+              <Button
+                variant={isActive("/tools/content-creator") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Content Creator
+              </Button>
+            </Link>
+            <Link to="/tools/image-editor">
+              <Button
+                variant={isActive("/tools/image-editor") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Paintbrush className="mr-2 h-4 w-4" />
+                Image Editor
+              </Button>
+            </Link>
+          </nav>
+
+          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+            Marketing
+          </div>
+          <nav className="space-y-1">
+            <Link to="/digital-marketing">
+              <Button
+                variant={isActive("/digital-marketing") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Globe className="mr-2 h-4 w-4" />
+                Digital Marketing
+              </Button>
+            </Link>
+            <Link to="/email-marketing">
+              <Button
+                variant={isActive("/email-marketing") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <Mail className="mr-2 h-4 w-4" />
+                Email Marketing
+              </Button>
+            </Link>
+            <Link to="/seo">
+              <Button
+                variant={isActive("/seo") ? "default" : "ghost"}
+                className="w-full justify-start"
+              >
+                <PieChart className="mr-2 h-4 w-4" />
+                SEO Tools
+              </Button>
+            </Link>
+          </nav>
+
+          <Link to="/freelancer">
+            <Button
+              variant={isActive("/freelancer") ? "default" : "ghost"}
+              className="w-full justify-start"
+            >
+              <Briefcase className="mr-2 h-4 w-4" />
+              Freelancer Tools
+            </Button>
+          </Link>
           
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Creative Tools
-            </div>
-            <nav className="space-y-1">
-              {creativeTools.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
+          {/* Show Admin section only for admin users */}
+          {isAdmin && (
+            <>
+              <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+                Administration
+              </div>
+              <nav className="space-y-1">
+                <Link to="/admin/dashboard">
+                  <Button
+                    variant={isActive("/admin/dashboard") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Layers className="mr-2 h-4 w-4" />
+                    SAAS Dashboard
+                  </Button>
                 </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Digital Marketing
-            </div>
-            <nav className="space-y-1">
-              {digitalMarketingTools.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
+                <Link to="/admin/users">
+                  <Button
+                    variant={isActive("/admin/users") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Users & Teams
+                  </Button>
                 </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Freelancer Hub
-            </div>
-            <nav className="space-y-1">
-              {freelancerTools.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
+                <Link to="/admin/integrations">
+                  <Button
+                    variant={isActive("/admin/integrations") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Database className="mr-2 h-4 w-4" />
+                    Integrations
+                  </Button>
                 </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Email Marketing
-            </div>
-            <nav className="space-y-1">
-              {emailMarketingTools.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
+                <Link to="/admin/activity">
+                  <Button
+                    variant={isActive("/admin/activity") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Activity className="mr-2 h-4 w-4" />
+                    Activity Log
+                  </Button>
                 </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              SEO Tools
-            </div>
-            <nav className="space-y-1">
-              {seoTools.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
+                <Link to="/admin/settings">
+                  <Button
+                    variant={isActive("/admin/settings") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    System Settings
+                  </Button>
                 </Link>
-              ))}
-            </nav>
-          </div>
+              </nav>
+            </>
+          )}
           
-          <div className="space-y-2">
-            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
-              Admin
+          <div className="mt-4">
+            <div className="rounded-lg bg-muted p-3">
+              <div className="flex items-center mb-2">
+                <Shield className="h-5 w-5 mr-2 text-adpilot-primary" />
+                <span className="text-sm font-medium">Organization</span>
+              </div>
+              <div className="text-xs text-adpilot-text-muted">
+                ID: {organizationId || "Not assigned"}
+              </div>
             </div>
-            <nav className="space-y-1">
-              {adminNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    location.pathname === item.href
-                      ? "bg-adpilot-primary text-white"
-                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
-                </Link>
-              ))}
-            </nav>
           </div>
         </div>
       </ScrollArea>
-      
-      <div className="border-t p-4">
-        <div className="flex items-center gap-3">
-          {/* Profile section */}
-          <div className="h-8 w-8 rounded-full bg-adpilot-muted flex items-center justify-center">
-            <span className="text-sm font-medium text-adpilot-primary">AP</span>
-          </div>
-          <div>
-            <div className="text-sm font-medium">Admin User</div>
-            <div className="text-xs text-adpilot-text-muted">admin@adpilot.com</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </aside>
   );
-
-  if (isMobile) {
-    return (
-      <>
-        {isOpen && (
-          <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setIsOpen(false)} />
-        )}
-        {sidebarContent}
-      </>
-    );
-  }
-
-  return sidebarContent;
 };
 
 export default AppSidebar;

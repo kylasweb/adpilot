@@ -1,8 +1,7 @@
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,43 +10,79 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { LogOut, Settings, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, Settings, LogOut, Shield } from "lucide-react";
 
 const UserProfileDropdown: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   
+  const handleLogout = () => {
+    logout();
+    navigate("/auth/login");
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase();
+  };
+
   if (!user) return null;
+
+  const isAdmin = user.role === "admin";
+  const organizationId = user.organizationId || "N/A";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-adpilot-muted">
-            <span className="text-sm font-medium">
-              {user.name.split(" ").map((n) => n[0]).join("").toUpperCase()}
-            </span>
+        <button className="flex items-center space-x-2 outline-none">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="/placeholder.svg" />
+            <AvatarFallback>{user.name ? getInitials(user.name) : "U"}</AvatarFallback>
+          </Avatar>
+          <div className="hidden md:block text-left">
+            <p className="text-sm font-medium">{user.name}</p>
+            <p className="text-xs text-adpilot-text-muted">{user.email}</p>
           </div>
-        </Button>
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
-          <div className="flex flex-col">
-            <span>{user.name}</span>
-            <span className="text-xs text-adpilot-text-muted">{user.email}</span>
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium">{user.name}</p>
+            <p className="text-xs text-adpilot-text-muted">{user.email}</p>
+            <p className="text-xs text-adpilot-text-muted">
+              Organization ID: {organizationId}
+            </p>
+            {isAdmin && (
+              <p className="text-xs text-adpilot-primary font-medium">
+                Admin User
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate("/settings/profile")}>
-          <User className="mr-2 h-4 w-4" /> Profile
+        <DropdownMenuItem onClick={() => navigate("/settings")}>
+          <User className="mr-2 h-4 w-4" />
+          Profile
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate("/settings")}>
-          <Settings className="mr-2 h-4 w-4" /> Settings
+          <Settings className="mr-2 h-4 w-4" />
+          Settings
         </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem onClick={() => navigate("/admin/dashboard")}>
+            <Shield className="mr-2 h-4 w-4" />
+            Admin Dashboard
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>
-          <LogOut className="mr-2 h-4 w-4" /> Sign out
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Log Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,4 +1,3 @@
-
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/types/auth.types";
 
@@ -14,14 +13,34 @@ const MOCK_USERS = [
     password: "password123",
     role: "admin" as const,
     createdAt: new Date().toISOString(),
+    organizationId: "org-001",
   },
   {
     id: "2",
-    email: "user@example.com",
-    name: "Regular User",
+    email: "user1@example.com",
+    name: "Marketing User",
     password: "password123",
     role: "user" as const,
     createdAt: new Date().toISOString(),
+    organizationId: "org-002",
+  },
+  {
+    id: "3",
+    email: "user2@example.com",
+    name: "Design User",
+    password: "password123",
+    role: "user" as const,
+    createdAt: new Date().toISOString(),
+    organizationId: "org-003",
+  },
+  {
+    id: "4",
+    email: "user3@example.com",
+    name: "Analytics User",
+    password: "password123",
+    role: "user" as const,
+    createdAt: new Date().toISOString(),
+    organizationId: "org-004",
   }
 ];
 
@@ -35,6 +54,7 @@ const generateToken = (user: Omit<User, "password">) => {
     email: user.email,
     name: user.name,
     role: user.role,
+    organizationId: user.organizationId,
     exp: Math.floor(Date.now() / 1000) + expiresIn,
   };
   
@@ -93,6 +113,7 @@ export const register = async (name: string, email: string, password: string) =>
       password,
       role: "user" as const,
       createdAt: new Date().toISOString(),
+      organizationId: "org-005",
     };
     
     // In a real app, this would be stored in the database
