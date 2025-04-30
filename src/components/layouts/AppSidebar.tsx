@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -77,7 +76,7 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
     {
       title: "Document Creator",
       href: "/tools/document-creator",
-      icon: FileText2,
+      icon: FileText,
     },
     {
       title: "Image Editor",

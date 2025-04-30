@@ -8,7 +8,7 @@ import MessageFrameworks from "@/components/creative/MessageFrameworks";
 import NewCreativeForm from "@/components/creative/NewCreativeForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Edit, FileText2, Image } from "lucide-react";
+import { Edit, FileText, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CreativePage = () => {
@@ -27,7 +27,7 @@ const CreativePage = () => {
       title: "Document Creator",
       description: "Create quotes, proposals, and invoices for your business",
       href: "/tools/document-creator",
-      icon: FileText2,
+      icon: FileText,
       color: "bg-green-100 text-green-600",
     },
     {

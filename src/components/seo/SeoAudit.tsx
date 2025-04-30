@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,7 @@ import {
   Lock, 
   Loader2, 
   ArrowRight,
-  Refresh
+  RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -270,7 +269,7 @@ const SeoAudit = () => {
             </TabsList>
             
             <Button variant="outline" size="sm" onClick={handleSubmit} disabled={scanning}>
-              <Refresh className="mr-2 h-4 w-4" />
+              <RefreshCw className="mr-2 h-4 w-4" />
               Refresh Audit
             </Button>
           </div>
