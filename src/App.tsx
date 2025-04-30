@@ -5,6 +5,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Auth Provider
+import { AuthProvider } from "@/context/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
+// Main Pages
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import CohortPage from "./pages/CohortPage";
@@ -48,6 +54,13 @@ import WebScrapingPage from "./pages/email-marketing/WebScrapingPage";
 import EmailAnalyticsPage from "./pages/email-marketing/EmailAnalyticsPage";
 import EmailSyncPage from "./pages/email-marketing/EmailSyncPage";
 
+// Auth Pages
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import UserSettingsPage from "./pages/UserSettingsPage";
+
 // Create a QueryClient instance inside the component
 const App = () => {
   // Create a client instance inside the component
@@ -56,62 +69,327 @@ const App = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <BrowserRouter>
-            <Toaster />
-            <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/cohorts" element={<CohortPage />} />
-              <Route path="/campaigns" element={<CampaignPage />} />
-              <Route path="/creative" element={<CreativePage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
-              
-              {/* Tool Routes */}
-              <Route path="/tools/content-creator" element={<ContentCreatorPage />} />
-              <Route path="/tools/document-creator" element={<DocumentCreatorPage />} />
-              <Route path="/tools/image-editor" element={<ImageEditorPage />} />
-              
-              {/* Digital Marketing Routes */}
-              <Route path="/digital-marketing" element={<DigitalMarketingPage />} />
-              <Route path="/digital-marketing/ad-manager" element={<AdManagerPage />} />
-              <Route path="/digital-marketing/social-planner" element={<SocialPlannerPage />} />
-              <Route path="/digital-marketing/analytics" element={<MarketingAnalyticsPage />} />
-              <Route path="/digital-marketing/automation" element={<MarketingAutomationPage />} />
-              
-              {/* Freelancer Routes */}
-              <Route path="/freelancer" element={<FreelancerPage />} />
-              <Route path="/freelancer/clients" element={<ClientManagerPage />} />
-              <Route path="/freelancer/time-tracking" element={<TimeTrackingPage />} />
-              <Route path="/freelancer/projects" element={<ProjectManagementPage />} />
-              <Route path="/freelancer/proposals" element={<ProposalGeneratorPage />} />
-              <Route path="/freelancer/invoices" element={<InvoiceCreatorPage />} />
-              
-              {/* Email Marketing Routes */}
-              <Route path="/email-marketing" element={<EmailMarketingPage />} />
-              <Route path="/email-marketing/campaigns" element={<EmailCampaignsPage />} />
-              <Route path="/email-marketing/templates" element={<EmailTemplatesPage />} />
-              <Route path="/email-marketing/lists" element={<EmailListsPage />} />
-              <Route path="/email-marketing/scraping" element={<WebScrapingPage />} />
-              <Route path="/email-marketing/analytics" element={<EmailAnalyticsPage />} />
-              <Route path="/email-marketing/sync" element={<EmailSyncPage />} />
-              
-              {/* SEO Routes */}
-              <Route path="/seo" element={<SeoPage />} />
-              <Route path="/seo/keywords" element={<SeoKeywordsPage />} />
-              <Route path="/seo/analyzer" element={<SeoAnalyzerPage />} />
-              <Route path="/seo/audit" element={<SeoAuditPage />} />
-              <Route path="/seo/backlinks" element={<SeoBacklinksPage />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin/users" element={<AdminUsersPage />} />
-              <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
-              <Route path="/admin/settings" element={<AdminSettingsPage />} />
-              <Route path="/admin/activity" element={<AdminActivityPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <BrowserRouter>
+              <Toaster />
+              <Sonner />
+              <Routes>
+                {/* Auth Routes */}
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/auth/register" element={<RegisterPage />} />
+                <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                
+                {/* Protected Routes */}
+                <Route 
+                  path="/" 
+                  element={
+                    <ProtectedRoute>
+                      <Index />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/cohorts" 
+                  element={
+                    <ProtectedRoute>
+                      <CohortPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/campaigns" 
+                  element={
+                    <ProtectedRoute>
+                      <CampaignPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/creative" 
+                  element={
+                    <ProtectedRoute>
+                      <CreativePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <AnalyticsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Tool Routes */}
+                <Route 
+                  path="/tools/content-creator" 
+                  element={
+                    <ProtectedRoute>
+                      <ContentCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/tools/document-creator" 
+                  element={
+                    <ProtectedRoute>
+                      <DocumentCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-editor" 
+                  element={
+                    <ProtectedRoute>
+                      <ImageEditorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Digital Marketing Routes */}
+                <Route 
+                  path="/digital-marketing" 
+                  element={
+                    <ProtectedRoute>
+                      <DigitalMarketingPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/ad-manager" 
+                  element={
+                    <ProtectedRoute>
+                      <AdManagerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/social-planner" 
+                  element={
+                    <ProtectedRoute>
+                      <SocialPlannerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <MarketingAnalyticsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/automation" 
+                  element={
+                    <ProtectedRoute>
+                      <MarketingAutomationPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Freelancer Routes */}
+                <Route 
+                  path="/freelancer" 
+                  element={
+                    <ProtectedRoute>
+                      <FreelancerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/clients" 
+                  element={
+                    <ProtectedRoute>
+                      <ClientManagerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/time-tracking" 
+                  element={
+                    <ProtectedRoute>
+                      <TimeTrackingPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/projects" 
+                  element={
+                    <ProtectedRoute>
+                      <ProjectManagementPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/proposals" 
+                  element={
+                    <ProtectedRoute>
+                      <ProposalGeneratorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/invoices" 
+                  element={
+                    <ProtectedRoute>
+                      <InvoiceCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Email Marketing Routes */}
+                <Route 
+                  path="/email-marketing" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailMarketingPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/campaigns" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailCampaignsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/templates" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailTemplatesPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/lists" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailListsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/scraping" 
+                  element={
+                    <ProtectedRoute>
+                      <WebScrapingPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailAnalyticsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/sync" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailSyncPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* SEO Routes */}
+                <Route 
+                  path="/seo" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/keywords" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoKeywordsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/analyzer" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoAnalyzerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/audit" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoAuditPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/backlinks" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoBacklinksPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* User Settings */}
+                <Route 
+                  path="/settings" 
+                  element={
+                    <ProtectedRoute>
+                      <UserSettingsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Admin Routes - Require admin role */}
+                <Route 
+                  path="/admin/users" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <AdminUsersPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/integrations" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <AdminIntegrationsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/settings" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <AdminSettingsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/activity" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <AdminActivityPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

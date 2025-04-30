@@ -4,6 +4,7 @@ import AppSidebar from "./AppSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import UserProfileDropdown from "@/components/common/UserProfileDropdown";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <h1 className="text-xl font-semibold text-adpilot-primary">AdPilot</h1>
           </div>
           <div className="flex items-center gap-4">
-            {/* User profile/settings would go here */}
+            <UserProfileDropdown />
           </div>
         </div>
       </header>
