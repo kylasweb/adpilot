@@ -1,5 +1,5 @@
 
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { User } from "@/types/auth.types";
 
 // This is a mock API for demonstration - replace with real API when adding Prisma

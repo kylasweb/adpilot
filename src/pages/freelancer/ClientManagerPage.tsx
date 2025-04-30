@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { UserCheck, Plus, Mail, Phone, FileText, Clock, Database } from "lucide-react";
+import { UserCheck, Plus, Mail, Phone, FileText, Clock, Database, Send } from "lucide-react";
 
 const ClientManagerPage = () => {
   const [isAddClientOpen, setIsAddClientOpen] = useState(false);
