@@ -20,7 +20,20 @@ import {
   Search,
   Globe,
   LineChart,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Mail,
+  Briefcase,
+  MessageSquare,
+  Target,
+  Send,
+  PieChart,
+  TrendingUp,
+  UserCheck,
+  Clock,
+  Clipboard,
+  Filter,
+  Inbox,
+  BarChart2
 } from "lucide-react";
 
 interface AppSidebarProps {
@@ -53,6 +66,21 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
       title: "Creative Studio",
       href: "/creative",
       icon: FileText,
+    },
+    {
+      title: "Digital Marketing",
+      href: "/digital-marketing",
+      icon: Target,
+    },
+    {
+      title: "Freelancer Hub",
+      href: "/freelancer",
+      icon: Briefcase,
+    },
+    {
+      title: "Email Marketing",
+      href: "/email-marketing",
+      icon: Mail,
     },
     {
       title: "SEO Tools",
@@ -104,6 +132,90 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
       title: "Backlink Manager",
       href: "/seo/backlinks",
       icon: LinkIcon,
+    },
+  ];
+  
+  const digitalMarketingTools = [
+    {
+      title: "Ad Campaign Manager",
+      href: "/digital-marketing/ad-manager",
+      icon: Target,
+    },
+    {
+      title: "Social Media Planner",
+      href: "/digital-marketing/social-planner",
+      icon: MessageSquare,
+    },
+    {
+      title: "Analytics Dashboard",
+      href: "/digital-marketing/analytics",
+      icon: PieChart,
+    },
+    {
+      title: "Marketing Automation",
+      href: "/digital-marketing/automation",
+      icon: TrendingUp,
+    },
+  ];
+  
+  const freelancerTools = [
+    {
+      title: "Client Manager",
+      href: "/freelancer/clients",
+      icon: UserCheck,
+    },
+    {
+      title: "Time Tracking",
+      href: "/freelancer/time-tracking",
+      icon: Clock,
+    },
+    {
+      title: "Project Management",
+      href: "/freelancer/projects",
+      icon: Clipboard,
+    },
+    {
+      title: "Proposal Generator",
+      href: "/freelancer/proposals",
+      icon: FileText,
+    },
+    {
+      title: "Invoice Creator",
+      href: "/freelancer/invoices",
+      icon: Database,
+    },
+  ];
+  
+  const emailMarketingTools = [
+    {
+      title: "Campaign Builder",
+      href: "/email-marketing/campaigns",
+      icon: Mail,
+    },
+    {
+      title: "Email Templates",
+      href: "/email-marketing/templates",
+      icon: FileText,
+    },
+    {
+      title: "Email List Manager",
+      href: "/email-marketing/lists",
+      icon: Filter,
+    },
+    {
+      title: "Web Scraping",
+      href: "/email-marketing/scraping",
+      icon: Globe,
+    },
+    {
+      title: "Email Analytics",
+      href: "/email-marketing/analytics",
+      icon: BarChart2,
+    },
+    {
+      title: "Email Sync",
+      href: "/email-marketing/sync",
+      icon: Inbox,
     },
   ];
   
@@ -213,6 +325,75 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
             </div>
             <nav className="space-y-1">
               {creativeTools.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                    location.pathname === item.href
+                      ? "bg-adpilot-primary text-white"
+                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-2">
+            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
+              Digital Marketing
+            </div>
+            <nav className="space-y-1">
+              {digitalMarketingTools.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                    location.pathname === item.href
+                      ? "bg-adpilot-primary text-white"
+                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-2">
+            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
+              Freelancer Hub
+            </div>
+            <nav className="space-y-1">
+              {freelancerTools.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                    location.pathname === item.href
+                      ? "bg-adpilot-primary text-white"
+                      : "text-adpilot-text-secondary hover:bg-adpilot-muted"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-2">
+            <div className="px-3 text-xs font-semibold text-adpilot-text-muted uppercase tracking-wider">
+              Email Marketing
+            </div>
+            <nav className="space-y-1">
+              {emailMarketingTools.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
