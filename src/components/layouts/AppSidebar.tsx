@@ -17,7 +17,6 @@ import {
   Edit,
   Lightbulb,
   Image,
-  FileText2,
   Search,
   Globe,
   LineChart,
