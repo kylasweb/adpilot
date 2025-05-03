@@ -50,11 +50,12 @@ import SeoBacklinksPage from "./pages/seo/SeoBacklinksPage";
 import SeoKeywordsPage from "./pages/seo/SeoKeywordsPage";
 
 // Admin Pages
+// Import admin pages from the correct location - they are directly in ./pages/
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import AdminUsersPage from "./pages/admin/AdminUsersPage";
-import AdminIntegrationsPage from "./pages/admin/AdminIntegrationsPage";
-import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
-import AdminActivityPage from "./pages/admin/AdminActivityPage";
+import AdminUsersPage from "./pages/AdminUsersPage"; 
+import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
+import AdminSettingsPage from "./pages/AdminSettingsPage";
+import AdminActivityPage from "./pages/AdminActivityPage";
 import StorytellingPage from "./pages/admin/storytelling/StorytellingPage";
 import ApiManagementPage from "./pages/admin/ApiManagementPage";
 

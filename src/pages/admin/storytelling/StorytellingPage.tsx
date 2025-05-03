@@ -18,6 +18,7 @@ import {
   HelpCircle,
   Save
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch"; // Import the missing Switch component
 import StoryObjectiveSelector from "@/components/admin/storytelling/StoryObjectiveSelector";
 import PlatformSelector from "@/components/admin/storytelling/PlatformSelector";
 import AudienceSelector from "@/components/admin/storytelling/AudienceSelector";
