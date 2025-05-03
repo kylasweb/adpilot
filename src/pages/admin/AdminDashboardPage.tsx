@@ -137,6 +137,10 @@ const AdminDashboardPage: React.FC = () => {
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </TabsTrigger>
+                <TabsTrigger value="storytelling">
+                  <Layers className="mr-2 h-4 w-4" />
+                  AI Storyteller
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -202,7 +206,7 @@ const AdminDashboardPage: React.FC = () => {
                         </td>
                         <td className="p-4 align-middle">{org.users}</td>
                         <td className="p-4 align-middle">
-                          <Badge variant={org.status === "Active" ? "success" : "warning"}>
+                          <Badge variant={org.status === "Active" ? "default" : "secondary"}>
                             {org.status}
                           </Badge>
                         </td>
@@ -248,6 +252,17 @@ const AdminDashboardPage: React.FC = () => {
                 <p className="text-muted-foreground mb-4">Configure global system settings and defaults</p>
                 <Button>Open Settings</Button>
               </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="storytelling" className="mt-0">
+            <div className="flex justify-center">
+              <Button 
+                onClick={() => window.location.href = '/admin/storytelling'}
+                className="bg-adpilot-primary hover:bg-adpilot-primary/90"
+              >
+                Open AI Storyteller
+              </Button>
             </div>
           </TabsContent>
         </CardContent>

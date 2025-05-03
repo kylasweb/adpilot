@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +22,7 @@ import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
 import AdminSettingsPage from "./pages/AdminSettingsPage";
 import AdminActivityPage from "./pages/AdminActivityPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import StorytellingPage from "./pages/admin/storytelling/StorytellingPage";
 import ContentCreatorPage from "./pages/tools/ContentCreatorPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
@@ -138,6 +140,14 @@ const App = () => {
                   element={
                     <ProtectedRoute requiredRole="admin">
                       <AdminActivityPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/storytelling" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <StorytellingPage />
                     </ProtectedRoute>
                   } 
                 />
