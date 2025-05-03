@@ -23,6 +23,7 @@ import {
   Activity,
   Database,
   LayoutDashboard,
+  BookOpen,
 } from "lucide-react";
 
 interface AppSidebarProps {
@@ -137,13 +138,24 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
                 Image Editor
               </Button>
             </Link>
+            {isAdmin && (
+              <Link to="/admin/storytelling">
+                <Button
+                  variant={isActive("/admin/storytelling") ? "default" : "ghost"}
+                  className="w-full justify-start"
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  AI Storyteller
+                </Button>
+              </Link>
+            )}
           </nav>
 
           <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
             Marketing
           </div>
           <nav className="space-y-1">
-            <Link to="/digital-marketing">
+            <Link to="/digital-marketing/dashboard">
               <Button
                 variant={isActive("/digital-marketing") ? "default" : "ghost"}
                 className="w-full justify-start"
@@ -231,7 +243,16 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
                     className="w-full justify-start"
                   >
                     <Settings className="mr-2 h-4 w-4" />
-                    System Settings
+                    Settings
+                  </Button>
+                </Link>
+                <Link to="/admin/storytelling">
+                  <Button
+                    variant={isActive("/admin/storytelling") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    AI Storyteller
                   </Button>
                 </Link>
               </nav>

@@ -30,6 +30,39 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
 
+// Digital Marketing Pages
+import DigitalMarketingDashboardPage from "./pages/digital-marketing/DigitalMarketingDashboardPage";
+import AdManagerPage from "./pages/digital-marketing/AdManagerPage";
+import MarketingAnalyticsPage from "./pages/digital-marketing/MarketingAnalyticsPage";
+import SocialPlannerPage from "./pages/digital-marketing/SocialPlannerPage";
+import MarketingAutomationPage from "./pages/digital-marketing/MarketingAutomationPage";
+
+// Email Marketing Pages
+import EmailCampaignsPage from "./pages/email-marketing/EmailCampaignsPage";
+import EmailListsPage from "./pages/email-marketing/EmailListsPage";
+import EmailTemplatesPage from "./pages/email-marketing/EmailTemplatesPage";
+import EmailAnalyticsPage from "./pages/email-marketing/EmailAnalyticsPage";
+import EmailSyncPage from "./pages/email-marketing/EmailSyncPage";
+
+// SEO Pages
+import SeoPage from "./pages/SeoPage";
+import SeoAnalyzerPage from "./pages/seo/SeoAnalyzerPage";
+import SeoAuditPage from "./pages/seo/SeoAuditPage";
+import SeoKeywordsPage from "./pages/seo/SeoKeywordsPage";
+import SeoBacklinksPage from "./pages/seo/SeoBacklinksPage";
+
+// Freelancer Pages
+import FreelancerPage from "./pages/FreelancerPage";
+import ClientManagerPage from "./pages/freelancer/ClientManagerPage";
+import ProjectManagementPage from "./pages/freelancer/ProjectManagementPage";
+import InvoiceCreatorPage from "./pages/freelancer/InvoiceCreatorPage";
+import ProposalGeneratorPage from "./pages/freelancer/ProposalGeneratorPage";
+import TimeTrackingPage from "./pages/freelancer/TimeTrackingPage";
+
+// Tool Pages
+import ImageEditorPage from "./pages/tools/ImageEditorPage";
+import DocumentCreatorPage from "./pages/tools/DocumentCreatorPage";
+
 // Create a QueryClient instance inside the component
 const App = () => {
   // Create a client instance inside the component
@@ -92,12 +125,230 @@ const App = () => {
                   } 
                 />
                 
+                {/* Digital Marketing Routes */}
+                <Route 
+                  path="/digital-marketing" 
+                  element={
+                    <ProtectedRoute>
+                      <DigitalMarketingDashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <DigitalMarketingDashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/ad-manager" 
+                  element={
+                    <ProtectedRoute>
+                      <AdManagerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <MarketingAnalyticsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/social-planner" 
+                  element={
+                    <ProtectedRoute>
+                      <SocialPlannerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/digital-marketing/automation" 
+                  element={
+                    <ProtectedRoute>
+                      <MarketingAutomationPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Email Marketing Routes */}
+                <Route 
+                  path="/email-marketing" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailCampaignsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/campaigns" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailCampaignsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/lists" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailListsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/templates" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailTemplatesPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailAnalyticsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/email-marketing/sync" 
+                  element={
+                    <ProtectedRoute>
+                      <EmailSyncPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* SEO Routes */}
+                <Route 
+                  path="/seo" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/analyzer" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoAnalyzerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/audit" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoAuditPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/keywords" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoKeywordsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/seo/backlinks" 
+                  element={
+                    <ProtectedRoute>
+                      <SeoBacklinksPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Freelancer Routes */}
+                <Route 
+                  path="/freelancer" 
+                  element={
+                    <ProtectedRoute>
+                      <FreelancerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/client-manager" 
+                  element={
+                    <ProtectedRoute>
+                      <ClientManagerPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/project-management" 
+                  element={
+                    <ProtectedRoute>
+                      <ProjectManagementPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/invoice-creator" 
+                  element={
+                    <ProtectedRoute>
+                      <InvoiceCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/proposal-generator" 
+                  element={
+                    <ProtectedRoute>
+                      <ProposalGeneratorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/freelancer/time-tracking" 
+                  element={
+                    <ProtectedRoute>
+                      <TimeTrackingPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
                 {/* Tool Routes */}
                 <Route 
                   path="/tools/content-creator" 
                   element={
                     <ProtectedRoute>
                       <ContentCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-editor" 
+                  element={
+                    <ProtectedRoute>
+                      <ImageEditorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/tools/document-creator" 
+                  element={
+                    <ProtectedRoute>
+                      <DocumentCreatorPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* User Settings */}
+                <Route 
+                  path="/settings" 
+                  element={
+                    <ProtectedRoute>
+                      <UserSettingsPage />
                     </ProtectedRoute>
                   } 
                 />
