@@ -1,44 +1,99 @@
 
 import React from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { StoryData } from "@/hooks/useStoryGenerator";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Copy, Download } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Copy, Download, AlertTriangle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface StoryOutputProps {
   isLoading: boolean;
-  storyData: {
-    hook: string;
-    hookText: string;
-    story: string;
-    learningPoints: string[];
-    cta: string;
-    visuals: string[];
-  } | null;
+  storyData: StoryData | null;
+  errorMessage?: string | null;
 }
 
-export function StoryOutput({ isLoading, storyData }: StoryOutputProps) {
-  const { toast } = useToast();
-  
-  const copyToClipboard = (text: string) => {
+const StoryOutput: React.FC<StoryOutputProps> = ({ isLoading, storyData, errorMessage }) => {
+  const handleCopy = (text: string, description: string) => {
     navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied to clipboard",
-      description: "Content has been copied to your clipboard.",
-    });
+    toast.success(`${description} copied to clipboard`);
+  };
+  
+  const handleExport = () => {
+    if (!storyData) return;
+    
+    const storyText = `
+# AI Generated Story
+
+## Hook Visual
+${storyData.hook}
+
+## Hook Text
+${storyData.hookText}
+
+## Story
+${storyData.story}
+
+## Learning Points
+${storyData.learningPoints.map(point => `- ${point}`).join('\n')}
+
+## Call to Action
+${storyData.cta}
+
+## Visual Elements
+${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
+    `;
+    
+    const blob = new Blob([storyText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ai-generated-story.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Story exported successfully");
   };
   
   if (isLoading) {
     return (
-      <Card className="w-full">
+      <Card className="h-full flex flex-col">
         <CardHeader>
-          <CardTitle>Generating Your Story...</CardTitle>
+          <CardTitle>Generating Story...</CardTitle>
+          <CardDescription>
+            Our AI is crafting your platform-specific narrative
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center h-60">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-muted-foreground">Our AI is crafting your perfect story...</p>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-adpilot-primary mx-auto mb-4" />
+            <p className="text-adpilot-text-secondary">
+              Crafting an engaging narrative tailored to your specifications
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  if (errorMessage) {
+    return (
+      <Card className="h-full flex flex-col">
+        <CardHeader>
+          <CardTitle className="text-red-500 flex items-center">
+            <AlertTriangle className="h-5 w-5 mr-2" />
+            Generation Error
+          </CardTitle>
+          <CardDescription>
+            There was a problem generating your story
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1">
+          <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700">{errorMessage}</p>
+            <p className="text-sm text-red-600 mt-2">
+              Please check your API keys in the API Management section or try again with different parameters.
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -47,13 +102,17 @@ export function StoryOutput({ isLoading, storyData }: StoryOutputProps) {
   
   if (!storyData) {
     return (
-      <Card className="w-full">
+      <Card className="h-full flex flex-col">
         <CardHeader>
-          <CardTitle>Your Story Output</CardTitle>
+          <CardTitle>Story Output</CardTitle>
+          <CardDescription>
+            Your generated story will appear here
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center h-60 text-center">
-            <p className="text-muted-foreground">Complete the form and click "Generate Story" to create your content.</p>
+        <CardContent className="flex-1 flex items-center justify-center text-center text-adpilot-text-muted">
+          <div>
+            <p className="mb-2">Configure your story parameters on the left and click "Generate Story"</p>
+            <p className="text-sm">The AI will create a platform-specific narrative based on your selections</p>
           </div>
         </CardContent>
       </Card>
@@ -61,123 +120,126 @@ export function StoryOutput({ isLoading, storyData }: StoryOutputProps) {
   }
   
   return (
-    <Card className="w-full">
-      <CardHeader className="border-b">
-        <CardTitle>Your AI-Generated Story</CardTitle>
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle>Generated Story</CardTitle>
+        <CardDescription>
+          Platform-optimized narrative based on your parameters
+        </CardDescription>
       </CardHeader>
-      <CardContent className="pt-6">
-        <Tabs defaultValue="story">
-          <TabsList className="mb-4">
-            <TabsTrigger value="story">Complete Story</TabsTrigger>
-            <TabsTrigger value="hook">Hook & Opening</TabsTrigger>
-            <TabsTrigger value="learning">Key Points</TabsTrigger>
-            <TabsTrigger value="cta">Call to Action</TabsTrigger>
-            <TabsTrigger value="visuals">Visual Guidance</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="story">
-            <div className="space-y-4">
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Full Story</h3>
-                <p className="whitespace-pre-line">{storyData.story}</p>
-              </div>
-              <div className="flex justify-end">
-                <Button variant="outline" size="sm" onClick={() => copyToClipboard(storyData.story)}>
-                  <Copy className="h-4 w-4 mr-2" /> Copy
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="hook">
-            <div className="space-y-4">
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Hook Visual Description</h3>
-                <p className="whitespace-pre-line">{storyData.hook}</p>
-              </div>
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Hook Text</h3>
-                <p className="whitespace-pre-line">{storyData.hookText}</p>
-              </div>
-              <div className="flex justify-end">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(`${storyData.hook}\n\n${storyData.hookText}`)}
-                >
-                  <Copy className="h-4 w-4 mr-2" /> Copy
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="learning">
-            <div className="space-y-4">
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Key Learning Points</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  {storyData.learningPoints.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex justify-end">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(storyData.learningPoints.join("\n\n"))}
-                >
-                  <Copy className="h-4 w-4 mr-2" /> Copy
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="cta">
-            <div className="space-y-4">
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Call to Action</h3>
-                <p className="whitespace-pre-line">{storyData.cta}</p>
-              </div>
-              <div className="flex justify-end">
-                <Button variant="outline" size="sm" onClick={() => copyToClipboard(storyData.cta)}>
-                  <Copy className="h-4 w-4 mr-2" /> Copy
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="visuals">
-            <div className="space-y-4">
-              <div className="bg-muted p-4 rounded-md">
-                <h3 className="font-bold mb-2">Visual Suggestions</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  {storyData.visuals.map((visual, index) => (
-                    <li key={index}>{visual}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex justify-end">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(storyData.visuals.join("\n\n"))}
-                >
-                  <Copy className="h-4 w-4 mr-2" /> Copy
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+      <CardContent className="flex-1 overflow-y-auto space-y-6">
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Hook Visual</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <p>{storyData.hook}</p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.hook, "Hook visual")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Hook Text</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <p>{storyData.hookText}</p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.hookText, "Hook text")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Story</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <p className="whitespace-pre-line">{storyData.story}</p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.story, "Story")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Learning Points</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <ul className="list-disc pl-5 space-y-1">
+              {storyData.learningPoints.map((point, index) => (
+                <li key={index}>{point}</li>
+              ))}
+            </ul>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.learningPoints.join("\n- "), "Learning points")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Call to Action</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <p>{storyData.cta}</p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.cta, "Call to action")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium text-adpilot-text-secondary">Visual Elements</h3>
+          <div className="bg-adpilot-bg p-3 rounded-md">
+            <ul className="list-disc pl-5 space-y-1">
+              {storyData.visuals.map((visual, index) => (
+                <li key={index}>{visual}</li>
+              ))}
+            </ul>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => handleCopy(storyData.visuals.join("\n- "), "Visual elements")}
+              className="mt-2"
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              Copy
+            </Button>
+          </div>
+        </div>
       </CardContent>
-      <CardFooter className="flex justify-between border-t pt-6">
-        <Button variant="outline">
-          <Download className="h-4 w-4 mr-2" /> Save to Library
+      <CardFooter className="border-t p-4">
+        <Button onClick={handleExport} className="w-full">
+          <Download className="mr-2 h-4 w-4" />
+          Export Story
         </Button>
-        <Button>Share with Team</Button>
       </CardFooter>
     </Card>
   );
-}
+};
 
 export default StoryOutput;

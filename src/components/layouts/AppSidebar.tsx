@@ -24,6 +24,7 @@ import {
   Database,
   LayoutDashboard,
   BookOpen,
+  Key,
 } from "lucide-react";
 
 interface AppSidebarProps {
@@ -226,6 +227,15 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
                   >
                     <Database className="mr-2 h-4 w-4" />
                     Integrations
+                  </Button>
+                </Link>
+                <Link to="/admin/api-management">
+                  <Button
+                    variant={isActive("/admin/api-management") ? "default" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Key className="mr-2 h-4 w-4" />
+                    API Management
                   </Button>
                 </Link>
                 <Link to="/admin/activity">
