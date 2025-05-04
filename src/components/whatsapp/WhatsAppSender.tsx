@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -582,7 +583,7 @@ const WhatsAppSender = () => {
                                           </div>
                                         </TableCell>
                                         <TableCell>
-                                          <Badge variant={contact.status === "active" ? "success" : "secondary"}>
+                                          <Badge variant={contact.status === "active" ? "default" : "secondary"}>
                                             {contact.status}
                                           </Badge>
                                         </TableCell>
@@ -639,10 +640,10 @@ const WhatsAppSender = () => {
                         <div className="mt-4">
                           <h5 className="text-sm font-medium mb-2">Variables</h5>
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            {selectedTemplate.variables.map(variable => (
-                              <div key={variable}>
-                                <Label className="text-xs">{variable}</Label>
-                                <Input placeholder={`Enter ${variable}`} size="sm" />
+                            {selectedTemplate.variables.map(varName => (
+                              <div key={varName}>
+                                <Label className="text-xs">{varName}</Label>
+                                <Input placeholder={`Enter ${varName}`} size="sm" />
                               </div>
                             ))}
                           </div>
@@ -1057,7 +1058,7 @@ const WhatsAppSender = () => {
                             <TableCell>
                               <Badge 
                                 variant={
-                                  campaign.status === "completed" ? "success" : 
+                                  campaign.status === "completed" ? "default" : 
                                   campaign.status === "running" ? "default" : 
                                   campaign.status === "scheduled" ? "outline" : 
                                   "secondary"
@@ -1250,3 +1251,4 @@ const WhatsAppSender = () => {
 };
 
 export default WhatsAppSender;
+
