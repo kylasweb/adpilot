@@ -17,7 +17,8 @@ import {
   Mail,
   LineChart,
   Building2,
-  Calendar
+  Calendar,
+  CheckCircle
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
