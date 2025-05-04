@@ -102,10 +102,11 @@ const App = () => {
     <Router>
       <AuthProvider>
         <Routes>
-          {/* Landing Page */}
+          {/* Landing Page - now the default route */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="/landing" element={<LandingPage />} />
           
-          {/* Authentication Routes */}
+          {/* Authentication Routes - fixed login path */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -113,8 +114,8 @@ const App = () => {
           
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            {/* Main Dashboard */}
-            <Route path="/" element={<Index />} />
+            {/* Main Dashboard - now at /dashboard */}
+            <Route path="/dashboard" element={<Index />} />
             <Route path="/settings" element={<UserSettingsPage />} />
             
             {/* Core App Routes */}

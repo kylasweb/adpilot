@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const from = location.state?.from || "/";
+  const from = location.state?.from || "/dashboard";
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link to="/auth/forgot-password" className="text-xs text-adpilot-primary hover:underline">
+                <Link to="/forgot-password" className="text-xs text-adpilot-primary hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -147,7 +147,7 @@ const LoginPage: React.FC = () => {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-adpilot-text-muted">
             Don't have an account?{" "}
-            <Link to="/auth/register" className="text-adpilot-primary hover:underline">
+            <Link to="/register" className="text-adpilot-primary hover:underline">
               Sign up
             </Link>
           </p>
