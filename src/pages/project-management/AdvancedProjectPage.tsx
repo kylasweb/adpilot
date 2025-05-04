@@ -4,7 +4,7 @@ import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { FileText, Calendar, Users, Clock, Share2, MessagesSquare, Bot } from "lucide-react";
+import { FileText, Calendar, Users, Clock, Share2, MessagesSquare, Bot, Briefcase } from "lucide-react";
 
 const AdvancedProjectPage = () => {
   const projectFeatures = [
