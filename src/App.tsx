@@ -54,9 +54,10 @@ import SeoAuditPage from "./pages/seo/SeoAuditPage";
 import SeoBacklinksPage from "./pages/seo/SeoBacklinksPage";
 import SeoKeywordsPage from "./pages/seo/SeoKeywordsPage";
 import SeoChecklistPage from "./pages/seo/SeoChecklistPage";
+import LocalSeoManagerPage from "./pages/seo/LocalSeoManagerPage";
+import TechnicalSeoAnalyzerPage from "./pages/seo/TechnicalSeoAnalyzerPage";
 
 // Admin Pages
-// Import admin pages from the correct location - they are directly in ./pages/
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUsersPage from "./pages/AdminUsersPage"; 
 import AdminIntegrationsPage from "./pages/AdminIntegrationsPage";
@@ -72,6 +73,29 @@ import ProjectManagementPage from "./pages/freelancer/ProjectManagementPage";
 import ProposalGeneratorPage from "./pages/freelancer/ProposalGeneratorPage";
 import InvoiceCreatorPage from "./pages/freelancer/InvoiceCreatorPage";
 import TimeTrackingPage from "./pages/freelancer/TimeTrackingPage";
+
+// Advanced Project Management Pages
+import AdvancedProjectPage from "./pages/project-management/AdvancedProjectPage";
+import ProjectDevelopmentPage from "./pages/project-management/ProjectDevelopmentPage";
+import ProjectMeetingsPage from "./pages/project-management/ProjectMeetingsPage";
+import ProjectResourcesPage from "./pages/project-management/ProjectResourcesPage";
+import ProjectTimelinesPage from "./pages/project-management/ProjectTimelinesPage";
+import ProjectTeamPage from "./pages/project-management/ProjectTeamPage";
+import ProjectSharingPage from "./pages/project-management/ProjectSharingPage";
+import ProjectCollaborationPage from "./pages/project-management/ProjectCollaborationPage";
+import ProjectAIAssistantPage from "./pages/project-management/ProjectAIAssistantPage";
+
+// Marketplace Optimization Pages
+import MarketplaceOptimizationPage from "./pages/marketplace/MarketplaceOptimizationPage";
+import ChecklistPage from "./pages/marketplace/ChecklistPage";
+import ConfiguratorsPage from "./pages/marketplace/ConfiguratorsPage";
+import ProductSeoPage from "./pages/marketplace/ProductSeoPage";
+
+// CRM Pages
+import AdvancedCrmPage from "./pages/crm/AdvancedCrmPage";
+import CrmDashboardPage from "./pages/crm/CrmDashboardPage";
+import AccountingPage from "./pages/crm/AccountingPage";
+import HrmPage from "./pages/crm/HrmPage";
 
 const App = () => {
   return (
@@ -130,6 +154,8 @@ const App = () => {
             <Route path="/seo/backlinks" element={<SeoBacklinksPage />} />
             <Route path="/seo/keywords" element={<SeoKeywordsPage />} />
             <Route path="/seo/checklist" element={<SeoChecklistPage />} />
+            <Route path="/seo/local-manager" element={<LocalSeoManagerPage />} />
+            <Route path="/seo/technical-analyzer" element={<TechnicalSeoAnalyzerPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
@@ -147,6 +173,29 @@ const App = () => {
             <Route path="/freelancer/proposal-generator" element={<ProposalGeneratorPage />} />
             <Route path="/freelancer/invoice-creator" element={<InvoiceCreatorPage />} />
             <Route path="/freelancer/time-tracking" element={<TimeTrackingPage />} />
+            
+            {/* Advanced Project Management Routes */}
+            <Route path="/project-management" element={<AdvancedProjectPage />} />
+            <Route path="/project-management/development" element={<ProjectDevelopmentPage />} />
+            <Route path="/project-management/meetings" element={<ProjectMeetingsPage />} />
+            <Route path="/project-management/resources" element={<ProjectResourcesPage />} />
+            <Route path="/project-management/timelines" element={<ProjectTimelinesPage />} />
+            <Route path="/project-management/team" element={<ProjectTeamPage />} />
+            <Route path="/project-management/sharing" element={<ProjectSharingPage />} />
+            <Route path="/project-management/collaboration" element={<ProjectCollaborationPage />} />
+            <Route path="/project-management/ai-assistant" element={<ProjectAIAssistantPage />} />
+            
+            {/* Marketplace Optimization Routes */}
+            <Route path="/marketplace" element={<MarketplaceOptimizationPage />} />
+            <Route path="/marketplace/checklist" element={<ChecklistPage />} />
+            <Route path="/marketplace/configurators" element={<ConfiguratorsPage />} />
+            <Route path="/marketplace/product-seo" element={<ProductSeoPage />} />
+            
+            {/* CRM Routes */}
+            <Route path="/crm" element={<AdvancedCrmPage />} />
+            <Route path="/crm/dashboard" element={<CrmDashboardPage />} />
+            <Route path="/crm/accounting" element={<AccountingPage />} />
+            <Route path="/crm/hrm" element={<HrmPage />} />
           </Route>
           
           {/* 404 Route */}

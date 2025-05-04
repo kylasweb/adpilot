@@ -27,7 +27,13 @@ import {
   Key,
   Phone,
   ListChecks,
-  Download
+  Calendar,
+  Clock,
+  Share,
+  Search,
+  Building2,
+  DollarSign,
+  UserPlus
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -157,6 +163,211 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
               </Link>
             </nav>
 
+            {/* Advanced Project Management Section */}
+            <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+              Project Management
+            </div>
+            <nav className="space-y-1">
+              <Link to="/project-management">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Project Dashboard
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Comprehensive project management dashboard
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/development">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/development") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Activity className="mr-2 h-4 w-4" />
+                      Project Development
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage project development lifecycle
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/meetings">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/meetings") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Meetings
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Schedule and manage project meetings
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/resources">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/resources") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Database className="mr-2 h-4 w-4" />
+                      Resources
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage project resources and assets
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/timelines">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/timelines") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Clock className="mr-2 h-4 w-4" />
+                      Timelines
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Project timelines and schedules
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/team">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/team") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Team
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage project teams
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/sharing">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/sharing") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Share className="mr-2 h-4 w-4" />
+                      Sharing
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Share projects with stakeholders
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/collaboration">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/collaboration") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Collaboration
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Real-time project collaboration tools
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/project-management/ai-assistant">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/project-management/ai-assistant") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      AI Assistant
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    AI-powered project management assistant
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+            </nav>
+
+            <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+              CRM & Business
+            </div>
+            <nav className="space-y-1">
+              <Link to="/crm">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/crm") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Briefcase className="mr-2 h-4 w-4" />
+                      Advanced CRM
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Customer relationship management suite
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/crm/accounting">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/crm/accounting") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <DollarSign className="mr-2 h-4 w-4" />
+                      Accounting
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Financial management and accounting
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/crm/hrm">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/crm/hrm") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      HRM
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Human resource management
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+            </nav>
+
             <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
               Tools
             </div>
@@ -246,9 +457,73 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
             </nav>
 
             <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
-              Marketing
+              Marketplace & SEO
             </div>
             <nav className="space-y-1">
+              <Link to="/marketplace">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/marketplace") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Building2 className="mr-2 h-4 w-4" />
+                      Marketplace Optimization
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Advanced marketplace optimization tools
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/marketplace/checklist">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/marketplace/checklist") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <ListChecks className="mr-2 h-4 w-4" />
+                      Checklist
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Marketplace optimization checklists
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/marketplace/configurators">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/marketplace/configurators") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Configurators
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Product configurator settings
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/marketplace/product-seo">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/marketplace/product-seo") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <Search className="mr-2 h-4 w-4" />
+                      Product SEO
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    SEO optimization for marketplace products
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
               <Link to="/digital-marketing/dashboard">
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -294,6 +569,38 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
                   </TooltipTrigger>
                   <TooltipContent side="right">
                     Optimize your website for search engines
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/seo/technical-analyzer">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/seo/technical-analyzer") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <Activity className="mr-2 h-4 w-4" />
+                      Technical SEO
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Advanced technical SEO analysis tools
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/seo/local-manager">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/seo/local-manager") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <Globe className="mr-2 h-4 w-4" />
+                      Local SEO Manager
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage local SEO and business listings
                   </TooltipContent>
                 </Tooltip>
               </Link>

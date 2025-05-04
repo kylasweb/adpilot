@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Search, LineChart, Globe, LinkIcon, ListChecks } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const S = () => {
+const SeoPage = () => {
   const seoTools = [
     {
       title: "Keyword Research",
@@ -76,4 +76,4 @@ const S = () => {
   );
 };
 
-export default S;
+export default SeoPage;
