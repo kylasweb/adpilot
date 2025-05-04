@@ -2,6 +2,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
+// Landing Page
+import LandingPage from "./pages/LandingPage";
+
 // Authentication Pages
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
@@ -24,6 +27,8 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import ContentCreatorPage from "./pages/tools/ContentCreatorPage";
 import ImageEditorPage from "./pages/tools/ImageEditorPage";
 import DocumentCreatorPage from "./pages/tools/DocumentCreatorPage";
+import ChatbotBuilderPage from "./pages/tools/ChatbotBuilderPage";
+import WhatsAppBulkSenderPage from "./pages/tools/WhatsAppBulkSenderPage";
 
 // Digital Marketing Pages
 import DigitalMarketingPage from "./pages/DigitalMarketingPage";
@@ -48,6 +53,7 @@ import SeoAnalyzerPage from "./pages/seo/SeoAnalyzerPage";
 import SeoAuditPage from "./pages/seo/SeoAuditPage";
 import SeoBacklinksPage from "./pages/seo/SeoBacklinksPage";
 import SeoKeywordsPage from "./pages/seo/SeoKeywordsPage";
+import SeoChecklistPage from "./pages/seo/SeoChecklistPage";
 
 // Admin Pages
 // Import admin pages from the correct location - they are directly in ./pages/
@@ -72,6 +78,9 @@ const App = () => {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* Landing Page */}
+          <Route path="/landing" element={<LandingPage />} />
+          
           {/* Authentication Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -94,6 +103,8 @@ const App = () => {
             <Route path="/tools/content-creator" element={<ContentCreatorPage />} />
             <Route path="/tools/image-editor" element={<ImageEditorPage />} />
             <Route path="/tools/document-creator" element={<DocumentCreatorPage />} />
+            <Route path="/tools/chatbot-builder" element={<ChatbotBuilderPage />} />
+            <Route path="/tools/whatsapp-sender" element={<WhatsAppBulkSenderPage />} />
             
             {/* Digital Marketing Routes */}
             <Route path="/digital-marketing" element={<DigitalMarketingPage />} />
@@ -118,6 +129,7 @@ const App = () => {
             <Route path="/seo/audit" element={<SeoAuditPage />} />
             <Route path="/seo/backlinks" element={<SeoBacklinksPage />} />
             <Route path="/seo/keywords" element={<SeoKeywordsPage />} />
+            <Route path="/seo/checklist" element={<SeoChecklistPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />

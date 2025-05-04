@@ -2,10 +2,10 @@
 import React from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, LineChart, Globe, LinkIcon } from "lucide-react";
+import { Search, LineChart, Globe, LinkIcon, ListChecks } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const SeoPage = () => {
+const S = () => {
   const seoTools = [
     {
       title: "Keyword Research",
@@ -34,6 +34,13 @@ const SeoPage = () => {
       href: "/seo/backlinks",
       icon: LinkIcon,
       color: "bg-amber-100 text-amber-600",
+    },
+    {
+      title: "SEO & Web Design Checklist",
+      description: "500-point checklist for webmasters and digital marketers",
+      href: "/seo/checklist",
+      icon: ListChecks,
+      color: "bg-indigo-100 text-indigo-600",
     }
   ];
 
@@ -47,7 +54,7 @@ const SeoPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {seoTools.map((tool) => (
             <Link key={tool.title} to={tool.href}>
               <Card className="h-full hover:shadow-md transition-shadow">
@@ -69,4 +76,4 @@ const SeoPage = () => {
   );
 };
 
-export default SeoPage;
+export default S;

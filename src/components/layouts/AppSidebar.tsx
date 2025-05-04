@@ -25,7 +25,11 @@ import {
   LayoutDashboard,
   BookOpen,
   Key,
+  Phone,
+  ListChecks,
+  Download
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AppSidebarProps {
   isOpen: boolean;
@@ -65,222 +69,405 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
       </div>
 
       <ScrollArea className="h-[calc(100vh-4rem)] py-4">
-        <div className="px-4 lg:px-6 space-y-6">
-          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
-            Core
-          </div>
-          <nav className="space-y-1">
-            <Link to="/">
-              <Button
-                variant={isActive("/") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                Dashboard
-              </Button>
-            </Link>
-            <Link to="/cohorts">
-              <Button
-                variant={isActive("/cohorts") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <Users className="mr-2 h-4 w-4" />
-                Audience
-              </Button>
-            </Link>
-            <Link to="/campaigns">
-              <Button
-                variant={isActive("/campaigns") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <Radio className="mr-2 h-4 w-4" />
-                Campaigns
-              </Button>
-            </Link>
-            <Link to="/creative">
-              <Button
-                variant={isActive("/creative") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Creative
-              </Button>
-            </Link>
-            <Link to="/analytics">
-              <Button
-                variant={isActive("/analytics") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <BarChart2 className="mr-2 h-4 w-4" />
-                Analytics
-              </Button>
-            </Link>
-          </nav>
-
-          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
-            Tools
-          </div>
-          <nav className="space-y-1">
-            <Link to="/tools/content-creator">
-              <Button
-                variant={isActive("/tools/content-creator") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                Content Creator
-              </Button>
-            </Link>
-            <Link to="/tools/image-editor">
-              <Button
-                variant={isActive("/tools/image-editor") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <Paintbrush className="mr-2 h-4 w-4" />
-                Image Editor
-              </Button>
-            </Link>
-            {isAdmin && (
-              <Link to="/admin/storytelling">
-                <Button
-                  variant={isActive("/admin/storytelling") ? "default" : "ghost"}
-                  className="w-full justify-start"
-                >
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  AI Storyteller
-                </Button>
+        <TooltipProvider>
+          <div className="px-4 lg:px-6 space-y-6">
+            <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+              Core
+            </div>
+            <nav className="space-y-1">
+              <Link to="/">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    View your marketing dashboard
+                  </TooltipContent>
+                </Tooltip>
               </Link>
-            )}
-          </nav>
+              <Link to="/cohorts">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/cohorts") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Audience
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage audience segments and personas
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/campaigns">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/campaigns") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Radio className="mr-2 h-4 w-4" />
+                      Campaigns
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Create and manage marketing campaigns
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/creative">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/creative") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Creative
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage creative assets and content
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/analytics">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/analytics") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <BarChart2 className="mr-2 h-4 w-4" />
+                      Analytics
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    View campaign performance metrics
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+            </nav>
 
-          <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
-            Marketing
-          </div>
-          <nav className="space-y-1">
-            <Link to="/digital-marketing/dashboard">
-              <Button
-                variant={isActive("/digital-marketing") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <Globe className="mr-2 h-4 w-4" />
-                Digital Marketing
-              </Button>
-            </Link>
-            <Link to="/email-marketing">
-              <Button
-                variant={isActive("/email-marketing") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <Mail className="mr-2 h-4 w-4" />
-                Email Marketing
-              </Button>
-            </Link>
-            <Link to="/seo">
-              <Button
-                variant={isActive("/seo") ? "default" : "ghost"}
-                className="w-full justify-start"
-              >
-                <PieChart className="mr-2 h-4 w-4" />
-                SEO Tools
-              </Button>
-            </Link>
-          </nav>
-
-          <Link to="/freelancer">
-            <Button
-              variant={isActive("/freelancer") ? "default" : "ghost"}
-              className="w-full justify-start"
-            >
-              <Briefcase className="mr-2 h-4 w-4" />
-              Freelancer Tools
-            </Button>
-          </Link>
-          
-          {/* Show Admin section only for admin users */}
-          {isAdmin && (
-            <>
-              <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
-                Administration
-              </div>
-              <nav className="space-y-1">
-                <Link to="/admin/dashboard">
-                  <Button
-                    variant={isActive("/admin/dashboard") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Layers className="mr-2 h-4 w-4" />
-                    SAAS Dashboard
-                  </Button>
-                </Link>
-                <Link to="/admin/users">
-                  <Button
-                    variant={isActive("/admin/users") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Users & Teams
-                  </Button>
-                </Link>
-                <Link to="/admin/integrations">
-                  <Button
-                    variant={isActive("/admin/integrations") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Database className="mr-2 h-4 w-4" />
-                    Integrations
-                  </Button>
-                </Link>
-                <Link to="/admin/api-management">
-                  <Button
-                    variant={isActive("/admin/api-management") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Key className="mr-2 h-4 w-4" />
-                    API Management
-                  </Button>
-                </Link>
-                <Link to="/admin/activity">
-                  <Button
-                    variant={isActive("/admin/activity") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Activity className="mr-2 h-4 w-4" />
-                    Activity Log
-                  </Button>
-                </Link>
-                <Link to="/admin/settings">
-                  <Button
-                    variant={isActive("/admin/settings") ? "default" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Button>
-                </Link>
+            <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+              Tools
+            </div>
+            <nav className="space-y-1">
+              <Link to="/tools/content-creator">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/tools/content-creator") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Content Creator
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    AI-powered marketing content generator
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/tools/image-editor">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/tools/image-editor") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Paintbrush className="mr-2 h-4 w-4" />
+                      Image Editor
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Create and edit marketing visuals
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/tools/chatbot-builder">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/tools/chatbot-builder") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Chatbot Builder
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Create AI chatbots for multiple platforms
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/tools/whatsapp-sender">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/tools/whatsapp-sender") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Phone className="mr-2 h-4 w-4" />
+                      WhatsApp Sender
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Send bulk WhatsApp messages to contacts
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              {isAdmin && (
                 <Link to="/admin/storytelling">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={isActive("/admin/storytelling") ? "default" : "ghost"}
+                        className="w-full justify-start"
+                      >
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        AI Storyteller
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      Create engaging marketing narratives with AI
+                    </TooltipContent>
+                  </Tooltip>
+                </Link>
+              )}
+            </nav>
+
+            <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+              Marketing
+            </div>
+            <nav className="space-y-1">
+              <Link to="/digital-marketing/dashboard">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/digital-marketing") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Globe className="mr-2 h-4 w-4" />
+                      Digital Marketing
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Manage digital marketing campaigns
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/email-marketing">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/email-marketing") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      Email Marketing
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Create and manage email campaigns
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/seo">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/seo") ? "default" : "ghost"}
+                      className="w-full justify-start"
+                    >
+                      <PieChart className="mr-2 h-4 w-4" />
+                      SEO Tools
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Optimize your website for search engines
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+              <Link to="/seo/checklist">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={isActive("/seo/checklist") ? "default" : "ghost"}
+                      className="w-full justify-start pl-9"
+                    >
+                      <ListChecks className="mr-2 h-4 w-4" />
+                      SEO Checklist
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    500-point SEO & web design checklist
+                  </TooltipContent>
+                </Tooltip>
+              </Link>
+            </nav>
+
+            <Link to="/freelancer">
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Button
-                    variant={isActive("/admin/storytelling") ? "default" : "ghost"}
+                    variant={isActive("/freelancer") ? "default" : "ghost"}
                     className="w-full justify-start"
                   >
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    AI Storyteller
+                    <Briefcase className="mr-2 h-4 w-4" />
+                    Freelancer Tools
                   </Button>
-                </Link>
-              </nav>
-            </>
-          )}
-          
-          <div className="mt-4">
-            <div className="rounded-lg bg-muted p-3">
-              <div className="flex items-center mb-2">
-                <Shield className="h-5 w-5 mr-2 text-adpilot-primary" />
-                <span className="text-sm font-medium">Organization</span>
-              </div>
-              <div className="text-xs text-adpilot-text-muted">
-                ID: {organizationId || "Not assigned"}
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  Tools for freelance marketers
+                </TooltipContent>
+              </Tooltip>
+            </Link>
+            
+            {/* Show Admin section only for admin users */}
+            {isAdmin && (
+              <>
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
+                  Administration
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/dashboard">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/dashboard") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Layers className="mr-2 h-4 w-4" />
+                          SAAS Dashboard
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Administrative SAAS dashboard
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/users">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/users") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Users className="mr-2 h-4 w-4" />
+                          Users & Teams
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage users and teams
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/integrations">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/integrations") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Database className="mr-2 h-4 w-4" />
+                          Integrations
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage third-party integrations
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/api-management">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/api-management") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Key className="mr-2 h-4 w-4" />
+                          API Management
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage API keys and connections
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/activity">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/activity") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Activity className="mr-2 h-4 w-4" />
+                          Activity Log
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        View system activity logs
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/settings">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/settings") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Settings className="mr-2 h-4 w-4" />
+                          Settings
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Configure system settings
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                  <Link to="/admin/storytelling">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/storytelling") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <BookOpen className="mr-2 h-4 w-4" />
+                          AI Storyteller
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Create engaging marketing narratives with AI
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+              </>
+            )}
+            
+            <div className="mt-4">
+              <div className="rounded-lg bg-muted p-3">
+                <div className="flex items-center mb-2">
+                  <Shield className="h-5 w-5 mr-2 text-adpilot-primary" />
+                  <span className="text-sm font-medium">Organization</span>
+                </div>
+                <div className="text-xs text-adpilot-text-muted">
+                  ID: {organizationId || "Not assigned"}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </TooltipProvider>
       </ScrollArea>
     </aside>
   );
