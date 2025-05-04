@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -11,7 +10,6 @@ import { Switch } from "@/components/ui/switch";
 import {
   MessageSquare,
   Globe,
-  BrandTelegram,
   Phone,
   Plus,
   Trash2,
@@ -76,7 +74,7 @@ export interface Chatbot {
 const platforms = [
   { id: "website", label: "Website", icon: Globe },
   { id: "whatsapp", label: "WhatsApp", icon: Phone },
-  { id: "telegram", label: "Telegram", icon: BrandTelegram },
+  { id: "telegram", label: "Telegram", icon: MessageSquare },
   { id: "facebook", label: "Facebook Messenger", icon: MessageSquare },
 ];
 

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -311,7 +310,7 @@ const SeoChecklist = () => {
                   completionPercentage < 25 ? "destructive" :
                   completionPercentage < 50 ? "outline" :
                   completionPercentage < 75 ? "secondary" :
-                  "success"
+                  "default"
                 }>
                   {completionPercentage < 25 ? "Just Started" :
                    completionPercentage < 50 ? "In Progress" :
@@ -386,13 +385,15 @@ const SeoChecklist = () => {
         <Card className="lg:col-span-3">
           <CardHeader className="pb-0">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <Input
-                placeholder="Search checklist items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="sm:max-w-sm"
-                startAdornment={<Search className="h-4 w-4 text-muted-foreground" />}
-              />
+              <div className="flex items-center">
+                <Input
+                  placeholder="Search checklist items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="sm:max-w-sm"
+                />
+                <Search className="h-4 w-4 text-muted-foreground -ml-8" />
+              </div>
               <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
                 <TabsList>
                   <TabsTrigger value="all">All</TabsTrigger>

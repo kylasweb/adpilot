@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Table, 
   TableBody, 
@@ -47,7 +47,8 @@ import {
   Check,
   AlertTriangle,
   X,
-  RefreshCw
+  RefreshCw,
+  Plus
 } from "lucide-react";
 
 // Type definitions
@@ -829,7 +830,7 @@ const WhatsAppSender = () => {
                               {contact.lastMessage ? new Date(contact.lastMessage).toLocaleDateString() : "-"}
                             </TableCell>
                             <TableCell>
-                              <Badge variant={contact.status === "active" ? "success" : "secondary"}>
+                              <Badge variant={contact.status === "active" ? "default" : "secondary"}>
                                 {contact.status}
                               </Badge>
                             </TableCell>
