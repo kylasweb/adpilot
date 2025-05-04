@@ -95,88 +95,107 @@ export const ContentCreator = () => {
             selectedTemplate={selectedTemplate}
             onSelectTemplate={setSelectedTemplate}
           />
+          
           <div className="mt-6">
             <AIConfigPanel 
-              selectedModel={selectedModel} 
-              onSelectModel={setSelectedModel} 
-              aiSuggestions={aiSuggestions}
-              setAiSuggestions={setAiSuggestions}
+              selectedModel={selectedModel}
+              onSelectModel={setSelectedModel}
+              advancedSettings={advancedSettings}
+              setAdvancedSettings={setAdvancedSettings}
             />
           </div>
         </div>
         
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs 
-            value={activeTab} 
-            onValueChange={setActiveTab}
-            className="flex-1 flex flex-col overflow-hidden"
-          >
-            <div className="px-6 border-b">
-              <TabsList className="mt-2">
-                <TabsTrigger value="create">Create</TabsTrigger>
-                <TabsTrigger value="preview">Preview</TabsTrigger>
-              </TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+            <div className="border-b">
+              <div className="px-4">
+                <TabsList className="mt-2">
+                  <TabsTrigger value="create">Create</TabsTrigger>
+                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                </TabsList>
+              </div>
             </div>
             
-            <TabsContent value="create" className="flex-1 overflow-y-auto p-6 m-0">
-              <ContentEditor 
-                prompt={prompt} 
-                setPrompt={setPrompt} 
-                contentType={contentType}
-                selectedTemplate={selectedTemplate}
-                advancedSettings={advancedSettings}
-                setAdvancedSettings={setAdvancedSettings}
-              />
-              
-              <div className="mt-6 flex justify-end">
-                <Button 
-                  onClick={handleGenerate} 
-                  disabled={isGenerating}
-                  className="px-6"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    "Generate Content"
-                  )}
-                </Button>
+            <TabsContent value="create" className="flex-1 p-4 overflow-auto">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Content Prompt</label>
+                  <textarea 
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe the content you want to create..."
+                    className="w-full h-32 p-3 border rounded-md resize-none focus:ring-2 focus:ring-adpilot-primary focus:border-transparent"
+                  />
+                </div>
+                
+                {aiSuggestions.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">AI Suggestions:</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {aiSuggestions.map((suggestion, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setPrompt(suggestion)}
+                          className="px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-full text-xs"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex justify-end space-x-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setPrompt("")}
+                    disabled={!prompt.trim() || isGenerating}
+                  >
+                    Clear
+                  </Button>
+                  <Button 
+                    onClick={handleGenerate}
+                    disabled={!prompt.trim() || isGenerating}
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      'Generate Content'
+                    )}
+                  </Button>
+                </div>
               </div>
             </TabsContent>
             
-            <TabsContent value="preview" className="flex-1 flex flex-col overflow-hidden p-0 m-0">
-              <div className="flex items-center px-6 py-2 border-b">
-                <Languages className="h-4 w-4 mr-2" />
-                <span className="text-sm font-medium capitalize">
-                  {advancedSettings.language} | {advancedSettings.tone} | {advancedSettings.style}
-                </span>
-              </div>
-              <div className="flex-1 p-6 overflow-y-auto">
-                <div className="prose max-w-none">
-                  {generatedContent ? (
-                    <div dangerouslySetInnerHTML={{ __html: generatedContent.replace(/\n/g, '<br />') }} />
-                  ) : (
-                    <p className="text-gray-400 italic">Generated content will appear here</p>
-                  )}
-                </div>
+            <TabsContent value="preview" className="flex-1 flex flex-col overflow-hidden">
+              <div className="p-4 flex-1 overflow-auto">
+                <ContentEditor content={generatedContent} onChange={setGeneratedContent} />
               </div>
               
               {generatedContent && (
-                <div className="border-t p-4 flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleCopy}>
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copy
-                  </Button>
-                  <Button variant="outline" onClick={handleExport}>
-                    <Download className="mr-2 h-4 w-4" />
-                    Export
-                  </Button>
-                  <Button onClick={handleSave}>
-                    <Save className="mr-2 h-4 w-4" />
-                    Save to Library
-                  </Button>
+                <div className="border-t p-4 flex justify-between items-center bg-gray-50">
+                  <div className="flex items-center">
+                    <Languages className="h-4 w-4 mr-2 text-gray-500" />
+                    <span className="text-sm text-gray-600">Content length: {generatedContent.length} characters</span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline" onClick={handleCopy}>
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={handleSave}>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save
+                    </Button>
+                    <Button size="sm" onClick={handleExport}>
+                      <Download className="mr-2 h-4 w-4" />
+                      Export
+                    </Button>
+                  </div>
                 </div>
               )}
             </TabsContent>
