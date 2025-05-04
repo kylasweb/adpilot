@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -643,7 +642,7 @@ const WhatsAppSender = () => {
                             {selectedTemplate.variables.map(varName => (
                               <div key={varName}>
                                 <Label className="text-xs">{varName}</Label>
-                                <Input placeholder={`Enter ${varName}`} size="sm" />
+                                <Input placeholder={`Enter ${varName}`} />
                               </div>
                             ))}
                           </div>
@@ -945,7 +944,7 @@ const WhatsAppSender = () => {
                                 onChange={(e) => setNewTemplateContent(e.target.value)}
                               />
                               <p className="text-xs text-muted-foreground mt-1">
-                                Use {{variable_name}} for dynamic content (e.g., {{name}}, {{date}})
+                                Use {"{{variable_name}}"} for dynamic content (e.g., {"{{name}}"}, {"{{date}}"})
                               </p>
                             </div>
                             <div>
@@ -1251,4 +1250,3 @@ const WhatsAppSender = () => {
 };
 
 export default WhatsAppSender;
-
