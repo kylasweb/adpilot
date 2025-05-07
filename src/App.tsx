@@ -1,6 +1,8 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { useEffect } from "react";
+import { initializeDefaultProviders } from "./services/apiKeyManager";
 
 // Landing Page
 import LandingPage from "./pages/LandingPage";
@@ -103,6 +105,11 @@ import AccountingPage from "./pages/crm/AccountingPage";
 import HrmPage from "./pages/crm/HrmPage";
 
 const App = () => {
+  useEffect(() => {
+    // Initialize API providers when app starts
+    initializeDefaultProviders();
+  }, []);
+
   return (
     <Router>
       <AuthProvider>

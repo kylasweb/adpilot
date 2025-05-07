@@ -10,6 +10,23 @@ export interface ApiProvider {
 
 const API_STORAGE_KEY = "adpilot-api-keys";
 
+/**
+ * Initialize all default API providers
+ */
+export const initializeDefaultProviders = (): void => {
+  try {
+    Object.entries(defaultApiKeys).forEach(([providerId, apiKey]) => {
+      // Only initialize if not already in storage
+      const storedData = localStorage.getItem(API_STORAGE_KEY);
+      if (!storedData || !(JSON.parse(storedData) as ApiProvider[]).find(p => p.id === providerId)) {
+        saveApiKey(providerId, apiKey, true);
+      }
+    });
+  } catch (error) {
+    console.error("Error initializing default providers:", error);
+  }
+};
+
 // Default API keys for development only (would usually be in env variables)
 const defaultApiKeys: Record<string, string> = {
   openai: "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",
@@ -40,8 +57,10 @@ export const getApiKey = (providerId: string, useDefault = true): string | null 
       }
     }
     
-    // Fall back to default keys if requested and available
+    // If no stored data or provider not found, initialize with default key
     if (useDefault && defaultApiKeys[providerId]) {
+      // Initialize provider with default key
+      saveApiKey(providerId, defaultApiKeys[providerId], true);
       return defaultApiKeys[providerId];
     }
     
@@ -63,11 +82,20 @@ export const isProviderEnabled = (providerId: string): boolean => {
     if (storedData) {
       const providers = JSON.parse(storedData) as ApiProvider[];
       const provider = providers.find(p => p.id === providerId);
-      return provider ? provider.isEnabled : false;
+      if (provider) {
+        return provider.isEnabled;
+      }
     }
-    return true; // Default to enabled if not in storage
+    
+    // If no stored data or provider not found, initialize with default state
+    if (defaultApiKeys[providerId]) {
+      saveApiKey(providerId, defaultApiKeys[providerId], true);
+      return true;
+    }
+    
+    return false;
   } catch {
-    return true; // Default to enabled on error
+    return defaultApiKeys[providerId] ? true : false;
   }
 };
 
