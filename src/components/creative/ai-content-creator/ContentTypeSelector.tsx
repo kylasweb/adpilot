@@ -1,4 +1,3 @@
-
 import React from "react";
 import { ContentType, ContentTemplate, contentTemplates } from "./types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,6 +33,9 @@ const ContentTypeSelector = ({
         <TabsList className="grid grid-cols-2 w-full h-auto mt-1">
           <TabsTrigger value="seo" className="py-1 text-xs">SEO</TabsTrigger>
           <TabsTrigger value="branding" className="py-1 text-xs">Branding</TabsTrigger>
+        </TabsList>
+        <TabsList className="grid grid-cols-2 w-full h-auto mt-1">
+          <TabsTrigger value="marketing" className="py-1 text-xs">Marketing</TabsTrigger>
         </TabsList>
         
         <div className="mt-6">
@@ -90,6 +92,19 @@ const ContentTypeSelector = ({
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="marketing" className="m-0 p-0">
+            <div className="grid grid-cols-1 gap-2">
+              {contentTemplates.marketing.map((template) => (
+                <TemplateCard 
+                  key={template.id}
+                  template={template}
+                  isSelected={selectedTemplate?.id === template.id}
+                  onSelect={() => onSelectTemplate(template)}
+                />
+              ))}
+            </div>
+          </TabsContent>
         </div>
       </Tabs>
     </div>
@@ -97,6 +112,7 @@ const ContentTypeSelector = ({
 };
 
 interface TemplateCardProps {
+  key: string;
   template: ContentTemplate;
   isSelected: boolean;
   onSelect: () => void;

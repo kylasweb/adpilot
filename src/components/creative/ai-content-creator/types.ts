@@ -1,4 +1,4 @@
-export type ContentType = "social" | "website" | "seo" | "branding";
+export type ContentType = "social" | "website" | "seo" | "branding" | "marketing";
 
 export type AIModel = "deepseek-coder" | "gemini-pro" | "llama3-70b" | "mixtral-8x7b" | "claude-3-opus";
 
@@ -23,7 +23,7 @@ export const contentTemplates: Record<ContentType, ContentTemplate[]> = {
       name: "Instagram Post",
       description: "Create engaging Instagram content with captions and hashtags",
       contentType: "social",
-      promptGuide: "Include caption, hashtags, and emoji suggestions"
+      promptGuide: "Include caption, hashtags, and emoji suggestions",
     },
     {
       id: "linkedin-article",
@@ -84,11 +84,11 @@ export const contentTemplates: Record<ContentType, ContentTemplate[]> = {
       promptGuide: "Include service descriptions, benefits, and differentiation points"
     },
     {
-      id: "landing-page",
-      name: "Landing Page",
-      description: "Conversion-focused page for specific campaigns",
+      id: "website-landing-page",
+      name: "Website Landing Page",
+      description: "Generate landing page copy, including headlines, body text, and calls to action.",
       contentType: "website",
-      promptGuide: "Include headline, problem/solution, testimonials, and strong CTA"
+      promptGuide: "Include headline, body text, and calls to action"
     }
   ],
   seo: [
@@ -97,7 +97,7 @@ export const contentTemplates: Record<ContentType, ContentTemplate[]> = {
       name: "SEO Blog Post",
       description: "Keyword-optimized blog content that ranks well",
       contentType: "seo",
-      promptGuide: "Include target keywords, header structure, and meta description"
+      promptGuide: "Include target keywords, header structure, and meta description",
     },
     {
       id: "product-page-seo",
@@ -164,7 +164,23 @@ export const contentTemplates: Record<ContentType, ContentTemplate[]> = {
       contentType: "branding",
       promptGuide: "Include positioning statement, pillars, proof points, and elevator pitch"
     }
-  ]
+  ],
+  marketing: [
+    {
+      id: "email-subject-line",
+      name: "Email Subject Line",
+      description: "Generate catchy and effective email subject lines",
+      contentType: "marketing",
+      promptGuide: "Include keywords, target audience, and desired tone"
+    },
+    {
+      id: "ad-copy",
+      name: "Ad Copy",
+      description: "Generate ad copy for various platforms with specific character limits",
+      contentType: "marketing",
+      promptGuide: "Specify platform, target audience, and desired tone"
+    }
+  ],
 };
 
 // Document creator types
@@ -184,10 +200,10 @@ export type ContentTone =
   | "casual" 
   | "friendly" 
   | "authoritative" 
-  | "persuasive" 
-  | "humorous" 
+  | "persuasive"
+  | "humorous"
   | "formal"
-  | "technical"
+  | "technical" 
   | "empathetic"
   | "urgent";
 
@@ -202,6 +218,7 @@ export type ContentStyle =
   | "descriptive"
   | "instructional";
 
+
 export type ContentUseCase =
   | "lead_generation"
   | "brand_awareness"
@@ -211,7 +228,7 @@ export type ContentUseCase =
   | "customer_education"
   | "thought_leadership";
 
-export type ContentLanguage =
+export type ContentLanguage = 
   | "english"
   | "spanish"
   | "french"
@@ -227,6 +244,7 @@ export type ContentLanguage =
   | "malayalam"
   | "tamil"
   | "telugu";
+
 
 export interface AdvancedContentSettings {
   tone: ContentTone;
@@ -285,5 +303,5 @@ export interface ServiceItem {
   description: string;
   quantity: number;
   price: number;
-  category: ServiceCategory;
+  category: ServiceCategory
 }

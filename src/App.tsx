@@ -28,9 +28,14 @@ import ContentCreatorPage from "./pages/tools/ContentCreatorPage";
 import ImageEditorPage from "./pages/tools/ImageEditorPage";
 import DocumentCreatorPage from "./pages/tools/DocumentCreatorPage";
 import ChatbotBuilderPage from "./pages/tools/ChatbotBuilderPage";
+// Tool Pages
 import WhatsAppBulkSenderPage from "./pages/tools/WhatsAppBulkSenderPage";
 
 // Digital Marketing Pages
+import SocialMediaSchedulerPage from "./pages/tools/SocialMediaSchedulerPage";
+import EmailMarketingAutomationPage from "./pages/tools/EmailMarketingAutomationPage";
+import SeoKeywordResearchToolPage from "./pages/tools/SeoKeywordResearchToolPage";
+import CompetitorAnalysisToolPage from "./pages/tools/CompetitorAnalysisToolPage";
 import DigitalMarketingPage from "./pages/DigitalMarketingPage";
 import DigitalMarketingDashboardPage from "./pages/digital-marketing/DigitalMarketingDashboardPage";
 import AdManagerPage from "./pages/digital-marketing/AdManagerPage";
@@ -130,6 +135,10 @@ const App = () => {
             <Route path="/tools/document-creator" element={<DocumentCreatorPage />} />
             <Route path="/tools/chatbot-builder" element={<ChatbotBuilderPage />} />
             <Route path="/tools/whatsapp-sender" element={<WhatsAppBulkSenderPage />} />
+            <Route path="/tools/social-media-scheduler" element={<SocialMediaSchedulerPage />} />
+            <Route path="/tools/email-marketing-automation" element={<EmailMarketingAutomationPage />} />
+            <Route path="/tools/seo-keyword-research" element={<SeoKeywordResearchToolPage />} />
+            <Route path="/tools/competitor-analysis" element={<CompetitorAnalysisToolPage />} />
             
             {/* Digital Marketing Routes */}
             <Route path="/digital-marketing" element={<DigitalMarketingPage />} />

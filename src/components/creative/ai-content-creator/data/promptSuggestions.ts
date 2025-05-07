@@ -1,41 +1,41 @@
 
 export const socialSuggestions: string[] = [
-  "Create an engaging Instagram post about a new product launch targeting millennials",
-  "Write a LinkedIn post sharing industry insights and positioning our company as a thought leader",
-  "Develop a Twitter thread explaining our company values and mission in an engaging way",
-  "Generate a Facebook post announcing a special promotion with compelling reasons to act now",
-  "Create a social media caption that uses humor to show the benefits of our service",
-  "Develop a social post that highlights customer success stories and testimonials",
-  "Write a social media post for a holiday campaign that creates emotional connection with our audience",
-  "Generate an engaging social media poll question that will encourage audience participation",
-  "Create a short, engaging Twitter post that drives traffic to our latest blog article",
-  "Develop a social media post series that explains a complex topic in our industry"
+  "Generate an Instagram post showcasing a user-generated content campaign with a specific hashtag.",
+  "Create a LinkedIn article discussing the impact of AI on the marketing industry.",
+  "Develop a Twitter thread providing tips for remote work productivity.",
+  "Write a Facebook post promoting a limited-time discount on a popular product.",
+  "Generate a TikTok script for a dance challenge promoting a new song.",
+  "Create a Pinterest pin promoting a blog post about home decor ideas.",
+  "Develop a YouTube video description for a product review.",
+  "Write a social media post for a contest or giveaway.",
+  "Generate a social media post that asks a question to encourage engagement.",
+  "Create a social media post that shares a surprising statistic related to our industry."
 ];
 
 export const websiteSuggestions: string[] = [
-  "Write compelling homepage copy that clearly communicates our value proposition",
-  "Create an 'About Us' page that tells our company story and builds trust",
-  "Develop product description copy that highlights benefits and drives conversions",
-  "Write clear and persuasive FAQ content that addresses common customer concerns",
-  "Create a services page that outlines our offerings with clear calls to action",
-  "Develop website banner headlines that capture attention and communicate our unique selling proposition",
-  "Write a privacy policy page that is clear, compliant, and builds trust",
-  "Create compelling case study content that demonstrates our solutions and results",
-  "Develop contact page copy that encourages visitors to reach out and connect",
-  "Write engaging blog post introductions that hook the reader and prevent bounce rates"
+  "Generate a product description for a new eco-friendly water bottle, highlighting its unique features and benefits.",
+  "Create a product description for a luxury watch, emphasizing its craftsmanship and timeless design.",
+  "Develop a product description for a software application, focusing on its key functionalities and user-friendliness.",
+  "Write a product description for a children's toy, emphasizing its educational value and safety features.",
+  "Generate a product description for a gourmet food item, highlighting its ingredients and taste profile.",
+  "Create a product description for a piece of artwork, emphasizing its artistic style and emotional impact.",
+  "Develop a product description for a piece of furniture, focusing on its design and comfort.",
+  "Write a product description for a travel package, highlighting its destinations and activities.",
+  "Generate a product description for a fitness program, emphasizing its benefits and results.",
+  "Create a product description for a financial service, highlighting its security and returns."
 ];
 
 export const seoSuggestions: string[] = [
-  "Create SEO-optimized blog content around the keyword 'sustainable fashion trends'",
-  "Write a comprehensive guide on 'digital marketing strategies' with proper keyword placement",
-  "Develop a list-based article targeting 'home workout equipment' with longtail keywords",
-  "Create product descriptions that naturally incorporate high-volume keywords",
-  "Write meta descriptions for our key landing pages that include target keywords and drive clicks",
-  "Develop a FAQ section targeting common customer search queries in our industry",
-  "Create location-based content to rank for '[service] in [location]' searches",
-  "Write an SEO-friendly comparison article between our product and competitors",
-  "Develop a how-to guide that targets instructional search queries related to our product",
-  "Create a comprehensive glossary page targeting industry terminology searches"
+  "Write a blog post about the benefits of using TypeScript for web development, targeting developers.",
+  "Create a blog post on the top 5 JavaScript frameworks for building scalable applications.",
+  "Develop a blog post discussing the latest trends in web design for e-commerce websites.",
+  "Write a blog post about the importance of website accessibility for SEO.",
+  "Create a blog post on how to optimize images for faster website loading speed.",
+  "Develop a blog post discussing the benefits of using a CDN for website performance.",
+  "Write a blog post about the importance of mobile-first design for SEO.",
+  "Create a blog post on how to use Google Analytics to track website traffic and conversions.",
+  "Develop a blog post discussing the benefits of using schema markup for SEO.",
+  "Write a blog post about the latest Google algorithm updates and how they affect SEO."
 ];
 
 export const brandingSuggestions: string[] = [
