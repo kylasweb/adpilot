@@ -1,19 +1,63 @@
-
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Calendar, PieChart } from "lucide-react";
+import { Clock, Calendar, PieChart, Settings, DollarSign, FileText } from "lucide-react";
+import { TimeEntryConfigurator } from "@/components/freelancer/configurators/timetracking/TimeEntryConfigurator";
+import { ProjectRateConfigurator } from "@/components/freelancer/configurators/timetracking/ProjectRateConfigurator";
+import { ReportingConfigurator } from "@/components/freelancer/configurators/timetracking/ReportingConfigurator";
+import { toast } from "sonner";
 
 const TimeTrackingPage = () => {
+  const [timeEntryOpen, setTimeEntryOpen] = useState(false);
+  const [projectRateOpen, setProjectRateOpen] = useState(false);
+  const [reportingOpen, setReportingOpen] = useState(false);
+
+  const handleConfigSubmit = (type: string, values: Record<string, any>) => {
+    console.log(`${type} settings updated:`, values);
+    toast.success(`${type} settings updated successfully`);
+  };
+
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-semibold">Time Tracking</h1>
-          <p className="text-adpilot-text-secondary mt-1">
-            Track time spent on projects and tasks with detailed reporting
-          </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-semibold">Time Tracking</h1>
+            <p className="text-adpilot-text-secondary mt-1">
+              Track time spent on projects and tasks with detailed reporting
+            </p>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTimeEntryOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Settings className="h-4 w-4" />
+              Time Entry Settings
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setProjectRateOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <DollarSign className="h-4 w-4" />
+              Project Rates
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setReportingOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              Reporting
+            </Button>
+          </div>
         </div>
         
         <div className="grid gap-6 md:grid-cols-2">
@@ -106,6 +150,27 @@ const TimeTrackingPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      <TimeEntryConfigurator
+        open={timeEntryOpen}
+        onOpenChange={setTimeEntryOpen}
+        onSubmit={(values) => handleConfigSubmit('Time entry', values)}
+        onCancel={() => setTimeEntryOpen(false)}
+      />
+
+      <ProjectRateConfigurator
+        open={projectRateOpen}
+        onOpenChange={setProjectRateOpen}
+        onSubmit={(values) => handleConfigSubmit('Project rate', values)}
+        onCancel={() => setProjectRateOpen(false)}
+      />
+
+      <ReportingConfigurator
+        open={reportingOpen}
+        onOpenChange={setReportingOpen}
+        onSubmit={(values) => handleConfigSubmit('Reporting', values)}
+        onCancel={() => setReportingOpen(false)}
+      />
     </AppLayout>
   );
 };

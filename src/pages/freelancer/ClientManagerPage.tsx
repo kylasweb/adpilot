@@ -8,10 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { UserCheck, Plus, Mail, Phone, FileText, Clock, Database, Send } from "lucide-react";
+import { UserCheck, Plus, Mail, Phone, FileText, Clock, Database, Send, Settings, Import, MessageSquare } from "lucide-react";
+import { ClientSettingsConfigurator } from "@/components/freelancer/configurators/client/ClientSettingsConfigurator";
+import { ImportExportConfigurator } from "@/components/freelancer/configurators/client/ImportExportConfigurator";
+import { CommunicationConfigurator } from "@/components/freelancer/configurators/client/CommunicationConfigurator";
 
 const ClientManagerPage = () => {
   const [isAddClientOpen, setIsAddClientOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isImportExportOpen, setIsImportExportOpen] = useState(false);
+  const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
   
   const clients = [
     {
@@ -70,7 +76,20 @@ const ClientManagerPage = () => {
               Organize and manage your client relationships and communications
             </p>
           </div>
-          <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setIsSettingsOpen(true)}>
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </Button>
+            <Button variant="outline" onClick={() => setIsImportExportOpen(true)}>
+              <Import className="mr-2 h-4 w-4" />
+              Import/Export
+            </Button>
+            <Button variant="outline" onClick={() => setIsCommunicationOpen(true)}>
+              <MessageSquare className="mr-2 h-4 w-4" />
+              Communication
+            </Button>
+            <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
@@ -126,6 +145,20 @@ const ClientManagerPage = () => {
           </Dialog>
         </div>
         
+        {/* Configurator Components */}
+        <ClientSettingsConfigurator
+          open={isSettingsOpen}
+          onOpenChange={setIsSettingsOpen}
+        />
+        <ImportExportConfigurator
+          open={isImportExportOpen}
+          onOpenChange={setIsImportExportOpen}
+        />
+        <CommunicationConfigurator
+          open={isCommunicationOpen}
+          onOpenChange={setIsCommunicationOpen}
+        />
+
         <Tabs defaultValue="clients">
           <TabsList className="mb-4">
             <TabsTrigger value="clients">Clients</TabsTrigger>

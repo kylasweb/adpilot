@@ -1,38 +1,45 @@
-
-import React from "react";
-import { Navigate, useLocation, Outlet } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
-import LoadingSpinner from "@/components/ui/loading-spinner";
+import { useEffect } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
+import { getAuthenticatedUser } from '@/lib/auth';
+import { User } from '@/types/auth.types';
 
 interface ProtectedRouteProps {
-  children?: React.ReactNode;
-  requiredRole?: "admin" | "user";
+  allowedRoles?: string[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requiredRole 
-}) => {
-  const { isAuthenticated, user, isLoading } = useAuth();
-  const location = useLocation();
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+  const navigate = useNavigate();
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { user } = await getAuthenticatedUser();
+        
+        if (!user) {
+          navigate('/login', { 
+            replace: true,
+            state: { from: window.location.pathname }
+          });
+          return;
+        }
 
-  if (!isAuthenticated) {
-    // Redirect to login page if not authenticated
-    return <Navigate to="/auth/login" state={{ from: location.pathname }} replace />;
-  }
+        // Check role-based access if roles are specified
+        if (allowedRoles && !allowedRoles.includes(user.role)) {
+          navigate('/unauthorized', { replace: true });
+          return;
+        }
 
-  if (requiredRole && user?.role !== requiredRole) {
-    // Redirect to unauthorized page if user doesn't have the required role
-    return <Navigate to="/unauthorized" replace />;
-  }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        navigate('/login', { 
+          replace: true,
+          state: { from: window.location.pathname }
+        });
+      }
+    };
 
-  // When used as a route element in v6, it should return an Outlet
-  // When used as a wrapper component, it should return children
-  return children ? <>{children}</> : <Outlet />;
+    checkAuth();
+  }, [navigate, allowedRoles]);
+
+  return <Outlet />;
 };
-
-export default ProtectedRoute;

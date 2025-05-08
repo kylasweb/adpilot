@@ -1,11 +1,26 @@
-
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Check } from "lucide-react";
+import { FileText, Users, Check, Settings, PenTool, Wand2, LayoutTemplate } from "lucide-react";
+import { TemplateEditorConfigurator } from "@/components/freelancer/configurators/proposal/TemplateEditorConfigurator";
+import { ProposalSettingsConfigurator } from "@/components/freelancer/configurators/proposal/ProposalSettingsConfigurator";
+import { AISettingsConfigurator } from "@/components/freelancer/configurators/proposal/AISettingsConfigurator";
+import { ContentBlockConfigurator } from "@/components/freelancer/configurators/proposal/ContentBlockConfigurator";
 
 const ProposalGeneratorPage = () => {
+  // State for configurator dialogs
+  const [isTemplateEditorOpen, setIsTemplateEditorOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAISettingsOpen, setIsAISettingsOpen] = useState(false);
+  const [isContentBlockOpen, setIsContentBlockOpen] = useState(false);
+
+  // Handlers for configurator events
+  const handleConfiguratorSubmit = (configurator: string, values: Record<string, any>) => {
+    console.log(`${configurator} settings updated:`, values);
+    // TODO: Implement settings update logic
+  };
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -16,9 +31,27 @@ const ProposalGeneratorPage = () => {
               Create professional proposals with AI-powered content assistance
             </p>
           </div>
-          <Button>
-            <span className="mr-2">+</span> New Proposal
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setIsTemplateEditorOpen(true)}>
+              <LayoutTemplate className="h-4 w-4 mr-2" />
+              Template
+            </Button>
+            <Button variant="outline" onClick={() => setIsContentBlockOpen(true)}>
+              <PenTool className="h-4 w-4 mr-2" />
+              Content
+            </Button>
+            <Button variant="outline" onClick={() => setIsAISettingsOpen(true)}>
+              <Wand2 className="h-4 w-4 mr-2" />
+              AI Settings
+            </Button>
+            <Button variant="outline" onClick={() => setIsSettingsOpen(true)}>
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
+            <Button>
+              <span className="mr-2">+</span> New Proposal
+            </Button>
+          </div>
         </div>
         
         <div className="grid gap-6 md:grid-cols-3">
@@ -125,6 +158,39 @@ const ProposalGeneratorPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Configurator Dialogs */}
+        <TemplateEditorConfigurator
+          open={isTemplateEditorOpen}
+          onOpenChange={setIsTemplateEditorOpen}
+          sections={[]}
+          onSubmit={(values) => handleConfiguratorSubmit('template', values)}
+          onCancel={() => setIsTemplateEditorOpen(false)}
+        />
+
+        <ProposalSettingsConfigurator
+          open={isSettingsOpen}
+          onOpenChange={setIsSettingsOpen}
+          sections={[]}
+          onSubmit={(values) => handleConfiguratorSubmit('settings', values)}
+          onCancel={() => setIsSettingsOpen(false)}
+        />
+
+        <AISettingsConfigurator
+          open={isAISettingsOpen}
+          onOpenChange={setIsAISettingsOpen}
+          sections={[]}
+          onSubmit={(values) => handleConfiguratorSubmit('ai', values)}
+          onCancel={() => setIsAISettingsOpen(false)}
+        />
+
+        <ContentBlockConfigurator
+          open={isContentBlockOpen}
+          onOpenChange={setIsContentBlockOpen}
+          sections={[]}
+          onSubmit={(values) => handleConfiguratorSubmit('content', values)}
+          onCancel={() => setIsContentBlockOpen(false)}
+        />
       </div>
     </AppLayout>
   );

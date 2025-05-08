@@ -1,11 +1,19 @@
-
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Database, FileText, DollarSign } from "lucide-react";
+import { Database, FileText, DollarSign, Settings, FileType, Receipt, Calculator } from "lucide-react";
+import { InvoiceTemplateConfigurator } from "@/components/freelancer/configurators/invoice/InvoiceTemplateConfigurator";
+import { InvoiceSettingsConfigurator } from "@/components/freelancer/configurators/invoice/InvoiceSettingsConfigurator";
+import { PaymentTermsConfigurator } from "@/components/freelancer/configurators/invoice/PaymentTermsConfigurator";
+import { TaxSettingsConfigurator } from "@/components/freelancer/configurators/invoice/TaxSettingsConfigurator";
 
-const InvoiceCreatorPage = () => {
+export const InvoiceCreatorPage: React.FC = () => {
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [paymentTermsDialogOpen, setPaymentTermsDialogOpen] = useState(false);
+  const [taxSettingsDialogOpen, setTaxSettingsDialogOpen] = useState(false);
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -16,9 +24,23 @@ const InvoiceCreatorPage = () => {
               Generate invoices and track payments from your clients
             </p>
           </div>
-          <Button>
-            <span className="mr-2">+</span> New Invoice
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" onClick={() => setTemplateDialogOpen(true)} title="Invoice Template">
+              <FileType className="h-5 w-5" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={() => setSettingsDialogOpen(true)} title="Invoice Settings">
+              <Settings className="h-5 w-5" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={() => setPaymentTermsDialogOpen(true)} title="Payment Terms">
+              <Receipt className="h-5 w-5" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={() => setTaxSettingsDialogOpen(true)} title="Tax Settings">
+              <Calculator className="h-5 w-5" />
+            </Button>
+            <Button>
+              <span className="mr-2">+</span> New Invoice
+            </Button>
+          </div>
         </div>
         
         <div className="grid gap-6 md:grid-cols-3">
@@ -99,6 +121,26 @@ const InvoiceCreatorPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      <InvoiceTemplateConfigurator 
+        open={templateDialogOpen}
+        onOpenChange={setTemplateDialogOpen}
+      />
+      
+      <InvoiceSettingsConfigurator
+        open={settingsDialogOpen}
+        onOpenChange={setSettingsDialogOpen}
+      />
+      
+      <PaymentTermsConfigurator
+        open={paymentTermsDialogOpen}
+        onOpenChange={setPaymentTermsDialogOpen}
+      />
+      
+      <TaxSettingsConfigurator
+        open={taxSettingsDialogOpen}
+        onOpenChange={setTaxSettingsDialogOpen}
+      />
     </AppLayout>
   );
 };
