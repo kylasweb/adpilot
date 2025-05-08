@@ -4,75 +4,171 @@ import { ConfiguratorSection } from '../types';
 
 const sections: ConfiguratorSection[] = [
   {
-    id: 'templates',
-    title: 'Project Templates',
-    description: 'Configure default project templates',
+    id: 'structure',
+    title: 'Project Structure',
+    description: 'Configure default project structure',
     options: [
       {
-        id: 'defaultTemplate',
-        label: 'Default Template',
+        id: 'templateType',
+        label: 'Template Type',
         type: 'select',
-        value: 'basic',
+        value: 'standard',
         options: [
-          { label: 'Basic Project', value: 'basic' },
+          { label: 'Standard Project', value: 'standard' },
           { label: 'Agile Sprint', value: 'agile' },
-          { label: 'Waterfall', value: 'waterfall' }
+          { label: 'Milestone Based', value: 'milestone' },
+          { label: 'Fixed Price', value: 'fixed' },
+          { label: 'Time & Materials', value: 'time' }
         ],
-        description: 'Default template for new projects'
+        description: 'Type of project template'
       },
       {
-        id: 'autoApplyTemplate',
-        label: 'Auto Apply Template',
+        id: 'defaultPhases',
+        label: 'Default Phases',
+        type: 'select',
+        value: ['planning', 'development', 'review'],
+        multiple: true,
+        options: [
+          { label: 'Planning', value: 'planning' },
+          { label: 'Discovery', value: 'discovery' },
+          { label: 'Development', value: 'development' },
+          { label: 'Testing', value: 'testing' },
+          { label: 'Review', value: 'review' },
+          { label: 'Deployment', value: 'deployment' }
+        ],
+        description: 'Default project phases'
+      },
+      {
+        id: 'enableMilestones',
+        label: 'Enable Milestones',
         type: 'boolean',
         value: true,
-        description: 'Automatically apply template to new projects'
+        description: 'Use milestones in projects'
       }
     ]
   },
   {
-    id: 'defaults',
-    title: 'Default Settings',
-    description: 'Set default values for new projects',
+    id: 'tasks',
+    title: 'Task Settings',
+    description: 'Configure default task settings',
+    options: [
+      {
+        id: 'taskCategories',
+        label: 'Task Categories',
+        type: 'select',
+        value: ['feature', 'bug', 'docs'],
+        multiple: true,
+        options: [
+          { label: 'Feature', value: 'feature' },
+          { label: 'Bug Fix', value: 'bug' },
+          { label: 'Documentation', value: 'docs' },
+          { label: 'Testing', value: 'testing' },
+          { label: 'Design', value: 'design' },
+          { label: 'Research', value: 'research' }
+        ],
+        description: 'Available task categories'
+      },
+      {
+        id: 'defaultPriority',
+        label: 'Default Priority',
+        type: 'select',
+        value: 'medium',
+        options: [
+          { label: 'High', value: 'high' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Low', value: 'low' }
+        ],
+        description: 'Default priority for new tasks'
+      },
+      {
+        id: 'estimateRequired',
+        label: 'Require Estimates',
+        type: 'boolean',
+        value: true,
+        description: 'Require time estimates for tasks'
+      }
+    ]
+  },
+  {
+    id: 'timeline',
+    title: 'Timeline Settings',
+    description: 'Configure project timeline defaults',
     options: [
       {
         id: 'defaultDuration',
         label: 'Default Duration (days)',
         type: 'number',
         value: 30,
-        description: 'Default project duration in days'
+        min: 1,
+        max: 365,
+        description: 'Default project duration'
       },
       {
-        id: 'defaultStatus',
-        label: 'Initial Status',
+        id: 'bufferDays',
+        label: 'Buffer Days',
+        type: 'number',
+        value: 5,
+        min: 0,
+        max: 30,
+        description: 'Extra days added for contingency'
+      },
+      {
+        id: 'workingDays',
+        label: 'Working Days',
         type: 'select',
-        value: 'planning',
+        value: ['mon', 'tue', 'wed', 'thu', 'fri'],
+        multiple: true,
         options: [
-          { label: 'Planning', value: 'planning' },
-          { label: 'In Progress', value: 'in-progress' },
-          { label: 'On Hold', value: 'on-hold' }
+          { label: 'Monday', value: 'mon' },
+          { label: 'Tuesday', value: 'tue' },
+          { label: 'Wednesday', value: 'wed' },
+          { label: 'Thursday', value: 'thu' },
+          { label: 'Friday', value: 'fri' },
+          { label: 'Saturday', value: 'sat' },
+          { label: 'Sunday', value: 'sun' }
         ],
-        description: 'Default status for new projects'
+        description: 'Default working days'
       }
     ]
   },
   {
-    id: 'automation',
-    title: 'Automation Settings',
-    description: 'Configure project automation settings',
+    id: 'collaboration',
+    title: 'Collaboration Settings',
+    description: 'Configure collaboration features',
     options: [
       {
-        id: 'autoCreateMilestones',
-        label: 'Auto Create Milestones',
-        type: 'boolean',
-        value: true,
-        description: 'Automatically create default milestones'
+        id: 'defaultVisibility',
+        label: 'Default Visibility',
+        type: 'select',
+        value: 'team',
+        options: [
+          { label: 'Team Only', value: 'team' },
+          { label: 'Client Visible', value: 'client' },
+          { label: 'Public', value: 'public' }
+        ],
+        description: 'Default project visibility'
       },
       {
-        id: 'autoAssignTeam',
-        label: 'Auto Assign Team',
+        id: 'clientAccess',
+        label: 'Client Access Features',
+        type: 'select',
+        value: ['files', 'comments', 'milestones'],
+        multiple: true,
+        options: [
+          { label: 'Files & Documents', value: 'files' },
+          { label: 'Comments', value: 'comments' },
+          { label: 'Milestones', value: 'milestones' },
+          { label: 'Time Logs', value: 'time' },
+          { label: 'Task Details', value: 'tasks' }
+        ],
+        description: 'Features available to clients'
+      },
+      {
+        id: 'autoNotifications',
+        label: 'Auto Notifications',
         type: 'boolean',
-        value: false,
-        description: 'Automatically assign default team members'
+        value: true,
+        description: 'Send automatic notifications'
       }
     ]
   }
@@ -81,19 +177,30 @@ const sections: ConfiguratorSection[] = [
 interface ProjectTemplateConfiguratorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSettingsUpdate?: (settings: Record<string, any>) => Promise<void>;
 }
 
-export function ProjectTemplateConfigurator({ open, onOpenChange }: ProjectTemplateConfiguratorProps) {
-  const handleSubmit = (values: Record<string, any>) => {
-    console.log('Saving project template settings:', values);
-    // TODO: Implement settings save logic
-    onOpenChange(false);
+export function ProjectTemplateConfigurator({
+  open,
+  onOpenChange,
+  onSettingsUpdate
+}: ProjectTemplateConfiguratorProps) {
+  const handleSubmit = async (values: Record<string, any>) => {
+    try {
+      if (onSettingsUpdate) {
+        await onSettingsUpdate(values);
+      }
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving project template settings:', error);
+      // TODO: Show error toast
+    }
   };
 
   return (
     <BaseConfiguratorDialog
-      title="Project Templates"
-      description="Configure your project templates and defaults"
+      title="Project Template Settings"
+      description="Configure default project templates and structures"
       sections={sections}
       onSubmit={handleSubmit}
       onCancel={() => onOpenChange(false)}

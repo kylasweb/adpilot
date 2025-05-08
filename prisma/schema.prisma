@@ -1,0 +1,237 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(uuid())
+  email         String       @unique
+  name          String
+  password      String
+  avatarUrl     String?
+  projects      ProjectMember[]
+  tasks         Task[]       @relation("Assignee")
+  createdTasks  Task[]       @relation("Creator")
+  timeEntries   TimeEntry[]
+  comments      Comment[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("users")
+}
+
+model Project {
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  status        ProjectStatus @default(ACTIVE)
+  startDate     DateTime
+  endDate       DateTime?
+  members       ProjectMember[]
+  tasks         Task[]
+  timeEntries   TimeEntry[]
+  roadmaps      Roadmap[]
+  bugs          Bug[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String      @id @default(uuid())
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      ProjectRole
+  joinedAt  DateTime    @default(now())
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+model Task {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus  @default(PENDING)
+  priority    TaskPriority @default(MEDIUM)
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  assignee    User?       @relation("Assignee", fields: [assigneeId], references: [id])
+  assigneeId  String?
+  creator     User        @relation("Creator", fields: [creatorId], references: [id])
+  creatorId   String
+  parentTask  Task?       @relation("SubTasks", fields: [parentTaskId], references: [id])
+  parentTaskId String?
+  subTasks    Task[]      @relation("SubTasks")
+  dueDate     DateTime?
+  timeEntries TimeEntry[]
+  comments    Comment[]
+  bugs        Bug[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("tasks")
+}
+
+model TimeEntry {
+  id          String    @id @default(uuid())
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?      // in seconds
+  ongoing     Boolean   @default(false)
+  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId      String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("time_entries")
+}
+
+model Comment {
+  id          String    @id @default(uuid())
+  content     String
+  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  attachments Attachment[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("comments")
+}
+
+model Attachment {
+  id          String    @id @default(uuid())
+  name        String
+  url         String
+  type        String
+  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId   String
+  createdAt   DateTime  @default(now())
+
+  @@map("attachments")
+}
+
+model WebhookConfig {
+  id          String         @id @default(uuid())
+  url         String
+  events      WebhookEvent[]
+  secret      String
+  active      Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("webhook_configs")
+}
+
+model Roadmap {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("roadmaps")
+}
+
+model Bug {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  status      BugStatus @default(OPEN)
+  priority    BugPriority @default(MEDIUM)
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  taskId      String?
+  task        Task?     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("bugs")
+}
+
+enum BugStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+
+  @@map("bug_status")
+}
+
+enum BugPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+
+  @@map("bug_priority")
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+
+  @@map("project_status")
+}
+
+enum ProjectRole {
+  OWNER
+  ADMIN
+  MEMBER
+
+  @@map("project_role")
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+
+  @@map("task_status")
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+
+  @@map("task_priority")
+}
+
+enum WebhookEvent {
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_DELETED
+  TASK_CREATED
+  TASK_UPDATED
+  TASK_DELETED
+  COMMENT_CREATED
+  COMMENT_UPDATED
+  COMMENT_DELETED
+  TIME_ENTRY_CREATED
+  TIME_ENTRY_UPDATED
+  TIME_ENTRY_DELETED
+
+  @@map("webhook_event")
+}

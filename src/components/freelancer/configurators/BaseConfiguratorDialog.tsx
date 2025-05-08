@@ -59,8 +59,8 @@ const ConfiguratorContent = () => {
               <SelectValue placeholder={option.description} />
             </SelectTrigger>
             <SelectContent>
-              {option.options?.map((opt) => (
-                <SelectItem key={opt.value.toString()} value={opt.value.toString()}>
+              {option.options?.map((opt: { value: string | number; label: string }) => (
+                <SelectItem key={opt.value?.toString()} value={opt.value?.toString()}>
                   {opt.label}
                 </SelectItem>
               ))}

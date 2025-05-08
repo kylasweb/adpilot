@@ -69,6 +69,7 @@ const ClientManagerPage = () => {
   return (
     <AppLayout>
       <div className="space-y-6">
+      </div>
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-semibold">Client Manager</h1>

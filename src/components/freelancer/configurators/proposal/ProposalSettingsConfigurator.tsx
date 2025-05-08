@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseConfiguratorDialog } from '../BaseConfiguratorDialog';
-import { ConfiguratorProps, ConfiguratorSection } from '../types';
+import { ConfiguratorSection } from '../types';
 
 const sections: ConfiguratorSection[] = [
   {
@@ -9,6 +9,22 @@ const sections: ConfiguratorSection[] = [
     description: 'Configure general proposal settings',
     options: [
       {
+        id: 'proposalPrefix',
+        label: 'Proposal Number Prefix',
+        type: 'text',
+        value: 'PROP-',
+        description: 'Prefix for proposal numbers'
+      },
+      {
+        id: 'validityPeriod',
+        label: 'Default Validity (days)',
+        type: 'number',
+        value: 30,
+        min: 1,
+        max: 180,
+        description: 'Default proposal validity period'
+      },
+      {
         id: 'defaultCurrency',
         label: 'Default Currency',
         type: 'select',
@@ -16,90 +32,175 @@ const sections: ConfiguratorSection[] = [
         options: [
           { label: 'USD ($)', value: 'USD' },
           { label: 'EUR (€)', value: 'EUR' },
-          { label: 'GBP (£)', value: 'GBP' }
+          { label: 'GBP (£)', value: 'GBP' },
+          { label: 'INR (₹)', value: 'INR' },
+          { label: 'AUD ($)', value: 'AUD' }
         ],
-        description: 'Select default currency for proposals'
-      },
-      {
-        id: 'validityPeriod',
-        label: 'Default Validity Period (days)',
-        type: 'number',
-        value: 30,
-        description: 'Number of days the proposal remains valid'
+        description: 'Default currency for proposals'
       }
     ]
   },
   {
-    id: 'defaults',
-    title: 'Default Content',
-    description: 'Set default content and terms',
+    id: 'workflow',
+    title: 'Workflow Settings',
+    description: 'Configure proposal workflow',
     options: [
       {
-        id: 'defaultTerms',
-        label: 'Default Terms & Conditions',
-        type: 'text',
-        value: 'Standard terms and conditions apply',
-        description: 'Default terms to include in proposals'
+        id: 'approvalWorkflow',
+        label: 'Approval Workflow',
+        type: 'select',
+        value: 'single',
+        options: [
+          { label: 'Single Level', value: 'single' },
+          { label: 'Two Level', value: 'two' },
+          { label: 'Custom', value: 'custom' },
+          { label: 'None', value: 'none' }
+        ],
+        description: 'Type of approval workflow'
       },
       {
-        id: 'defaultFooter',
-        label: 'Default Footer Text',
-        type: 'text',
-        value: 'Thank you for your consideration',
-        description: 'Footer text to appear on all proposals'
+        id: 'reviewers',
+        label: 'Default Reviewers',
+        type: 'select',
+        value: ['manager', 'finance'],
+        multiple: true,
+        options: [
+          { label: 'Project Manager', value: 'manager' },
+          { label: 'Finance Team', value: 'finance' },
+          { label: 'Legal Team', value: 'legal' },
+          { label: 'Technical Team', value: 'tech' }
+        ],
+        description: 'Default proposal reviewers'
+      },
+      {
+        id: 'autoExpire',
+        label: 'Auto Expire',
+        type: 'boolean',
+        value: true,
+        description: 'Automatically expire proposals'
+      }
+    ]
+  },
+  {
+    id: 'pricing',
+    title: 'Pricing Settings',
+    description: 'Configure pricing options',
+    options: [
+      {
+        id: 'pricingModels',
+        label: 'Pricing Models',
+        type: 'select',
+        value: ['fixed', 'hourly', 'milestone'],
+        multiple: true,
+        options: [
+          { label: 'Fixed Price', value: 'fixed' },
+          { label: 'Hourly Rate', value: 'hourly' },
+          { label: 'Milestone Based', value: 'milestone' },
+          { label: 'Value Based', value: 'value' },
+          { label: 'Retainer', value: 'retainer' }
+        ],
+        description: 'Available pricing models'
+      },
+      {
+        id: 'defaultMargin',
+        label: 'Default Margin (%)',
+        type: 'number',
+        value: 20,
+        min: 0,
+        max: 100,
+        description: 'Default profit margin'
+      },
+      {
+        id: 'roundingRule',
+        label: 'Price Rounding',
+        type: 'select',
+        value: 'nearest',
+        options: [
+          { label: 'Nearest 10', value: 'nearest' },
+          { label: 'Round Up', value: 'up' },
+          { label: 'Round Down', value: 'down' },
+          { label: 'None', value: 'none' }
+        ],
+        description: 'Price rounding rules'
       }
     ]
   },
   {
     id: 'automation',
     title: 'Automation Settings',
-    description: 'Configure automated behaviors',
+    description: 'Configure proposal automation',
     options: [
       {
-        id: 'autoFollowUp',
-        label: 'Automatic Follow-up',
+        id: 'autoFollowup',
+        label: 'Auto Follow-up',
         type: 'boolean',
         value: true,
-        description: 'Send automatic follow-up emails'
+        description: 'Send automatic follow-ups'
       },
       {
-        id: 'followUpDays',
-        label: 'Follow-up Days',
-        type: 'number',
-        value: 5,
-        description: 'Days to wait before sending follow-up'
+        id: 'followupSchedule',
+        label: 'Follow-up Schedule',
+        type: 'select',
+        value: ['3days', '1week'],
+        multiple: true,
+        options: [
+          { label: '3 Days After', value: '3days' },
+          { label: '1 Week After', value: '1week' },
+          { label: '2 Weeks After', value: '2weeks' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'When to send follow-ups'
       },
       {
-        id: 'autoExpireProposals',
-        label: 'Auto-expire Proposals',
-        type: 'boolean',
-        value: true,
-        description: 'Automatically mark proposals as expired'
+        id: 'reminderSettings',
+        label: 'Reminder Settings',
+        type: 'select',
+        value: ['expiry', 'pending'],
+        multiple: true,
+        options: [
+          { label: 'Expiry Warning', value: 'expiry' },
+          { label: 'Pending Review', value: 'pending' },
+          { label: 'Client View', value: 'view' },
+          { label: 'Custom Events', value: 'custom' }
+        ],
+        description: 'Automated reminder types'
       }
     ]
   }
 ];
 
+interface ProposalSettingsConfiguratorProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSettingsUpdate?: (settings: Record<string, any>) => Promise<void>;
+}
+
 export function ProposalSettingsConfigurator({
   open,
   onOpenChange,
-  onSubmit,
-  onCancel,
-  initialValues
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-} & ConfiguratorProps) {
+  onSettingsUpdate
+}: ProposalSettingsConfiguratorProps) {
+  const handleSubmit = async (values: Record<string, any>) => {
+    try {
+      if (onSettingsUpdate) {
+        await onSettingsUpdate(values);
+      }
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving proposal settings:', error);
+      // TODO: Show error toast
+    }
+  };
+
   return (
     <BaseConfiguratorDialog
       title="Proposal Settings"
-      description="Configure your default proposal settings and automation preferences"
+      description="Configure general proposal settings and defaults"
+      sections={sections}
+      onSubmit={handleSubmit}
+      onCancel={() => onOpenChange(false)}
       open={open}
       onOpenChange={onOpenChange}
-      sections={sections}
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
     />
   );
 }

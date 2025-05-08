@@ -33,7 +33,16 @@ import {
   Search,
   Building2,
   DollarSign,
-  UserPlus
+  UserPlus,
+  Lock,
+  CreditCard,
+  Cog,
+  Building,
+  Plug,
+  ClipboardCheck,
+  LineChart,
+  File,
+  Gauge
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -455,6 +464,230 @@ const AppSidebar = ({ isOpen, setIsOpen }: AppSidebarProps) => {
                 </Link>
               )}
             </nav>
+
+            {isAdmin && (
+              <>
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Security & Authentication
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/security">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/security") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Lock className="mr-2 h-4 w-4" />
+                          Security Settings
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage security configurations
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Billing & Subscription
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/billing">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/billing") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Billing Management
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage billing and subscriptions
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  System Configuration
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/settings">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/settings") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Cog className="mr-2 h-4 w-4" />
+                          System Settings
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Configure system settings
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Organization Management
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/organizations">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/organizations") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Building className="mr-2 h-4 w-4" />
+                          Organizations
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage organizations
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Advanced User Management
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/users">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/users") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          User Management
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage system users
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Integrations Hub
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/integrations">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/integrations") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Plug className="mr-2 h-4 w-4" />
+                          Integrations
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage system integrations
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Compliance & Reporting
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/compliance">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/compliance") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <ClipboardCheck className="mr-2 h-4 w-4" />
+                          Compliance
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage compliance and reporting
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Advanced Analytics
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/analytics">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/analytics") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <LineChart className="mr-2 h-4 w-4" />
+                          Analytics
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        View advanced analytics
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  Content Management
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/content">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/content") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <File className="mr-2 h-4 w-4" />
+                          Content
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Manage system content
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+
+                <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase mt-6">
+                  System Health
+                </div>
+                <nav className="space-y-1">
+                  <Link to="/admin/health">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive("/admin/health") ? "default" : "ghost"}
+                          className="w-full justify-start"
+                        >
+                          <Gauge className="mr-2 h-4 w-4" />
+                          System Health
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Monitor system health
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </nav>
+              </>
+            )}
 
             <div className="text-xs font-semibold text-adpilot-text-muted tracking-wider uppercase">
               Marketplace & SEO

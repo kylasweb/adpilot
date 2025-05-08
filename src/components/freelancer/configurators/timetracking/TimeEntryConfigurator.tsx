@@ -2,65 +2,179 @@ import React from 'react';
 import { BaseConfiguratorDialog } from '../BaseConfiguratorDialog';
 import { ConfiguratorSection } from '../types';
 
-const timeEntrySections: ConfiguratorSection[] = [
+const sections: ConfiguratorSection[] = [
   {
-    id: 'timeEntry',
-    title: 'Time Entry Settings',
-    description: 'Configure how time entries are recorded and managed',
+    id: 'tracking',
+    title: 'Time Tracking',
+    description: 'Configure time tracking settings',
     options: [
       {
-        id: 'minimumInterval',
-        label: 'Minimum Time Interval',
-        description: 'Minimum duration for time entries (in minutes)',
-        type: 'number',
-        value: 15
-      },
-      {
-        id: 'roundingRule',
-        label: 'Time Rounding',
-        description: 'How to round time entries',
+        id: 'trackingMethod',
+        label: 'Tracking Method',
         type: 'select',
-        value: 'nearest',
+        value: 'manual',
         options: [
-          { label: 'Round to nearest interval', value: 'nearest' },
-          { label: 'Round up to next interval', value: 'up' },
-          { label: 'Round down to previous interval', value: 'down' }
-        ]
+          { label: 'Manual Entry', value: 'manual' },
+          { label: 'Timer Based', value: 'timer' },
+          { label: 'Calendar Sync', value: 'calendar' },
+          { label: 'Automatic', value: 'auto' }
+        ],
+        description: 'Primary time tracking method'
       },
       {
-        id: 'autoStopEnabled',
-        label: 'Auto-Stop Timer',
-        description: 'Automatically stop timer after period of inactivity',
-        type: 'boolean',
-        value: true
+        id: 'timeFormat',
+        label: 'Time Format',
+        type: 'select',
+        value: 'decimal',
+        options: [
+          { label: 'Decimal (8.5)', value: 'decimal' },
+          { label: 'Hours:Minutes (8:30)', value: 'hhmm' },
+          { label: 'Duration (8h 30m)', value: 'duration' }
+        ],
+        description: 'Format for time entries'
       },
       {
-        id: 'autoStopInterval',
-        label: 'Auto-Stop Interval',
-        description: 'Minutes of inactivity before auto-stop (if enabled)',
+        id: 'minimumInterval',
+        label: 'Minimum Interval (minutes)',
         type: 'number',
-        value: 30
+        value: 15,
+        min: 1,
+        max: 60,
+        description: 'Minimum time tracking interval'
       }
     ]
   },
   {
-    id: 'notifications',
-    title: 'Timer Notifications',
-    description: 'Configure timer alerts and reminders',
+    id: 'rules',
+    title: 'Tracking Rules',
+    description: 'Configure tracking behavior',
     options: [
       {
-        id: 'reminderEnabled',
-        label: 'Timer Reminders',
-        description: 'Send periodic reminders while timer is running',
-        type: 'boolean',
-        value: true
+        id: 'workingHours',
+        label: 'Working Hours',
+        type: 'select',
+        value: ['9-17'],
+        multiple: true,
+        options: [
+          { label: '9 AM - 5 PM', value: '9-17' },
+          { label: '8 AM - 4 PM', value: '8-16' },
+          { label: '10 AM - 6 PM', value: '10-18' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'Default working hours'
       },
       {
-        id: 'reminderInterval',
-        label: 'Reminder Interval',
-        description: 'Minutes between reminders',
-        type: 'number',
-        value: 60
+        id: 'breakTracking',
+        label: 'Break Tracking',
+        type: 'select',
+        value: 'auto',
+        options: [
+          { label: 'Automatic', value: 'auto' },
+          { label: 'Manual', value: 'manual' },
+          { label: 'Scheduled', value: 'scheduled' },
+          { label: 'Disabled', value: 'disabled' }
+        ],
+        description: 'How breaks are tracked'
+      },
+      {
+        id: 'overtimeRules',
+        label: 'Overtime Rules',
+        type: 'select',
+        value: ['daily', 'weekly'],
+        multiple: true,
+        options: [
+          { label: 'Daily Overtime', value: 'daily' },
+          { label: 'Weekly Overtime', value: 'weekly' },
+          { label: 'Weekend Work', value: 'weekend' },
+          { label: 'Holiday Work', value: 'holiday' }
+        ],
+        description: 'Overtime calculation rules'
+      }
+    ]
+  },
+  {
+    id: 'categories',
+    title: 'Time Categories',
+    description: 'Configure time entry categories',
+    options: [
+      {
+        id: 'activityTypes',
+        label: 'Activity Types',
+        type: 'select',
+        value: ['development', 'meeting', 'planning'],
+        multiple: true,
+        options: [
+          { label: 'Development', value: 'development' },
+          { label: 'Meetings', value: 'meeting' },
+          { label: 'Planning', value: 'planning' },
+          { label: 'Research', value: 'research' },
+          { label: 'Documentation', value: 'documentation' },
+          { label: 'Support', value: 'support' }
+        ],
+        description: 'Available activity types'
+      },
+      {
+        id: 'billableCategories',
+        label: 'Billable Categories',
+        type: 'select',
+        value: ['development', 'support'],
+        multiple: true,
+        options: [
+          { label: 'Development', value: 'development' },
+          { label: 'Support', value: 'support' },
+          { label: 'Consulting', value: 'consulting' },
+          { label: 'Training', value: 'training' }
+        ],
+        description: 'Categories marked as billable'
+      },
+      {
+        id: 'customCategories',
+        label: 'Allow Custom Categories',
+        type: 'boolean',
+        value: true,
+        description: 'Enable custom categories'
+      }
+    ]
+  },
+  {
+    id: 'automation',
+    title: 'Automation Settings',
+    description: 'Configure time tracking automation',
+    options: [
+      {
+        id: 'autoStart',
+        label: 'Auto Start Triggers',
+        type: 'select',
+        value: ['calendar', 'task'],
+        multiple: true,
+        options: [
+          { label: 'Calendar Events', value: 'calendar' },
+          { label: 'Task Assignment', value: 'task' },
+          { label: 'Project Open', value: 'project' },
+          { label: 'Custom Rules', value: 'custom' }
+        ],
+        description: 'Automatic time tracking triggers'
+      },
+      {
+        id: 'idleDetection',
+        label: 'Idle Detection',
+        type: 'boolean',
+        value: true,
+        description: 'Enable idle time detection'
+      },
+      {
+        id: 'autoReminders',
+        label: 'Auto Reminders',
+        type: 'select',
+        value: ['start', 'stop'],
+        multiple: true,
+        options: [
+          { label: 'Start Timer', value: 'start' },
+          { label: 'Stop Timer', value: 'stop' },
+          { label: 'Fill Missing Time', value: 'missing' },
+          { label: 'Submit Timesheet', value: 'submit' }
+        ],
+        description: 'Automatic reminders'
       }
     ]
   }
@@ -69,28 +183,35 @@ const timeEntrySections: ConfiguratorSection[] = [
 interface TimeEntryConfiguratorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: Record<string, any>) => void;
-  onCancel: () => void;
-  initialValues?: Record<string, any>;
+  onSettingsUpdate?: (settings: Record<string, any>) => Promise<void>;
 }
 
 export function TimeEntryConfigurator({
   open,
   onOpenChange,
-  onSubmit,
-  onCancel,
-  initialValues
+  onSettingsUpdate
 }: TimeEntryConfiguratorProps) {
+  const handleSubmit = async (values: Record<string, any>) => {
+    try {
+      if (onSettingsUpdate) {
+        await onSettingsUpdate(values);
+      }
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving time entry settings:', error);
+      // TODO: Show error toast
+    }
+  };
+
   return (
     <BaseConfiguratorDialog
       title="Time Entry Settings"
-      description="Configure time tracking behavior and automation rules"
+      description="Configure time tracking and entry settings"
+      sections={sections}
+      onSubmit={handleSubmit}
+      onCancel={() => onOpenChange(false)}
       open={open}
       onOpenChange={onOpenChange}
-      sections={timeEntrySections}
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
     />
   );
 }

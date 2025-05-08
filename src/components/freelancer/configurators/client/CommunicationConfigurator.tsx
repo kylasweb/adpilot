@@ -4,77 +4,141 @@ import { ConfiguratorSection } from '../types';
 
 const sections: ConfiguratorSection[] = [
   {
-    id: 'preferences',
-    title: 'Communication Preferences',
-    description: 'Set up your client communication preferences',
+    id: 'channels',
+    title: 'Communication Channels',
+    description: 'Configure preferred communication methods',
     options: [
       {
         id: 'primaryChannel',
         label: 'Primary Channel',
-        type: 'select' as const,
+        type: 'select',
         value: 'email',
         options: [
           { label: 'Email', value: 'email' },
-          { label: 'Phone', value: 'phone' },
+          { label: 'SMS', value: 'sms' },
           { label: 'WhatsApp', value: 'whatsapp' },
-          { label: 'Slack', value: 'slack' }
+          { label: 'Slack', value: 'slack' },
+          { label: 'Client Portal', value: 'portal' }
         ],
-        description: 'Preferred communication channel'
+        description: 'Primary method of communication'
       },
       {
-        id: 'autoResponder',
-        label: 'Auto Responder',
-        type: 'boolean' as const,
-        value: true,
-        description: 'Automatically respond to client messages'
+        id: 'enabledChannels',
+        label: 'Enabled Channels',
+        type: 'select',
+        value: ['email', 'portal'],
+        multiple: true,
+        options: [
+          { label: 'Email', value: 'email' },
+          { label: 'SMS', value: 'sms' },
+          { label: 'WhatsApp', value: 'whatsapp' },
+          { label: 'Slack', value: 'slack' },
+          { label: 'Client Portal', value: 'portal' }
+        ],
+        description: 'All enabled communication channels'
+      },
+      {
+        id: 'urgentChannel',
+        label: 'Urgent Communications',
+        type: 'select',
+        value: 'sms',
+        options: [
+          { label: 'Email', value: 'email' },
+          { label: 'SMS', value: 'sms' },
+          { label: 'WhatsApp', value: 'whatsapp' },
+          { label: 'Phone Call', value: 'phone' }
+        ],
+        description: 'Channel for urgent messages'
       }
     ]
   },
   {
-    id: 'scheduling',
-    title: 'Meeting Scheduling',
-    description: 'Configure meeting and availability settings',
+    id: 'schedule',
+    title: 'Communication Schedule',
+    description: 'Configure timing preferences',
     options: [
       {
-        id: 'defaultDuration',
-        label: 'Default Meeting Duration',
-        type: 'select' as const,
-        value: '30',
+        id: 'businessHours',
+        label: 'Business Hours',
+        type: 'select',
+        value: '9-17',
         options: [
-          { label: '15 minutes', value: '15' },
-          { label: '30 minutes', value: '30' },
-          { label: '45 minutes', value: '45' },
-          { label: '60 minutes', value: '60' }
+          { label: '9 AM - 5 PM', value: '9-17' },
+          { label: '8 AM - 6 PM', value: '8-18' },
+          { label: '24/7', value: '24-7' }
         ],
-        description: 'Default duration for client meetings'
+        description: 'Hours during which to send communications'
       },
       {
-        id: 'bufferTime',
-        label: 'Buffer Time',
-        type: 'number' as const,
-        value: 15,
-        description: 'Minutes between meetings'
+        id: 'timezone',
+        label: 'Client Timezone',
+        type: 'select',
+        value: 'UTC',
+        options: [
+          { label: 'UTC', value: 'UTC' },
+          { label: 'EST (UTC-5)', value: 'EST' },
+          { label: 'PST (UTC-8)', value: 'PST' },
+          { label: 'IST (UTC+5:30)', value: 'IST' },
+          { label: 'GMT (UTC+0)', value: 'GMT' }
+        ],
+        description: 'Timezone for scheduling communications'
+      },
+      {
+        id: 'reminderDays',
+        label: 'Reminder Days Before',
+        type: 'number',
+        value: 3,
+        min: 1,
+        max: 14,
+        description: 'Days before deadline to send reminders'
       }
     ]
   },
   {
     id: 'templates',
     title: 'Message Templates',
-    description: 'Configure automated message templates',
+    description: 'Configure communication templates',
     options: [
       {
-        id: 'followUpTemplate',
-        label: 'Follow-up Template',
-        type: 'text' as const,
-        value: 'Thank you for our meeting today. Here\'s a summary of what we discussed...',
-        description: 'Template for follow-up messages'
+        id: 'defaultGreeting',
+        label: 'Default Greeting',
+        type: 'select',
+        value: 'formal',
+        options: [
+          { label: 'Formal', value: 'formal' },
+          { label: 'Casual', value: 'casual' },
+          { label: 'Friendly', value: 'friendly' }
+        ],
+        description: 'Default greeting style for messages'
       },
       {
-        id: 'reminderTemplate',
-        label: 'Reminder Template',
-        type: 'text' as const,
-        value: 'This is a friendly reminder about our upcoming meeting...',
-        description: 'Template for meeting reminders'
+        id: 'enabledTemplates',
+        label: 'Enabled Templates',
+        type: 'select',
+        value: ['welcome', 'invoice', 'reminder'],
+        multiple: true,
+        options: [
+          { label: 'Welcome Message', value: 'welcome' },
+          { label: 'Invoice Notice', value: 'invoice' },
+          { label: 'Payment Reminder', value: 'reminder' },
+          { label: 'Project Update', value: 'update' },
+          { label: 'Meeting Request', value: 'meeting' },
+          { label: 'Thank You Note', value: 'thanks' }
+        ],
+        description: 'Message templates to enable'
+      },
+      {
+        id: 'signatureStyle',
+        label: 'Email Signature',
+        type: 'select',
+        value: 'professional',
+        options: [
+          { label: 'Professional', value: 'professional' },
+          { label: 'Minimal', value: 'minimal' },
+          { label: 'Detailed', value: 'detailed' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'Style of email signature'
       }
     ]
   }
@@ -83,13 +147,24 @@ const sections: ConfiguratorSection[] = [
 interface CommunicationConfiguratorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSettingsUpdate?: (settings: Record<string, any>) => Promise<void>;
 }
 
-export function CommunicationConfigurator({ open, onOpenChange }: CommunicationConfiguratorProps) {
-  const handleSubmit = (values: Record<string, any>) => {
-    console.log('Saving communication settings:', values);
-    // TODO: Implement settings save logic
-    onOpenChange(false);
+export function CommunicationConfigurator({
+  open,
+  onOpenChange,
+  onSettingsUpdate
+}: CommunicationConfiguratorProps) {
+  const handleSubmit = async (values: Record<string, any>) => {
+    try {
+      if (onSettingsUpdate) {
+        await onSettingsUpdate(values);
+      }
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving communication settings:', error);
+      // TODO: Show error toast
+    }
   };
 
   return (

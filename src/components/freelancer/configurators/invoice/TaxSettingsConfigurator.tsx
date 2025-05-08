@@ -6,99 +6,154 @@ const sections: ConfiguratorSection[] = [
   {
     id: 'general',
     title: 'General Tax Settings',
-    description: 'Configure default tax settings',
+    description: 'Configure basic tax settings',
     options: [
       {
-        id: 'enableTax',
-        label: 'Enable Tax Calculation',
-        type: 'boolean',
-        value: true,
-        description: 'Enable tax calculations on invoices'
+        id: 'taxSystem',
+        label: 'Tax System',
+        type: 'select',
+        value: 'vat',
+        options: [
+          { label: 'VAT', value: 'vat' },
+          { label: 'GST', value: 'gst' },
+          { label: 'Sales Tax', value: 'sales' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'Type of tax system to use'
       },
       {
         id: 'defaultTaxRate',
         label: 'Default Tax Rate (%)',
         type: 'number',
         value: 20,
-        description: 'Default tax percentage to apply'
+        min: 0,
+        max: 100,
+        description: 'Default tax rate for new items'
       },
       {
-        id: 'taxNumberLabel',
-        label: 'Tax Number Label',
-        type: 'select',
-        value: 'vat',
-        options: [
-          { label: 'VAT Number', value: 'vat' },
-          { label: 'GST Number', value: 'gst' },
-          { label: 'Tax ID', value: 'taxid' }
-        ],
-        description: 'Label to use for tax identification number'
+        id: 'taxRegistrationNo',
+        label: 'Tax Registration Number',
+        type: 'text',
+        value: '',
+        description: 'Your tax registration number'
       }
     ]
   },
   {
-    id: 'rules',
-    title: 'Tax Rules',
+    id: 'categories',
+    title: 'Tax Categories',
+    description: 'Configure tax categories and rates',
+    options: [
+      {
+        id: 'enabledCategories',
+        label: 'Enabled Categories',
+        type: 'select',
+        value: ['standard', 'reduced', 'zero'],
+        multiple: true,
+        options: [
+          { label: 'Standard Rate', value: 'standard' },
+          { label: 'Reduced Rate', value: 'reduced' },
+          { label: 'Zero Rate', value: 'zero' },
+          { label: 'Exempt', value: 'exempt' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'Active tax categories'
+      },
+      {
+        id: 'reducedRate',
+        label: 'Reduced Rate (%)',
+        type: 'number',
+        value: 5,
+        min: 0,
+        max: 100,
+        description: 'Tax rate for reduced category'
+      },
+      {
+        id: 'customRates',
+        label: 'Custom Rates',
+        type: 'boolean',
+        value: false,
+        description: 'Enable custom tax rates'
+      }
+    ]
+  },
+  {
+    id: 'location',
+    title: 'Location Settings',
+    description: 'Configure location-based tax settings',
+    options: [
+      {
+        id: 'taxRegion',
+        label: 'Tax Region',
+        type: 'select',
+        value: 'domestic',
+        options: [
+          { label: 'Domestic', value: 'domestic' },
+          { label: 'EU', value: 'eu' },
+          { label: 'International', value: 'international' },
+          { label: 'Custom', value: 'custom' }
+        ],
+        description: 'Primary tax region'
+      },
+      {
+        id: 'enabledRegions',
+        label: 'Enabled Regions',
+        type: 'select',
+        value: ['domestic'],
+        multiple: true,
+        options: [
+          { label: 'Domestic', value: 'domestic' },
+          { label: 'EU Countries', value: 'eu' },
+          { label: 'North America', value: 'na' },
+          { label: 'Asia Pacific', value: 'apac' }
+        ],
+        description: 'Regions where you charge tax'
+      },
+      {
+        id: 'reverseCharge',
+        label: 'Reverse Charge',
+        type: 'boolean',
+        value: true,
+        description: 'Enable reverse charge mechanism'
+      }
+    ]
+  },
+  {
+    id: 'calculation',
+    title: 'Calculation Settings',
     description: 'Configure tax calculation rules',
     options: [
+      {
+        id: 'calculationMethod',
+        label: 'Calculation Method',
+        type: 'select',
+        value: 'line',
+        options: [
+          { label: 'Line Item', value: 'line' },
+          { label: 'Subtotal', value: 'subtotal' },
+          { label: 'Both', value: 'both' }
+        ],
+        description: 'How tax should be calculated'
+      },
+      {
+        id: 'roundingMethod',
+        label: 'Rounding Method',
+        type: 'select',
+        value: 'round',
+        options: [
+          { label: 'Round', value: 'round' },
+          { label: 'Round Up', value: 'ceil' },
+          { label: 'Round Down', value: 'floor' },
+          { label: 'Two Decimals', value: 'decimal' }
+        ],
+        description: 'How tax amounts should be rounded'
+      },
       {
         id: 'compoundTax',
         label: 'Compound Tax',
         type: 'boolean',
         value: false,
-        description: 'Apply tax on top of other taxes'
-      },
-      {
-        id: 'taxOnShipping',
-        label: 'Tax on Shipping',
-        type: 'boolean',
-        value: true,
-        description: 'Apply tax to shipping charges'
-      },
-      {
-        id: 'roundingMethod',
-        label: 'Tax Rounding',
-        type: 'select',
-        value: 'nearest',
-        options: [
-          { label: 'Nearest', value: 'nearest' },
-          { label: 'Up', value: 'up' },
-          { label: 'Down', value: 'down' }
-        ],
-        description: 'How to round tax calculations'
-      }
-    ]
-  },
-  {
-    id: 'display',
-    title: 'Display Settings',
-    description: 'Configure how tax information is displayed',
-    options: [
-      {
-        id: 'showTaxSummary',
-        label: 'Show Tax Summary',
-        type: 'boolean',
-        value: true,
-        description: 'Display tax breakdown in invoice'
-      },
-      {
-        id: 'taxItemization',
-        label: 'Tax Itemization',
-        type: 'select',
-        value: 'grouped',
-        options: [
-          { label: 'Grouped by Rate', value: 'grouped' },
-          { label: 'Per Line Item', value: 'peritem' },
-          { label: 'Summary Only', value: 'summary' }
-        ],
-        description: 'How to display tax calculations'
-      },
-      {
-        id: 'pricesIncludeTax',
-        label: 'Prices Include Tax',
-        type: 'boolean',
-        value: false,
-        description: 'Show prices with tax included'
+        description: 'Calculate tax on tax (compound)'
       }
     ]
   }
@@ -107,19 +162,30 @@ const sections: ConfiguratorSection[] = [
 interface TaxSettingsConfiguratorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSettingsUpdate?: (settings: Record<string, any>) => Promise<void>;
 }
 
-export function TaxSettingsConfigurator({ open, onOpenChange }: TaxSettingsConfiguratorProps) {
-  const handleSubmit = (values: Record<string, any>) => {
-    console.log('Saving tax settings:', values);
-    // TODO: Implement tax settings save logic
-    onOpenChange(false);
+export function TaxSettingsConfigurator({
+  open,
+  onOpenChange,
+  onSettingsUpdate
+}: TaxSettingsConfiguratorProps) {
+  const handleSubmit = async (values: Record<string, any>) => {
+    try {
+      if (onSettingsUpdate) {
+        await onSettingsUpdate(values);
+      }
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving tax settings:', error);
+      // TODO: Show error toast
+    }
   };
 
   return (
     <BaseConfiguratorDialog
       title="Tax Settings"
-      description="Configure tax calculation and display settings for your invoices"
+      description="Configure tax rates and calculations"
       sections={sections}
       onSubmit={handleSubmit}
       onCancel={() => onOpenChange(false)}

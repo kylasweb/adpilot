@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebRTC Demo</title>
+  <style>
+    video {
+      width: 320px;
+      height: 240px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>WebRTC Demo</h1>
+
+  <div>
+    <h2>Local Video</h2>
+    <video id="localVideo" autoplay muted></video>
+  </div>
+
+  <div>
+    <h2>Remote Video</h2>
+    <video id="remoteVideo" autoplay></video>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script src="webrtc-client.js"></script>
+</body>
+</html>

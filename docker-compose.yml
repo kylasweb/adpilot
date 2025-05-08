@@ -1,0 +1,120 @@
+version: "3.8"
+
+services:
+  # Signaling server
+  signaling:
+    image: node:16-alpine
+    working_dir: /app
+    volumes:
+      - ./webrtc:/app
+    ports:
+      - "3000:3000"
+    command: node signaling-server.js
+    networks:
+      - app-network
+
+  # SFU (Selective Forwarding Unit)
+  sfu:
+    image: your-sfu-image:latest
+    ports:
+      - "8080:8080" # Example port
+    environment:
+      - SIGNALING_SERVER_URL=http://signaling:3000
+    networks:
+      - app-network
+
+  # Authentication service
+  auth:
+    image: your-auth-image:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - POSTGRES_HOST=postgres
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  # API Gateway
+  api-gateway:
+    image: your-api-gateway-image:latest
+    ports:
+      - "80:80"
+    environment:
+      - AUTH_SERVICE_URL=http://auth:8081
+    depends_on:
+      - auth
+    networks:
+      - app-network
+
+  # Load Balancer
+  load-balancer:
+    image: your-load-balancer-image:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api-gateway
+    networks:
+      - app-network
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=youruser
+      - POSTGRES_PASSWORD=yourpassword
+      - POSTGRES_DB=yourdb
+    networks:
+      - app-network
+
+  # MongoDB database
+  mongodb:
+    image: mongo:4.4
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  # RabbitMQ message queue
+  rabbitmq:
+    image: rabbitmq:3.9-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - app-network
+
+  # Object Storage (MinIO for example)
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_data:
+  minio_data:

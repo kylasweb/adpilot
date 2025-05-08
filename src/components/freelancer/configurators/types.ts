@@ -1,10 +1,13 @@
 export interface ConfiguratorOption {
   id: string;
   label: string;
-  value: string | number | boolean;
+  value: string | number | boolean | string[];
   type: 'text' | 'number' | 'boolean' | 'select';
   options?: { label: string; value: string | number }[];
   description?: string;
+  min?: number;
+  max?: number;
+  multiple?: boolean;
 }
 
 export interface ConfiguratorSection {
