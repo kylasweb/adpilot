@@ -2,18 +2,18 @@ import { SignJWT, jwtVerify } from 'jose';
 import { User } from "@/types/auth.types";
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Secret keys should be in .env
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
-const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET || 'refresh-secret-key');
+const JWT_SECRET = new TextEncoder().encode(import.meta.env.VITE_JWT_SECRET || 'your-secret-key');
+const REFRESH_SECRET = new TextEncoder().encode(import.meta.env.VITE_REFRESH_SECRET || 'refresh-secret-key');
 
 // Enhanced cookie configuration for security
 const AUTH_COOKIE_OPTIONS = {
-  secure: process.env.NODE_ENV === 'production',
+  secure: import.meta.env.PROD,
   sameSite: 'strict' as const,
   path: '/',
-  expires: 1/24, // 1 hour
+  expires: 1 / 24, // 1 hour
   httpOnly: true
 };
 
@@ -28,7 +28,7 @@ export const CORS_OPTIONS = {
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   headers: ['Content-Type', 'Authorization'],
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: import.meta.env.VITE_ALLOWED_ORIGINS?.split(',') || ['http://localhost:8080'],
   maxAge: 86400 // 24 hours
 };
 
@@ -75,7 +75,7 @@ const MOCK_USERS = [
 // Generate JWT token with jose
 export const generateToken = async (user: Omit<User, "password">) => {
   const expiresIn = '1h';
-  
+
   const token = await new SignJWT({
     sub: user.id,
     email: user.email,
@@ -94,7 +94,7 @@ export const generateToken = async (user: Omit<User, "password">) => {
 // Generate refresh token
 export const generateRefreshToken = async (userId: string) => {
   const expiresIn = '7d';
-  
+
   const token = await new SignJWT({
     sub: userId,
     type: 'refresh'
@@ -134,23 +134,23 @@ export const login = async (email: string, password: string) => {
   try {
     // Find user in mock data (replace with real API call when adding Prisma)
     const user = MOCK_USERS.find(u => u.email === email && u.password === password);
-    
+
     if (!user) {
       throw new Error("Invalid email or password");
     }
-    
+
     const { password: _, ...userWithoutPassword } = user;
-    
+
     // Generate auth token and refresh token
     const [token, refreshToken] = await Promise.all([
       generateToken(userWithoutPassword),
       generateRefreshToken(user.id)
     ]);
-    
+
     // Store tokens in secure cookies
     Cookies.set('auth_token', token, AUTH_COOKIE_OPTIONS);
     Cookies.set('refresh_token', refreshToken, REFRESH_COOKIE_OPTIONS);
-    
+
     return { user: userWithoutPassword, token, refreshToken };
   } catch (error) {
     if (error instanceof Error) {
@@ -166,7 +166,7 @@ export const register = async (name: string, email: string, password: string) =>
     if (MOCK_USERS.some(u => u.email === email)) {
       throw new Error("User with this email already exists");
     }
-    
+
     const newUser = {
       id: `${MOCK_USERS.length + 1}`,
       email,
@@ -176,21 +176,21 @@ export const register = async (name: string, email: string, password: string) =>
       createdAt: new Date().toISOString(),
       organizationId: "org-005",
     };
-    
+
     MOCK_USERS.push(newUser);
-    
+
     const { password: _, ...userWithoutPassword } = newUser;
-    
+
     // Generate auth token and refresh token
     const [token, refreshToken] = await Promise.all([
       generateToken(userWithoutPassword),
       generateRefreshToken(newUser.id)
     ]);
-    
+
     // Store tokens in secure cookies
     Cookies.set('auth_token', token, AUTH_COOKIE_OPTIONS);
     Cookies.set('refresh_token', refreshToken, REFRESH_COOKIE_OPTIONS);
-    
+
     return { user: userWithoutPassword, token, refreshToken };
   } catch (error) {
     if (error instanceof Error) {
@@ -210,17 +210,17 @@ export const refreshAccessToken = async (refreshToken: string) => {
   try {
     const payload = await verifyRefreshToken(refreshToken);
     const user = MOCK_USERS.find(u => u.id === payload.sub);
-    
+
     if (!user) {
       throw new Error('User not found');
     }
-    
+
     const { password: _, ...userWithoutPassword } = user;
     const newToken = await generateToken(userWithoutPassword);
-    
+
     // Update auth token cookie
     Cookies.set('auth_token', newToken, AUTH_COOKIE_OPTIONS);
-    
+
     return { token: newToken };
   } catch (error) {
     throw new Error('Failed to refresh token');
@@ -231,15 +231,15 @@ export const getAuthenticatedUser = async (): Promise<{ user: User | null; token
   try {
     const token = Cookies.get('auth_token');
     const refreshToken = Cookies.get('refresh_token');
-    
+
     if (!token) {
       return { user: null, token: null };
     }
-    
+
     try {
       // Verify the current token
       const payload = await verifyJWT(token);
-      
+
       const user: User = {
         id: payload.sub as string,
         email: payload.email as string,
@@ -250,7 +250,7 @@ export const getAuthenticatedUser = async (): Promise<{ user: User | null; token
         createdAt: new Date().toISOString(),
         organizationId: payload.organizationId as string,
       };
-      
+
       return { user, token };
     } catch (error) {
       // Token is invalid/expired - attempt refresh if refresh token exists
@@ -266,7 +266,7 @@ export const getAuthenticatedUser = async (): Promise<{ user: User | null; token
           return { user: null, token: null };
         }
       }
-      
+
       // No refresh token - clear auth token
       Cookies.remove('auth_token', { path: '/' });
       return { user: null, token: null };

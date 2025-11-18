@@ -23,12 +23,12 @@ const Index = () => {
       easing: 'easeOutQuad',
       duration: 800,
     })
-    .add({
-      targets: '.dashboard-section',
-      translateY: [30, 0],
-      opacity: [0, 1],
-      delay: anime.stagger(150),
-    });
+      .add({
+        targets: '.dashboard-section',
+        translateY: [30, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(150),
+      });
 
     tl.play();
   }, []);
