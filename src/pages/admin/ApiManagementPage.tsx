@@ -53,11 +53,14 @@ const defaultApiProviders = [
 
 // Default API keys for development (would normally be stored in environment variables)
 const developmentApiKeys = {
-  openai: "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",
-  openrouter: "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",
-  gemini: "AIzaSyAPi9CB4lcHCvOGs6fTxZdcUSU48FUFgps",
-  replicate: "383517d223266a2715abec18efa481f858018868",
-  huggingface: "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"
+  openai: process.env.VITE_OPENAI_API_KEY || "",
+  openrouter: process.env.VITE_OPENROUTER_API_KEY || "",
+  gemini: process.env.VITE_GEMINI_API_KEY || "",
+  replicate: process.env.VITE_REPLICATE_API_KEY || "",
+  huggingface: process.env.VITE_HUGGINGFACE_API_KEY || "",
+  agentrouter: process.env.VITE_AGENTROUTER_API_KEY || "",
+  bytez: process.env.VITE_BYTEZ_API_KEY || "",
+  groq: process.env.VITE_GROQ_API_KEY || ""
 };
 
 interface ApiProvider {
