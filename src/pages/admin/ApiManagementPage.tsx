@@ -14,40 +14,40 @@ const API_STORAGE_KEY = "adpilot-api-keys";
 
 // Default API providers
 const defaultApiProviders = [
-  { 
-    id: "openai", 
-    name: "OpenAI", 
+  {
+    id: "openai",
+    name: "OpenAI",
     description: "ChatGPT, DALL-E, and other AI models",
     isEnabled: true,
-    apiKey: "" 
+    apiKey: ""
   },
-  { 
-    id: "openrouter", 
-    name: "OpenRouter", 
+  {
+    id: "openrouter",
+    name: "OpenRouter",
     description: "Gateway to open-source models like Claude, Llama, and more",
     isEnabled: true,
-    apiKey: "" 
+    apiKey: ""
   },
-  { 
-    id: "gemini", 
-    name: "Google Gemini", 
+  {
+    id: "gemini",
+    name: "Google Gemini",
     description: "Google's multimodal AI model",
     isEnabled: true,
-    apiKey: "" 
+    apiKey: ""
   },
-  { 
-    id: "replicate", 
-    name: "Replicate", 
+  {
+    id: "replicate",
+    name: "Replicate",
     description: "Open-source models hosted in the cloud",
     isEnabled: true,
-    apiKey: "" 
+    apiKey: ""
   },
-  { 
-    id: "huggingface", 
-    name: "Hugging Face", 
+  {
+    id: "huggingface",
+    name: "Hugging Face",
     description: "Open-source model repository and inference API",
     isEnabled: true,
-    apiKey: "" 
+    apiKey: ""
   }
 ];
 
@@ -78,7 +78,7 @@ const ApiManagementPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("api-keys");
   const [organizationId, setOrganizationId] = useState<string | null>(null);
-  
+
   // Initialize with stored API keys or defaults
   useEffect(() => {
     const loadApiKeys = () => {
@@ -130,7 +130,7 @@ const ApiManagementPage: React.FC = () => {
     );
     setApiProviders(updatedProviders);
     saveToLocalStorage(updatedProviders);
-    
+
     const provider = updatedProviders.find(p => p.id === id);
     if (provider) {
       toast.success(`${provider.name} API ${provider.isEnabled ? 'enabled' : 'disabled'}`);
@@ -160,7 +160,7 @@ const ApiManagementPage: React.FC = () => {
     }
 
     const id = newProvider.name.toLowerCase().replace(/\s+/g, '-');
-    
+
     if (apiProviders.some(provider => provider.id === id)) {
       toast.error("A provider with this name already exists");
       return;
@@ -168,9 +168,9 @@ const ApiManagementPage: React.FC = () => {
 
     const updatedProviders = [
       ...apiProviders,
-      { 
-        id, 
-        name: newProvider.name.trim(), 
+      {
+        id,
+        name: newProvider.name.trim(),
         description: newProvider.description.trim(),
         isEnabled: true,
         apiKey: newProvider.apiKey.trim()
@@ -191,7 +191,7 @@ const ApiManagementPage: React.FC = () => {
     }
 
     toast.info(`Testing ${provider.name} API key...`);
-    
+
     // This would typically be a real API validation call
     setTimeout(() => {
       toast.success(`${provider.name} API key is valid`);
@@ -238,14 +238,14 @@ const ApiManagementPage: React.FC = () => {
             <TabsTrigger value="add-provider">Add New Provider</TabsTrigger>
             <TabsTrigger value="usage">Usage & Limits</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="api-keys" className="space-y-4">
             {apiProviders.map((provider) => (
               <Card key={provider.id}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{provider.name}</CardTitle>
-                    <Switch 
+                    <Switch
                       checked={provider.isEnabled}
                       onCheckedChange={() => handleToggleEnabled(provider.id)}
                     />
@@ -278,8 +278,8 @@ const ApiManagementPage: React.FC = () => {
                           )}
                         </button>
                       </div>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         onClick={() => handleTestApiKey(provider.id)}
                         disabled={!provider.isEnabled || !provider.apiKey}
                       >
@@ -291,7 +291,7 @@ const ApiManagementPage: React.FC = () => {
               </Card>
             ))}
           </TabsContent>
-          
+
           <TabsContent value="add-provider">
             <Card>
               <CardHeader>
@@ -306,7 +306,7 @@ const ApiManagementPage: React.FC = () => {
                   <Input
                     id="provider-name"
                     value={newProvider.name}
-                    onChange={(e) => setNewProvider({...newProvider, name: e.target.value})}
+                    onChange={(e) => setNewProvider({ ...newProvider, name: e.target.value })}
                     placeholder="e.g. Custom AI Service"
                   />
                 </div>
@@ -315,7 +315,7 @@ const ApiManagementPage: React.FC = () => {
                   <Input
                     id="provider-description"
                     value={newProvider.description}
-                    onChange={(e) => setNewProvider({...newProvider, description: e.target.value})}
+                    onChange={(e) => setNewProvider({ ...newProvider, description: e.target.value })}
                     placeholder="Brief description of the service"
                   />
                 </div>
@@ -324,7 +324,7 @@ const ApiManagementPage: React.FC = () => {
                   <Input
                     id="provider-api-key"
                     value={newProvider.apiKey}
-                    onChange={(e) => setNewProvider({...newProvider, apiKey: e.target.value})}
+                    onChange={(e) => setNewProvider({ ...newProvider, apiKey: e.target.value })}
                     type="password"
                     placeholder="Enter API key"
                   />
@@ -338,7 +338,7 @@ const ApiManagementPage: React.FC = () => {
               </CardFooter>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="usage">
             <Card>
               <CardHeader>
@@ -358,8 +358,8 @@ const ApiManagementPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-adpilot-primary" 
+                        <div
+                          className="h-full bg-adpilot-primary"
                           style={{ width: `${Math.floor(Math.random() * 80)}%` }}
                         />
                       </div>
@@ -368,7 +368,7 @@ const ApiManagementPage: React.FC = () => {
                       </p>
                     </div>
                   ))}
-                  
+
                   {apiProviders.filter(p => p.isEnabled && p.apiKey).length === 0 && (
                     <div className="text-center py-6">
                       <Cpu className="h-10 w-10 text-adpilot-text-muted mx-auto mb-4" />

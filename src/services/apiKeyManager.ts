@@ -52,21 +52,21 @@ export const getApiKey = (providerId: string, useDefault = true): string | null 
     if (storedData) {
       const providers = JSON.parse(storedData) as ApiProvider[];
       const provider = providers.find(p => p.id === providerId);
-      
+
       // If provider is found and enabled, return its key
       if (provider) {
         if (!provider.isEnabled) return null;
         if (provider.apiKey) return provider.apiKey;
       }
     }
-    
+
     // If no stored data or provider not found, initialize with default key
     if (useDefault && defaultApiKeys[providerId]) {
       // Initialize provider with default key
       saveApiKey(providerId, defaultApiKeys[providerId], true);
       return defaultApiKeys[providerId];
     }
-    
+
     return null;
   } catch (error) {
     console.error("Error accessing API key:", error);
@@ -89,13 +89,13 @@ export const isProviderEnabled = (providerId: string): boolean => {
         return provider.isEnabled;
       }
     }
-    
+
     // If no stored data or provider not found, initialize with default state
     if (defaultApiKeys[providerId]) {
       saveApiKey(providerId, defaultApiKeys[providerId], true);
       return true;
     }
-    
+
     return false;
   } catch {
     return defaultApiKeys[providerId] ? true : false;
@@ -116,11 +116,11 @@ export const saveApiKey = (
   try {
     const storedData = localStorage.getItem(API_STORAGE_KEY);
     let providers: ApiProvider[] = [];
-    
+
     if (storedData) {
       providers = JSON.parse(storedData);
       const index = providers.findIndex(p => p.id === providerId);
-      
+
       if (index >= 0) {
         // Update existing provider
         providers[index] = {
@@ -148,7 +148,7 @@ export const saveApiKey = (
         isEnabled: enabled
       }];
     }
-    
+
     localStorage.setItem(API_STORAGE_KEY, JSON.stringify(providers));
   } catch (error) {
     console.error("Error saving API key:", error);
