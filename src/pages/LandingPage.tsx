@@ -1,8 +1,9 @@
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/context/AuthContext";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -17,6 +18,25 @@ import {
 } from "lucide-react";
 
 const LandingPage = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-adpilot-primary"></div>
+      </div>
+    );
+  }
+
+  // If authenticated, this component won't render due to the redirect
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
@@ -85,7 +105,7 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        
+
         {/* Tools Section */}
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">

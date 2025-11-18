@@ -21,7 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const { user, token } = getAuthenticatedUser();
+        const { user, token } = await getAuthenticatedUser();
         
         setState({
           user,

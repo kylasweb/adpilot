@@ -19,18 +19,15 @@ const Index = () => {
 
   useEffect(() => {
     // Orchestrated reveal sequence for dashboard sections
-    const tl = anime.Timeline({
+    const tl = new anime.Timeline()
+    .add({
+      targets: '.dashboard-section',
+      translateY: [30, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(150),
       easing: 'easeOutQuad',
       duration: 800,
-    })
-      .add({
-        targets: '.dashboard-section',
-        translateY: [30, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(150),
-      });
-
-    tl.play();
+    });    tl.play();
   }, []);
 
   return (

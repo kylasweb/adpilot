@@ -96,15 +96,14 @@ const DashboardStats: React.FC = () => {
     const targets = containerRef.current.querySelectorAll('.dashboard-card');
 
     anime.remove(targets as any);
-    const tl = anime.Timeline({
-      easing: 'easeOutQuad',
-      duration: 700,
-    })
+    const tl = new anime.Timeline()
       .add({
         targets,
         translateY: [20, 0],
         opacity: [0, 1],
         delay: anime.stagger(120),
+        easing: 'easeOutQuad',
+        duration: 700,
       });
 
     tl.play();
