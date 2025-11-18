@@ -29,14 +29,14 @@ export const initializeDefaultProviders = (): void => {
 
 // Default API keys for development (would normally be stored in environment variables)
 const defaultApiKeys: Record<string, string> = {
-  openai: process.env.VITE_OPENAI_API_KEY || "",
-  openrouter: process.env.VITE_OPENROUTER_API_KEY || "",
-  gemini: process.env.VITE_GEMINI_API_KEY || "",
-  replicate: process.env.VITE_REPLICATE_API_KEY || "",
-  huggingface: process.env.VITE_HUGGINGFACE_API_KEY || "",
-  agentrouter: process.env.VITE_AGENTROUTER_API_KEY || "",
-  bytez: process.env.VITE_BYTEZ_API_KEY || "",
-  groq: process.env.VITE_GROQ_API_KEY || ""
+  openai: import.meta.env.VITE_OPENAI_API_KEY || "",
+  openrouter: import.meta.env.VITE_OPENROUTER_API_KEY || "",
+  gemini: import.meta.env.VITE_GEMINI_API_KEY || "",
+  replicate: import.meta.env.VITE_REPLICATE_API_KEY || "",
+  huggingface: import.meta.env.VITE_HUGGINGFACE_API_KEY || "",
+  agentrouter: import.meta.env.VITE_AGENTROUTER_API_KEY || "",
+  bytez: import.meta.env.VITE_BYTEZ_API_KEY || "",
+  groq: import.meta.env.VITE_GROQ_API_KEY || ""
 };
 
 /**
