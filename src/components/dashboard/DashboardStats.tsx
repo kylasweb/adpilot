@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { 
   BarChart,
   ArrowUp, 
@@ -17,38 +17,42 @@ const StatCard = ({
   icon: Icon,
   trend
 }: { 
-  title: string; 
-  value: string; 
-  change: string; 
-  icon: React.ElementType;
-  trend: "up" | "down" | "neutral";
-}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
   return (
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-adpilot-text-secondary">{title}</p>
-            <h3 className="text-2xl font-bold mt-1">{value}</h3>
+    <div ref={ref} className="dashboard-card">
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-adpilot-text-secondary">{title}</p>
+              <h3 className="text-2xl font-bold mt-1" style={{ fontFamily: "var(--font-display)" }}>{value}</h3>
+            </div>
+            <div className="h-12 w-12 rounded-full bg-adpilot-muted flex items-center justify-center">
+              <Icon className="h-6 w-6 text-adpilot-primary" />
+            </div>
           </div>
-          <div className="h-12 w-12 rounded-full bg-adpilot-muted flex items-center justify-center">
-            <Icon className="h-6 w-6 text-adpilot-primary" />
+          <div className="mt-4 flex items-center">
+            {trend === "up" && (
+              <ArrowUp className="h-4 w-4 text-adpilot-success mr-1" />
+            )}
+            {trend === "down" && (
+              <ArrowDown className="h-4 w-4 text-adpilot-danger mr-1" />
+            )}
+            <span 
+              className={cn("text-sm font-medium", {
+                "text-adpilot-success": trend === "up",
+                "text-adpilot-danger": trend === "down",
+                "text-adpilot-text-secondary": trend === "neutral"
+              })}
+            >
+              {change}
+            </span>
           </div>
-        </div>
-        <div className="mt-4 flex items-center">
-          {trend === "up" && (
-            <ArrowUp className="h-4 w-4 text-adpilot-success mr-1" />
-          )}
-          {trend === "down" && (
-            <ArrowDown className="h-4 w-4 text-adpilot-danger mr-1" />
-          )}
-          <span 
-            className={cn("text-sm font-medium", {
-              "text-adpilot-success": trend === "up",
-              "text-adpilot-danger": trend === "down",
-              "text-adpilot-text-secondary": trend === "neutral"
-            })}
-          >
+        </CardContent>
+      </Card>
+    </div>
+  );
             {change}
           </span>
         </div>
@@ -56,6 +60,8 @@ const StatCard = ({
     </Card>
   );
 };
+
+import anime from "animejs";
 
 const DashboardStats = () => {
   const stats = [
@@ -89,8 +95,28 @@ const DashboardStats = () => {
     },
   ];
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const targets = containerRef.current.querySelectorAll('.dashboard-card');
+
+    anime.remove(targets);
+    anime.timeline({
+      easing: 'easeOutQuad',
+      duration: 700,
+    })
+    .add({
+      targets,
+      translateY: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(120),
+    });
+  }, []);
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div ref={containerRef} className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
         <StatCard key={stat.title} {...stat} />
       ))}
