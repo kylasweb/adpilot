@@ -1,26 +1,27 @@
 
 import React, { useEffect, useRef } from "react";
-import { 
+import {
   BarChart,
-  ArrowUp, 
+  ArrowUp,
   ArrowDown,
   TrendingUp,
   Users
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import * as anime from "animejs";
 
-const StatCard = ({ 
-  title, 
-  value, 
-  change, 
-  icon: Icon,
-  trend
-}: { 
-  const ref = useRef<HTMLDivElement | null>(null);
+type Stat = {
+  title: string;
+  value: string;
+  change: string;
+  icon: React.ElementType;
+  trend: "up" | "down" | "neutral";
+};
 
+const StatCard: React.FC<Stat> = ({ title, value, change, icon: Icon, trend }) => {
   return (
-    <div ref={ref} className="dashboard-card">
+    <div className="dashboard-card">
       <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
@@ -39,7 +40,7 @@ const StatCard = ({
             {trend === "down" && (
               <ArrowDown className="h-4 w-4 text-adpilot-danger mr-1" />
             )}
-            <span 
+            <span
               className={cn("text-sm font-medium", {
                 "text-adpilot-success": trend === "up",
                 "text-adpilot-danger": trend === "down",
@@ -53,45 +54,37 @@ const StatCard = ({
       </Card>
     </div>
   );
-            {change}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
-  );
 };
 
-import anime from "animejs";
-
-const DashboardStats = () => {
-  const stats = [
+const DashboardStats: React.FC = () => {
+  const stats: Stat[] = [
     {
       title: "Active Campaigns",
       value: "12",
       change: "+2.5% from last month",
       icon: BarChart,
-      trend: "up" as const,
+      trend: "up",
     },
     {
       title: "Total Audience",
       value: "1,234,567",
       change: "+12.3% from last month",
       icon: Users,
-      trend: "up" as const,
+      trend: "up",
     },
     {
       title: "Avg. ROAS",
       value: "3.2x",
       change: "+0.5x from last month",
       icon: TrendingUp,
-      trend: "up" as const,
+      trend: "up",
     },
     {
       title: "Avg. CTR",
       value: "2.8%",
       change: "-0.3% from last month",
       icon: TrendingUp,
-      trend: "down" as const,
+      trend: "down",
     },
   ];
 
@@ -102,17 +95,17 @@ const DashboardStats = () => {
 
     const targets = containerRef.current.querySelectorAll('.dashboard-card');
 
-    anime.remove(targets);
+    anime.remove(targets as any);
     anime.timeline({
       easing: 'easeOutQuad',
       duration: 700,
     })
-    .add({
-      targets,
-      translateY: [20, 0],
-      opacity: [0, 1],
-      delay: anime.stagger(120),
-    });
+      .add({
+        targets,
+        translateY: [20, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(120),
+      });
   }, []);
 
   return (

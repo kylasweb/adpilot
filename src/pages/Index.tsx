@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardStats from "@/components/dashboard/DashboardStats";
+import StatementPiece from "@/components/statement/StatementPiece";
 import ActiveCampaigns from "@/components/dashboard/ActiveCampaigns";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import TopCohorts from "@/components/dashboard/TopCohorts";
@@ -17,9 +18,11 @@ const Index = () => {
 
   return (
     <AppLayout>
-      <div className="flex items-center justify-between mb-6">
+      <div className="relative">
+        <StatementPiece className="hidden lg:block" />
+        <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>Dashboard</h1>
           <p className="text-adpilot-text-secondary mt-1">Welcome to AdPilot - Your campaign management platform</p>
         </div>
         <div className="flex gap-3">
