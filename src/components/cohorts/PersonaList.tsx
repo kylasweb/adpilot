@@ -47,9 +47,9 @@ const PersonaList = () => {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {personas.map((persona) => (
-        <Card key={persona.id} className="overflow-hidden border-2 hover:border-adpilot-primary transition-colors">
+        <Card key={persona.id} className="overflow-hidden border-2 hover:border-adsilo-primary transition-colors">
           <CardContent className="p-0">
-            <div className="bg-adpilot-muted px-4 py-3 flex items-center justify-between">
+            <div className="bg-adsilo-muted px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-lg">
                   {persona.avatar}
@@ -81,14 +81,14 @@ const PersonaList = () => {
               </DropdownMenu>
             </div>
             <div className="p-4">
-              <p className="text-sm text-adpilot-text-secondary mb-4">{persona.description}</p>
+              <p className="text-sm text-adsilo-text-secondary mb-4">{persona.description}</p>
               <div className="space-y-2">
-                <h4 className="text-xs font-semibold uppercase text-adpilot-text-muted tracking-wider">Characteristics</h4>
+                <h4 className="text-xs font-semibold uppercase text-adsilo-text-muted tracking-wider">Characteristics</h4>
                 <div className="flex flex-wrap gap-2">
                   {persona.characteristics.map((char, index) => (
                     <span 
                       key={index} 
-                      className="text-xs bg-adpilot-muted px-2 py-1 rounded-full text-adpilot-text-secondary"
+                      className="text-xs bg-adsilo-muted px-2 py-1 rounded-full text-adsilo-text-secondary"
                     >
                       {char}
                     </span>

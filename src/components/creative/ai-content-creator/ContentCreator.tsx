@@ -26,13 +26,13 @@ export const ContentCreator = () => {
     keyPhrases: [],
     contentLength: "medium"
   });
-  
-  const { 
-    generateContent, 
-    generateImage, 
-    isGenerating, 
+
+  const {
+    generateContent,
+    generateImage,
+    isGenerating,
     aiSuggestions,
-    setAiSuggestions 
+    setAiSuggestions
   } = useAIGenerator();
 
   const handleGenerate = async () => {
@@ -43,9 +43,9 @@ export const ContentCreator = () => {
 
     try {
       const content = await generateContent(
-        prompt, 
-        selectedModel, 
-        contentType, 
+        prompt,
+        selectedModel,
+        contentType,
         selectedTemplate,
         advancedSettings
       );
@@ -84,20 +84,20 @@ export const ContentCreator = () => {
   return (
     <div className="w-full h-[calc(100vh-80px)] flex flex-col border rounded-lg bg-white shadow-sm">
       <div className="border-b p-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-adpilot-primary">AI Content Creator</h2>
+        <h2 className="text-2xl font-semibold text-adsilo-primary">AI Content Creator</h2>
       </div>
-      
+
       <div className="flex h-full overflow-hidden">
         <div className="w-72 border-r p-4 bg-gray-50 overflow-y-auto">
-          <ContentTypeSelector 
-            selectedType={contentType} 
-            onSelectType={setContentType} 
+          <ContentTypeSelector
+            selectedType={contentType}
+            onSelectType={setContentType}
             selectedTemplate={selectedTemplate}
             onSelectTemplate={setSelectedTemplate}
           />
-          
+
           <div className="mt-6">
-            <AIConfigPanel 
+            <AIConfigPanel
               selectedModel={selectedModel}
               onSelectModel={setSelectedModel}
               advancedSettings={advancedSettings}
@@ -105,7 +105,7 @@ export const ContentCreator = () => {
             />
           </div>
         </div>
-        
+
         <div className="flex-1 flex flex-col overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
             <div className="border-b">
@@ -116,19 +116,19 @@ export const ContentCreator = () => {
                 </TabsList>
               </div>
             </div>
-            
+
             <TabsContent value="create" className="flex-1 p-4 overflow-auto">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">Content Prompt</label>
-                  <textarea 
+                  <textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Describe the content you want to create..."
-                    className="w-full h-32 p-3 border rounded-md resize-none focus:ring-2 focus:ring-adpilot-primary focus:border-transparent"
+                    className="w-full h-32 p-3 border rounded-md resize-none focus:ring-2 focus:ring-adsilo-primary focus:border-transparent"
                   />
                 </div>
-                
+
                 {aiSuggestions.length > 0 && (
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium">AI Suggestions:</h3>
@@ -136,25 +136,25 @@ export const ContentCreator = () => {
                       {aiSuggestions.map((suggestion, idx) => (
                         <button
                           key={idx}
-                          onClick={() => setPrompt(suggestion)}
+                          onClick={() => setPrompt(suggestion.name)}
                           className="px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-full text-xs"
                         >
-                          {suggestion}
+                          {suggestion.name}
                         </button>
                       ))}
                     </div>
                   </div>
                 )}
-                
+
                 <div className="flex justify-end space-x-2">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => setPrompt("")}
                     disabled={!prompt.trim() || isGenerating}
                   >
                     Clear
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handleGenerate}
                     disabled={!prompt.trim() || isGenerating}
                   >
@@ -170,13 +170,15 @@ export const ContentCreator = () => {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="preview" className="flex-1 flex flex-col overflow-hidden">
               <div className="p-4 flex-1 overflow-auto">
-                <ContentEditor content={generatedContent} onChange={setGeneratedContent} />
-              </div>
-              
-              {generatedContent && (
+                <div className="prose max-w-none">
+                  <pre className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {generatedContent || "Generated content will appear here..."}
+                  </pre>
+                </div>
+              </div>              {generatedContent && (
                 <div className="border-t p-4 flex justify-between items-center bg-gray-50">
                   <div className="flex items-center">
                     <Languages className="h-4 w-4 mr-2 text-gray-500" />

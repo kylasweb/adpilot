@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router-dom';
 
-const AdminLayout: FC = () => {
+const AdminLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="container mx-auto p-6">
-      <Outlet />
+      {children}
     </div>
   );
 };

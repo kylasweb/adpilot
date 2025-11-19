@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, RequestHandler } from 'express';
 import { validateRequest } from '../middleware/validateRequest';
 import { authorize } from '../middleware/authorize';
-// import { ProjectRole } from '@prisma/client';
+import { ProjectRole } from '@prisma/client';
 import {
   getProjects,
   getProjectById,
@@ -21,7 +21,7 @@ import {
 const router = Router();
 
 // Get all projects (with pagination and filters)
-router.get('/', 
+router.get('/',
   authorize(),
   getProjects
 );

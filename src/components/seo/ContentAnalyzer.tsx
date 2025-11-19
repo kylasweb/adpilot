@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
-  BarChart, 
-  Type, 
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  BarChart,
+  Type,
   Search,
   Link as LinkIcon,
   Loader2
@@ -24,7 +24,24 @@ const ContentAnalyzer = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
   const [activeTab, setActiveTab] = useState("content");
-  const [analysisResults, setAnalysisResults] = useState({
+  const [analysisResults, setAnalysisResults] = useState<{
+    readability: {
+      score: number;
+      level: string;
+      suggestions: string[];
+    };
+    seo: {
+      score: number;
+      keywordDensity: number;
+      issues: string[];
+    };
+    metrics: {
+      wordCount: number;
+      sentenceCount: number;
+      paragraphCount: number;
+      readingTime: number;
+    };
+  }>({
     readability: {
       score: 0,
       level: "",
@@ -63,18 +80,18 @@ const ContentAnalyzer = () => {
       const sentenceCount = content.split(/[.!?]+/).filter(Boolean).length;
       const paragraphCount = content.split(/\n\s*\n/).filter(Boolean).length;
       const readingTime = Math.ceil(wordCount / 200); // Average reading speed: 200 words per minute
-      
+
       // Calculate keyword metrics
       const keywordRegex = new RegExp(keyword, 'gi');
       const keywordMatches = (content.match(keywordRegex) || []).length;
       const keywordDensity = (keywordMatches / wordCount) * 100;
-      
+
       // Mock readability score (Flesch-Kincaid like)
       const readabilityScore = Math.min(Math.floor(Math.random() * 50) + 50, 100);
       let readabilityLevel = "Difficult";
       if (readabilityScore >= 80) readabilityLevel = "Easy";
       else if (readabilityScore >= 60) readabilityLevel = "Standard";
-      
+
       // Generate mock analysis results
       const results = {
         readability: {
@@ -94,7 +111,7 @@ const ContentAnalyzer = () => {
             keywordDensity > 3 ? "Keyword density is too high (aim for 1-3%)" : null,
             !content.toLowerCase().includes(keyword.toLowerCase()) ? "Keyword is missing from the first paragraph" : null,
             sentenceCount < 10 ? "Content may be too short for good SEO performance" : null
-          ].filter(Boolean)
+          ].filter((issue): issue is string => issue !== null)
         },
         metrics: {
           wordCount,
@@ -103,7 +120,7 @@ const ContentAnalyzer = () => {
           readingTime
         }
       };
-      
+
       setAnalysisResults(results);
       setAnalyzing(false);
       setAnalyzed(true);
@@ -119,7 +136,7 @@ const ContentAnalyzer = () => {
           <TabsTrigger value="content">Content</TabsTrigger>
           <TabsTrigger value="analysis" disabled={!analyzed}>Analysis</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="content" className="space-y-4 mt-4">
           <Card>
             <CardHeader>
@@ -135,7 +152,7 @@ const ContentAnalyzer = () => {
                   onChange={(e) => setKeyword(e.target.value)}
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="content" className="block text-sm font-medium mb-1">Content</label>
                 <Textarea
@@ -147,7 +164,7 @@ const ContentAnalyzer = () => {
                   className="resize-none"
                 />
               </div>
-              
+
               <Button onClick={handleAnalyze} disabled={analyzing}>
                 {analyzing ? (
                   <>
@@ -161,7 +178,7 @@ const ContentAnalyzer = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="analysis" className="space-y-6 mt-4">
           {analyzed && (
             <>
@@ -177,18 +194,18 @@ const ContentAnalyzer = () => {
                     <div className="space-y-4">
                       <Progress value={analysisResults.seo.score} className="h-2" />
                       <div className="text-2xl font-bold">{analysisResults.seo.score}/100</div>
-                      
+
                       <div>
                         <div className="text-sm font-medium mb-1">Keyword Density</div>
                         <div className="flex items-center">
-                          <Progress 
-                            value={Math.min(analysisResults.seo.keywordDensity * 33, 100)} 
-                            className="h-2 flex-1 mr-2" 
+                          <Progress
+                            value={Math.min(analysisResults.seo.keywordDensity * 33, 100)}
+                            className="h-2 flex-1 mr-2"
                           />
                           <span className="text-sm font-medium">{analysisResults.seo.keywordDensity}%</span>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Issues to Address</div>
                         {analysisResults.seo.issues.length > 0 ? (
@@ -210,7 +227,7 @@ const ContentAnalyzer = () => {
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center">
@@ -227,7 +244,7 @@ const ContentAnalyzer = () => {
                           {analysisResults.readability.level}
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Improvement Suggestions</div>
                         <ul className="space-y-2">
@@ -243,7 +260,7 @@ const ContentAnalyzer = () => {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle>Content Metrics</CardTitle>
@@ -254,23 +271,23 @@ const ContentAnalyzer = () => {
                       <div className="text-sm text-gray-500">Word Count</div>
                       <div className="text-2xl font-bold">{analysisResults.metrics.wordCount}</div>
                     </div>
-                    
+
                     <div className="p-4 bg-gray-50 rounded-md">
                       <div className="text-sm text-gray-500">Sentences</div>
                       <div className="text-2xl font-bold">{analysisResults.metrics.sentenceCount}</div>
                     </div>
-                    
+
                     <div className="p-4 bg-gray-50 rounded-md">
                       <div className="text-sm text-gray-500">Paragraphs</div>
                       <div className="text-2xl font-bold">{analysisResults.metrics.paragraphCount}</div>
                     </div>
-                    
+
                     <div className="p-4 bg-gray-50 rounded-md">
                       <div className="text-sm text-gray-500">Reading Time</div>
                       <div className="text-2xl font-bold">{analysisResults.metrics.readingTime} min</div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-6 flex justify-end space-x-2">
                     <Button variant="outline" onClick={() => setActiveTab("content")}>
                       Edit Content

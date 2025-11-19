@@ -68,7 +68,7 @@ const FacebookAdsIntegration = () => {
           {!isConnected ? (
             <div className="space-y-4">
               <p className="text-sm">
-                Connect your Facebook Ads account to create and manage campaigns directly from AdPilot.
+                Connect your Facebook Ads account to create and manage campaigns directly from Adsilo.
               </p>
               <div className="space-y-2">
                 <label htmlFor="access-token" className="text-sm font-medium">

@@ -193,7 +193,7 @@ const KeywordResearch = () => {
               <TabsTrigger value="saved">
                 Saved Keywords
                 {savedKeywords.length > 0 && (
-                  <Badge className="ml-2 bg-adpilot-primary text-white" variant="secondary">
+                  <Badge className="ml-2 bg-adsilo-primary text-white" variant="secondary">
                     {savedKeywords.length}
                   </Badge>
                 )}

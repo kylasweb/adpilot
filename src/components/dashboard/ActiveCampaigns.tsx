@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Table, 
   TableBody, 
@@ -25,47 +25,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { getActiveCampaigns } from "@/services/dashboardService";
 
-const campaignData = [
-  {
-    id: 1,
-    name: "Summer Sale 2023",
-    objective: "Conversions",
-    audience: "High-Value Customers",
-    status: "Active",
-    spent: "$1,245.67",
-    budget: "$5,000.00",
-    progress: 25,
-    results: "127 purchases",
-    cpa: "$9.81",
-  },
-  {
-    id: 2,
-    name: "Brand Awareness Q3",
-    objective: "Awareness",
-    audience: "New Market Users",
-    status: "Active",
-    spent: "$2,387.92",
-    budget: "$3,500.00",
-    progress: 68,
-    results: "456k impressions",
-    cpa: "$5.24",
-  },
-  {
-    id: 3,
-    name: "Product Launch - Pro Series",
-    objective: "Traffic",
-    audience: "Tech Enthusiasts",
-    status: "Active",
-    spent: "$876.34",
-    budget: "$2,000.00",
-    progress: 44,
-    results: "12.3k clicks",
-    cpa: "$0.71",
-  },
-];
+
 
 const ActiveCampaigns = () => {
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const response = await getActiveCampaigns(5);
+        // Transform the data to match the expected format
+        const transformedCampaigns = response.data.map((campaign: any) => ({
+          id: campaign.id,
+          name: campaign.name,
+          objective: campaign.objective || 'N/A',
+          audience: 'Target Audience', // This would come from actual data
+          status: campaign.status,
+          spent: '$0.00', // This would come from actual data
+          budget: `$${campaign.budget.toFixed(2)}`,
+          progress: Math.floor(Math.random() * 100), // This would come from actual data
+          results: '0 results', // This would come from actual data
+          cpa: '$0.00' // This would come from actual data
+        }));
+        setCampaigns(transformedCampaigns);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch active campaigns:", error);
+        setLoading(false);
+      }
+    };
+    
+    fetchCampaigns();
+  }, []);
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-adsilo-primary"></div>
+      </div>
+    );
+  }
+  
   return (
     <Table>
       <TableHeader>
@@ -80,60 +83,68 @@ const ActiveCampaigns = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {campaignData.map((campaign) => (
-          <TableRow key={campaign.id}>
-            <TableCell className="font-medium">
-              <div>
-                {campaign.name}
-                <div className="text-xs text-adpilot-text-muted mt-1">
-                  {campaign.objective}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>{campaign.audience}</TableCell>
-            <TableCell>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{campaign.spent}</span>
-                  <span className="text-adpilot-text-muted">{campaign.budget}</span>
-                </div>
-                <Progress value={campaign.progress} />
-              </div>
-            </TableCell>
-            <TableCell>{campaign.results}</TableCell>
-            <TableCell>{campaign.cpa}</TableCell>
-            <TableCell>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                {campaign.status}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Edit className="mr-2 h-4 w-4" />
-                    <span>Edit</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <BarChart className="mr-2 h-4 w-4" />
-                    <span>View Report</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Pause className="mr-2 h-4 w-4" />
-                    <span>Pause Campaign</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+        {campaigns.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={7} className="text-center py-8 text-adsilo-text-muted">
+              No active campaigns
             </TableCell>
           </TableRow>
-        ))}
+        ) : (
+          campaigns.map((campaign) => (
+            <TableRow key={campaign.id}>
+              <TableCell className="font-medium">
+                <div>
+                  {campaign.name}
+                  <div className="text-xs text-adsilo-text-muted mt-1">
+                    {campaign.objective}
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>{campaign.audience}</TableCell>
+              <TableCell>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>{campaign.spent}</span>
+                    <span className="text-adsilo-text-muted">{campaign.budget}</span>
+                  </div>
+                  <Progress value={campaign.progress} />
+                </div>
+              </TableCell>
+              <TableCell>{campaign.results}</TableCell>
+              <TableCell>{campaign.cpa}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  {campaign.status}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Edit className="mr-2 h-4 w-4" />
+                      <span>Edit</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <BarChart className="mr-2 h-4 w-4" />
+                      <span>View Report</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Pause className="mr-2 h-4 w-4" />
+                      <span>Pause Campaign</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );

@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   LineChart,
@@ -16,66 +15,133 @@ import {
   Pie,
   Cell,
 } from "recharts";
-
-const lineData = [
-  { date: "Jan 1", impressions: 320000, clicks: 8400, conversions: 560 },
-  { date: "Jan 8", impressions: 340000, clicks: 9200, conversions: 670 },
-  { date: "Jan 15", impressions: 380000, clicks: 9800, conversions: 720 },
-  { date: "Jan 22", impressions: 420000, clicks: 10100, conversions: 780 },
-  { date: "Jan 29", impressions: 410000, clicks: 10500, conversions: 810 },
-  { date: "Feb 5", impressions: 450000, clicks: 11200, conversions: 890 },
-  { date: "Feb 12", impressions: 470000, clicks: 12000, conversions: 950 },
-];
-
-const barData = [
-  { name: "Summer Sale", value: 3.8 },
-  { name: "Brand Awareness", value: 2.1 },
-  { name: "Product Launch", value: 4.2 },
-  { name: "Retargeting", value: 5.6 },
-  { name: "Conversion", value: 3.2 },
-];
-
-const pieData = [
-  { name: "Facebook Feed", value: 45 },
-  { name: "Instagram Stories", value: 25 },
-  { name: "Facebook Stories", value: 10 },
-  { name: "Instagram Feed", value: 20 },
-];
+import { getPerformanceOverview } from "@/services/analyticsService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const COLORS = ["#4F46E5", "#6366F1", "#8B5CF6", "#A78BFA"];
 
 const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const result = await getPerformanceOverview({ dateRange });
+        setData(result);
+      } catch (err) {
+        setError("Failed to fetch performance data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [dateRange]);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-6">
+                <Skeleton className="h-4 w-24 mb-2" />
+                <Skeleton className="h-6 w-16 mt-2" />
+                <Skeleton className="h-3 w-20 mt-3" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card>
+            <CardContent className="p-6">
+              <Skeleton className="h-6 w-40 mb-4" />
+              <div className="h-[300px] flex items-center justify-center">
+                <Skeleton className="h-[250px] w-[250px] rounded-full" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <Skeleton className="h-6 w-48 mb-4" />
+              <div className="h-[300px] flex items-center justify-center">
+                <Skeleton className="h-[250px] w-[250px] rounded-full" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <Card>
+          <CardContent className="p-6">
+            <Skeleton className="h-6 w-40 mb-4" />
+            <div className="h-[300px] flex items-center justify-center">
+              <Skeleton className="h-[250px] w-full" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="text-red-500 p-4 bg-red-50 rounded-lg">
+          Error: {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="p-6">
-            <h3 className="text-sm font-medium text-adpilot-text-secondary">Impressions</h3>
-            <div className="text-2xl font-bold mt-2">3.2M</div>
+            <h3 className="text-sm font-medium text-adsilo-text-secondary">Impressions</h3>
+            <div className="text-2xl font-bold mt-2">
+              {data.summary.totalImpressions?.toLocaleString() || "0"}
+            </div>
             <p className="text-xs text-green-600 mt-1">↑ 12.3% vs. prev. period</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <h3 className="text-sm font-medium text-adpilot-text-secondary">Clicks</h3>
-            <div className="text-2xl font-bold mt-2">87.4K</div>
+            <h3 className="text-sm font-medium text-adsilo-text-secondary">Clicks</h3>
+            <div className="text-2xl font-bold mt-2">
+              {data.summary.totalClicks?.toLocaleString() || "0"}
+            </div>
             <p className="text-xs text-green-600 mt-1">↑ 8.7% vs. prev. period</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <h3 className="text-sm font-medium text-adpilot-text-secondary">CTR</h3>
-            <div className="text-2xl font-bold mt-2">2.73%</div>
+            <h3 className="text-sm font-medium text-adsilo-text-secondary">CTR</h3>
+            <div className="text-2xl font-bold mt-2">
+              {data.summary.ctr ? `${data.summary.ctr}%` : "0%"}
+            </div>
             <p className="text-xs text-red-600 mt-1">↓ 0.5% vs. prev. period</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <h3 className="text-sm font-medium text-adpilot-text-secondary">Conversions</h3>
-            <div className="text-2xl font-bold mt-2">5,234</div>
+            <h3 className="text-sm font-medium text-adsilo-text-secondary">Conversions</h3>
+            <div className="text-2xl font-bold mt-2">
+              {data.summary.totalConversions?.toLocaleString() || "0"}
+            </div>
             <p className="text-xs text-green-600 mt-1">↑ 15.2% vs. prev. period</p>
           </CardContent>
         </Card>
@@ -87,7 +153,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             <h3 className="text-lg font-medium mb-4">Performance Trends</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart
-                data={lineData}
+                data={data.performanceTrends}
                 margin={{
                   top: 5,
                   right: 30,
@@ -136,7 +202,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={pieData}
+                  data={data.placementDistribution}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -145,7 +211,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {pieData.map((entry, index) => (
+                  {data.placementDistribution.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -161,7 +227,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
           <h3 className="text-lg font-medium mb-4">ROAS by Campaign</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
-              data={barData}
+              data={data.campaignRoas}
               margin={{
                 top: 5,
                 right: 30,

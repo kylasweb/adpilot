@@ -342,7 +342,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
       case 'quotation':
         title = `${serviceCategory.charAt(0).toUpperCase() + serviceCategory.slice(1).replace('-', ' ')} Services Quotation`;
         notes = "This quotation is valid for 30 days from the date of issue. All prices are subject to change after this period.";
-        terms = "50% payment is required upfront to commence work. The remainder is due upon project completion. All deliverables remain the property of AdPilot until full payment is received.";
+        terms = "50% payment is required upfront to commence work. The remainder is due upon project completion. All deliverables remain the property of Adsilo until full payment is received.";
         break;
         
       case 'proposal':
@@ -383,7 +383,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
   return (
     <div className="p-4">
       <div className="flex items-center mb-6">
-        <Sparkles className="h-5 w-5 mr-2 text-adpilot-primary" />
+        <Sparkles className="h-5 w-5 mr-2 text-adsilo-primary" />
         <h3 className="text-xl font-medium">AI Document Generator</h3>
       </div>
       
@@ -502,7 +502,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       onClick={() => setPrompt(suggestion)}
                     >
                       <div className="flex items-center mb-1">
-                        <FileCheck className="h-4 w-4 mr-2 text-adpilot-primary" />
+                        <FileCheck className="h-4 w-4 mr-2 text-adsilo-primary" />
                         <span className="text-sm font-medium">Suggestion {index + 1}</span>
                       </div>
                       <p className="text-sm text-gray-600">{suggestion}</p>
@@ -526,7 +526,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <div className="flex items-center mb-4">
-                  <Globe className="h-5 w-5 mr-2 text-adpilot-primary" />
+                  <Globe className="h-5 w-5 mr-2 text-adsilo-primary" />
                   <h4 className="text-lg font-medium">Language & Localization</h4>
                 </div>
                 
@@ -571,7 +571,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
               
               <div>
                 <div className="flex items-center mb-4">
-                  <Building className="h-5 w-5 mr-2 text-adpilot-primary" />
+                  <Building className="h-5 w-5 mr-2 text-adsilo-primary" />
                   <h4 className="text-lg font-medium">Business Context</h4>
                 </div>
                 

@@ -300,7 +300,7 @@ const SeoChecklist = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
               <div>
                 <h3 className="text-lg font-medium">Checklist Progress</h3>
-                <p className="text-adpilot-text-secondary text-sm">
+                <p className="text-adsilo-text-secondary text-sm">
                   {completedItems} of {totalItems} items completed
                 </p>
               </div>
@@ -410,7 +410,7 @@ const SeoChecklist = () => {
               <div className="text-center py-10">
                 <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-1">No items found</h3>
-                <p className="text-adpilot-text-secondary">
+                <p className="text-adsilo-text-secondary">
                   Try adjusting your search query or filter settings
                 </p>
               </div>
@@ -470,7 +470,7 @@ const SeoChecklist = () => {
                             </div>
                           </div>
                           
-                          <p className="text-sm text-adpilot-text-secondary mt-1 mb-2">
+                          <p className="text-sm text-adsilo-text-secondary mt-1 mb-2">
                             {item.description}
                           </p>
                           

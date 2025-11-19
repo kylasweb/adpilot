@@ -1,4 +1,6 @@
 
+"use client"
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContextType, AuthState, LoginCredentials, RegisterData, User } from "@/types/auth.types";
 import { login as authLogin, register as authRegister, logout as authLogout, getAuthenticatedUser } from "@/lib/auth";
@@ -22,7 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initializeAuth = async () => {
       try {
         const { user, token } = await getAuthenticatedUser();
-        
+
         setState({
           user,
           token,
@@ -43,10 +45,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (credentials: LoginCredentials) => {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
-    
+
     try {
       const { user, token } = await authLogin(credentials.email, credentials.password);
-      
+
       setState({
         user,
         token,
@@ -54,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading: false,
         error: null,
       });
-      
+
       toast({
         title: "Login Successful",
         description: `Welcome back, ${user.name}!`,
@@ -64,13 +66,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      
+
       setState((prevState) => ({
         ...prevState,
         isLoading: false,
         error: errorMessage,
       }));
-      
+
       toast({
         title: "Login Failed",
         description: errorMessage,
@@ -81,14 +83,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (data: RegisterData) => {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
-    
+
     try {
       if (data.password !== data.confirmPassword) {
         throw new Error("Passwords do not match");
       }
-      
+
       const { user, token } = await authRegister(data.name, data.email, data.password);
-      
+
       setState({
         user,
         token,
@@ -96,7 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading: false,
         error: null,
       });
-      
+
       toast({
         title: "Registration Successful",
         description: `Welcome, ${user.name}!`,
@@ -106,13 +108,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      
+
       setState((prevState) => ({
         ...prevState,
         isLoading: false,
         error: errorMessage,
       }));
-      
+
       toast({
         title: "Registration Failed",
         description: errorMessage,
@@ -130,7 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isLoading: false,
       error: null,
     });
-    
+
     toast({
       title: "Logged Out",
       description: "You have been successfully logged out.",

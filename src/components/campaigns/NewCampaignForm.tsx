@@ -686,8 +686,8 @@ const NewCampaignForm = ({ open, onOpenChange }: NewCampaignFormProps) => {
                       <span>Daily Budget (Est.)</span>
                       <span className="font-medium">$10.71/day</span>
                     </div>
-                    <div className="w-full bg-adpilot-muted h-2 rounded-full mt-2">
-                      <div className="bg-adpilot-primary h-full rounded-full w-1/3"></div>
+                    <div className="w-full bg-adsilo-muted h-2 rounded-full mt-2">
+                      <div className="bg-adsilo-primary h-full rounded-full w-1/3"></div>
                     </div>
                   </div>
                 </div>

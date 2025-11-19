@@ -1,3 +1,4 @@
+'use client';
 
 import React from "react";
 import AppSidebar from "./AppSidebar";
@@ -19,8 +20,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-adpilot-background">
-      <header className="h-16 border-b flex items-center px-4 lg:px-6 bg-white">
+    <div className="min-h-screen flex flex-col bg-adsilo-background">
+      <header className="h-16 border-b border-adsilo-border flex items-center px-4 lg:px-6 bg-white">
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-4">
             {isMobile && (
@@ -32,7 +33,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 <Menu className="h-5 w-5" />
               </Button>
             )}
-            <h1 className="text-xl font-semibold text-adpilot-primary">AdPilot</h1>
+            <h1 className="text-xl font-semibold text-adsilo-primary">Adsilo</h1>
           </div>
           <div className="flex items-center gap-4">
             <UserProfileDropdown />

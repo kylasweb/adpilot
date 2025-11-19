@@ -82,7 +82,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         <div className="print:block" id="printable-document">
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-adpilot-primary">{document.title}</h2>
+              <h2 className="text-2xl font-bold text-adsilo-primary">{document.title}</h2>
               <p className="text-gray-500">
                 {document.type.charAt(0).toUpperCase() + document.type.slice(1)} #{document.id.substring(0, 8)}
               </p>
@@ -95,10 +95,10 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               </div>
             </div>
             <div className="text-right">
-              <div className="font-bold text-xl text-adpilot-primary">AdPilot</div>
+              <div className="font-bold text-xl text-adsilo-primary">Adsilo</div>
               <p>123 Marketing Street</p>
               <p>Digital City, DC 12345</p>
-              <p>contact@adpilot.com</p>
+              <p>contact@adsilo.com</p>
             </div>
           </div>
 
@@ -161,7 +161,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 <tr className="bg-gray-50">
                   <td colSpan={3} className="py-2"></td>
                   <td className="py-3 px-4 text-right font-bold">Total</td>
-                  <td className="py-3 px-4 text-right font-bold text-adpilot-primary">${document.total.toFixed(2)}</td>
+                  <td className="py-3 px-4 text-right font-bold text-adsilo-primary">${document.total.toFixed(2)}</td>
                 </tr>
               </tfoot>
             </table>

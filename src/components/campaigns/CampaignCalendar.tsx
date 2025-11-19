@@ -58,7 +58,7 @@ const CampaignCalendar = () => {
             campaign: (date) => getCampaignsForDate(date).length > 0,
           }}
           modifiersClassNames={{
-            campaign: "bg-adpilot-primary text-white font-bold",
+            campaign: "bg-adsilo-primary text-white font-bold",
           }}
         />
       </Card>
@@ -69,7 +69,7 @@ const CampaignCalendar = () => {
           <div className="space-y-3">
             {date && getCampaignsForDate(date).length > 0 ? (
               getCampaignsForDate(date).map((campaign, index) => (
-                <div key={index} className="bg-adpilot-muted p-3 rounded-md">
+                <div key={index} className="bg-adsilo-muted p-3 rounded-md">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{campaign.title}</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${
@@ -83,7 +83,7 @@ const CampaignCalendar = () => {
                 </div>
               ))
             ) : (
-              <p className="text-adpilot-text-muted text-center py-4">No campaigns scheduled for this date.</p>
+              <p className="text-adsilo-text-muted text-center py-4">No campaigns scheduled for this date.</p>
             )}
           </div>
         </CardContent>

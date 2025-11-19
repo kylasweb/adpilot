@@ -52,12 +52,12 @@ const RecentActivity = () => {
           <div>
             <p className="text-sm font-medium">
               {item.action}
-              <span className="font-normal text-adpilot-text-secondary"> - {item.target}</span>
+              <span className="font-normal text-adsilo-text-secondary"> - {item.target}</span>
             </p>
             <div className="flex items-center gap-1 mt-1">
-              <p className="text-xs text-adpilot-text-muted">{item.user}</p>
-              <span className="text-xs text-adpilot-text-muted">•</span>
-              <p className="text-xs text-adpilot-text-muted">{item.time}</p>
+              <p className="text-xs text-adsilo-text-muted">{item.user}</p>
+              <span className="text-xs text-adsilo-text-muted">•</span>
+              <p className="text-xs text-adsilo-text-muted">{item.time}</p>
             </div>
           </div>
         </div>

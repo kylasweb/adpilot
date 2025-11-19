@@ -1,7 +1,9 @@
 
+'use client';
+
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +17,11 @@ import { User, Settings, LogOut, Shield } from "lucide-react";
 
 const UserProfileDropdown: React.FC = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   
   const handleLogout = () => {
     logout();
-    navigate("/auth/login");
+    router.push("/auth/login");
   };
 
   const getInitials = (name: string) => {
@@ -45,7 +47,7 @@ const UserProfileDropdown: React.FC = () => {
           </Avatar>
           <div className="hidden md:block text-left">
             <p className="text-sm font-medium">{user.name}</p>
-            <p className="text-xs text-adpilot-text-muted">{user.email}</p>
+            <p className="text-xs text-adsilo-text-muted">{user.email}</p>
           </div>
         </button>
       </DropdownMenuTrigger>
@@ -53,28 +55,28 @@ const UserProfileDropdown: React.FC = () => {
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">{user.name}</p>
-            <p className="text-xs text-adpilot-text-muted">{user.email}</p>
-            <p className="text-xs text-adpilot-text-muted">
+            <p className="text-xs text-adsilo-text-muted">{user.email}</p>
+            <p className="text-xs text-adsilo-text-muted">
               Organization ID: {organizationId}
             </p>
             {isAdmin && (
-              <p className="text-xs text-adpilot-primary font-medium">
+              <p className="text-xs text-adsilo-primary font-medium">
                 Admin User
               </p>
             )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate("/settings")}>
+        <DropdownMenuItem onClick={() => router.push("/settings")}>
           <User className="mr-2 h-4 w-4" />
           Profile
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate("/settings")}>
+        <DropdownMenuItem onClick={() => router.push("/settings")}>
           <Settings className="mr-2 h-4 w-4" />
           Settings
         </DropdownMenuItem>
         {isAdmin && (
-          <DropdownMenuItem onClick={() => navigate("/admin/dashboard")}>
+          <DropdownMenuItem onClick={() => router.push("/admin/dashboard")}>
             <Shield className="mr-2 h-4 w-4" />
             Admin Dashboard
           </DropdownMenuItem>

@@ -7,6 +7,10 @@ const prisma = new PrismaClient();
 // Get all projects with pagination and filters
 export const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    if (!req.user) {
+      throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
+    }
+
     const { page = 1, limit = 20, status, sort = 'created_at', order = 'desc' } = req.query;
     const skip = (Number(page) - 1) * Number(limit);
 
@@ -50,7 +54,7 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
       prisma.project.count({ where })
     ]);
 
-    return res.json({
+    res.json({
       data: projects,
       meta: {
         total,
@@ -103,6 +107,10 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
 // Create new project
 export const createProject = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    if (!req.user) {
+      throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
+    }
+
     const { name, description, startDate, endDate, members = [] } = req.body;
 
     // Add creator as owner
@@ -137,7 +145,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
       }
     });
 
-    return res.status(201).json(project);
+    res.status(201).json(project);
   } catch (error) {
     next(error);
   }
@@ -173,7 +181,7 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
       }
     });
 
-    return res.json(project);
+    res.json(project);
   } catch (error) {
     next(error);
   }
@@ -186,7 +194,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
       where: { id: req.params.id }
     });
 
-    return res.status(204).send();
+    res.status(204).send();
   } catch (error) {
     next(error);
   }
@@ -214,7 +222,7 @@ export const addProjectMember = async (req: Request, res: Response, next: NextFu
       }
     });
 
-    return res.status(201).json(projectMember);
+    res.status(201).json(projectMember);
   } catch (error) {
     next(error);
   }
@@ -244,7 +252,7 @@ export const updateProjectMember = async (req: Request, res: Response, next: Nex
       }
     });
 
-    return res.json(projectMember);
+    res.json(projectMember);
   } catch (error) {
     next(error);
   }
@@ -262,7 +270,7 @@ export const removeProjectMember = async (req: Request, res: Response, next: Nex
       }
     });
 
-    return res.status(204).send();
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

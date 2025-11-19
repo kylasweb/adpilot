@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -23,12 +22,10 @@ interface RenderOptions {
 // Define providers wrapper
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        {children}
-        <Toaster />
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      {children}
+      <Toaster />
+    </ThemeProvider>
   );
 };
 

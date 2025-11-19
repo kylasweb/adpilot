@@ -3,7 +3,7 @@ import { useConfiguratorForm } from '../hooks/useConfigStore';
 import { Button } from '@/components/ui/button';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
 export function ConfiguratorExample() {
@@ -38,7 +38,7 @@ export function ConfiguratorExample() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (await handleSubmit()) {
       console.log('Configuration saved successfully');
     }
@@ -60,7 +60,6 @@ export function ConfiguratorExample() {
             id="projectPrefix"
             value={values.projectPrefix || ''}
             onChange={(e) => handleChange('projectPrefix', e.target.value)}
-            error={errors.projectPrefix}
             placeholder="Enter project prefix"
           />
           {errors.projectPrefix && (
@@ -74,15 +73,18 @@ export function ConfiguratorExample() {
             Default Visibility
           </label>
           <Select
-            id="defaultVisibility"
             value={values.defaultVisibility || ''}
-            onChange={(value) => handleChange('defaultVisibility', value)}
-            error={errors.defaultVisibility}
+            onValueChange={(value) => handleChange('defaultVisibility', value)}
           >
-            <option value="private">Private</option>
-            <option value="team">Team</option>
-            <option value="client">Client</option>
-            <option value="public">Public</option>
+            <SelectTrigger id="defaultVisibility">
+              <SelectValue placeholder="Select visibility..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="private">Private</SelectItem>
+              <SelectItem value="team">Team</SelectItem>
+              <SelectItem value="client">Client</SelectItem>
+              <SelectItem value="public">Public</SelectItem>
+            </SelectContent>
           </Select>
           {errors.defaultVisibility && (
             <p className="text-sm text-red-500">{errors.defaultVisibility}</p>

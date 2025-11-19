@@ -690,8 +690,8 @@ const ChatbotBuilder = () => {
               <div className="mb-6">
                 <Label htmlFor="embed-code">Embed Code</Label>
                 <pre className="mt-2 p-4 bg-slate-100 rounded-md text-xs overflow-x-auto">
-                  {`<script src="https://adpilot.example/chatbot.js?id=${chatbot.id}" defer></script>
-<div id="adpilot-chatbot"></div>`}
+                  {`<script src="https://adsilo.example/chatbot.js?id=${chatbot.id}" defer></script>
+<div id="adsilo-chatbot"></div>`}
                 </pre>
                 <Button variant="outline" size="sm" className="mt-2">
                   Copy Code

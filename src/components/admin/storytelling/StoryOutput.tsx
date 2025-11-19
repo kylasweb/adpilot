@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { StoryData } from "@/hooks/useStoryGenerator";
@@ -66,8 +65,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </CardHeader>
         <CardContent className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="h-12 w-12 animate-spin text-adpilot-primary mx-auto mb-4" />
-            <p className="text-adpilot-text-secondary">
+            <Loader2 className="h-12 w-12 animate-spin text-adsilo-primary mx-auto mb-4" />
+            <p className="text-adsilo-text-secondary">
               Crafting an engaging narrative tailored to your specifications
             </p>
           </div>
@@ -109,7 +108,7 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
             Your generated story will appear here
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 flex items-center justify-center text-center text-adpilot-text-muted">
+        <CardContent className="flex-1 flex items-center justify-center text-center text-adsilo-text-muted">
           <div>
             <p className="mb-2">Configure your story parameters on the left and click "Generate Story"</p>
             <p className="text-sm">The AI will create a platform-specific narrative based on your selections</p>
@@ -129,8 +128,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
       </CardHeader>
       <CardContent className="flex-1 overflow-y-auto space-y-6">
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Hook Visual</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Hook Visual</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <p>{storyData.hook}</p>
             <Button 
               variant="ghost" 
@@ -145,8 +144,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </div>
         
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Hook Text</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Hook Text</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <p>{storyData.hookText}</p>
             <Button 
               variant="ghost" 
@@ -161,8 +160,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </div>
         
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Story</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Story</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <p className="whitespace-pre-line">{storyData.story}</p>
             <Button 
               variant="ghost" 
@@ -177,8 +176,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </div>
         
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Learning Points</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Learning Points</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <ul className="list-disc pl-5 space-y-1">
               {storyData.learningPoints.map((point, index) => (
                 <li key={index}>{point}</li>
@@ -197,8 +196,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </div>
         
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Call to Action</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Call to Action</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <p>{storyData.cta}</p>
             <Button 
               variant="ghost" 
@@ -213,8 +212,8 @@ ${storyData.visuals.map(visual => `- ${visual}`).join('\n')}
         </div>
         
         <div className="space-y-1.5">
-          <h3 className="text-sm font-medium text-adpilot-text-secondary">Visual Elements</h3>
-          <div className="bg-adpilot-bg p-3 rounded-md">
+          <h3 className="text-sm font-medium text-adsilo-text-secondary">Visual Elements</h3>
+          <div className="bg-adsilo-bg p-3 rounded-md">
             <ul className="list-disc pl-5 space-y-1">
               {storyData.visuals.map((visual, index) => (
                 <li key={index}>{visual}</li>

@@ -401,7 +401,7 @@ const WhatsAppSender = () => {
                   <QrCode className="h-6 w-6 mr-3 text-green-600" />
                   <h3 className="text-lg font-medium">QR Code Login</h3>
                 </div>
-                <p className="text-adpilot-text-secondary mb-6">
+                <p className="text-adsilo-text-secondary mb-6">
                   Connect using WhatsApp Web by scanning a QR code with your phone.
                 </p>
                 <Button onClick={handleQrConnect}>
@@ -414,7 +414,7 @@ const WhatsAppSender = () => {
                   <MessageSquare className="h-6 w-6 mr-3 text-blue-600" />
                   <h3 className="text-lg font-medium">Business API</h3>
                 </div>
-                <p className="text-adpilot-text-secondary mb-6">
+                <p className="text-adsilo-text-secondary mb-6">
                   Connect using WhatsApp Business API credentials (requires approval).
                 </p>
                 <Button onClick={handleBusinessConnect}>
@@ -426,10 +426,10 @@ const WhatsAppSender = () => {
             {showQr && (
               <div className="flex flex-col items-center justify-center p-6 border rounded-md">
                 <div className="mb-6">
-                  <QrCode className="h-32 w-32 text-adpilot-primary animate-pulse" />
+                  <QrCode className="h-32 w-32 text-adsilo-primary animate-pulse" />
                 </div>
                 <p className="mb-2 text-center">Scan the QR code with your phone</p>
-                <p className="text-sm text-adpilot-text-secondary text-center">
+                <p className="text-sm text-adsilo-text-secondary text-center">
                   Open WhatsApp on your phone &gt; Settings &gt; WhatsApp Web/Desktop &gt; Scan the QR code
                 </p>
               </div>
@@ -518,7 +518,7 @@ const WhatsAppSender = () => {
                     <div>
                       <div className="flex justify-between mb-2">
                         <Label>Selected Contacts</Label>
-                        <span className="text-sm text-adpilot-text-muted">{selectedContacts.length} selected</span>
+                        <span className="text-sm text-adsilo-text-muted">{selectedContacts.length} selected</span>
                       </div>
                       <Dialog>
                         <DialogTrigger asChild>
@@ -624,7 +624,7 @@ const WhatsAppSender = () => {
                               )}
                             </div>
                           </div>
-                          <p className="text-sm text-adpilot-text-secondary">{template.content}</p>
+                          <p className="text-sm text-adsilo-text-secondary">{template.content}</p>
                         </div>
                       ))}
                     </div>
@@ -694,7 +694,7 @@ const WhatsAppSender = () => {
                   {isBulkSending ? (
                     <div className="space-y-3">
                       <Progress value={sendProgress} className="w-full" />
-                      <div className="flex justify-between text-sm text-adpilot-text-muted">
+                      <div className="flex justify-between text-sm text-adsilo-text-muted">
                         <span>Sending messages...</span>
                         <span>{sendProgress}%</span>
                       </div>
@@ -723,9 +723,9 @@ const WhatsAppSender = () => {
                 <CardContent>
                   <div className="border rounded-md h-[500px] flex items-center justify-center bg-slate-50 relative overflow-hidden">
                     <div className="text-center">
-                      <MessageSquare className="h-12 w-12 mb-4 text-adpilot-primary mx-auto" />
+                      <MessageSquare className="h-12 w-12 mb-4 text-adsilo-primary mx-auto" />
                       <p className="font-semibold mb-2">WhatsApp Web Embeddable</p>
-                      <p className="text-sm text-adpilot-text-secondary max-w-md mx-auto mb-4">
+                      <p className="text-sm text-adsilo-text-secondary max-w-md mx-auto mb-4">
                         For security and privacy reasons, WhatsApp Web is not embedded by default. 
                         Click the button below to load WhatsApp Web in this panel.
                       </p>
@@ -870,7 +870,7 @@ const WhatsAppSender = () => {
                       </CardHeader>
                       <CardContent>
                         <p className="text-2xl font-bold">3</p>
-                        <p className="text-sm text-adpilot-text-muted">contacts</p>
+                        <p className="text-sm text-adsilo-text-muted">contacts</p>
                       </CardContent>
                     </Card>
                     <Card>
@@ -882,7 +882,7 @@ const WhatsAppSender = () => {
                       </CardHeader>
                       <CardContent>
                         <p className="text-2xl font-bold">2</p>
-                        <p className="text-sm text-adpilot-text-muted">contacts</p>
+                        <p className="text-sm text-adsilo-text-muted">contacts</p>
                       </CardContent>
                     </Card>
                     <Card>
@@ -894,7 +894,7 @@ const WhatsAppSender = () => {
                       </CardHeader>
                       <CardContent>
                         <p className="text-2xl font-bold">2</p>
-                        <p className="text-sm text-adpilot-text-muted">contacts</p>
+                        <p className="text-sm text-adsilo-text-muted">contacts</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -998,7 +998,7 @@ const WhatsAppSender = () => {
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-adpilot-text-secondary mb-4">{template.content}</p>
+                          <p className="text-adsilo-text-secondary mb-4">{template.content}</p>
                           
                           {template.variables.length > 0 && (
                             <div>
@@ -1095,7 +1095,7 @@ const WhatsAppSender = () => {
                   </CardHeader>
                   <CardContent className="h-[300px] flex items-center justify-center bg-slate-50">
                     {/* Placeholder for chart */}
-                    <p className="text-adpilot-text-secondary">Campaign performance chart will appear here</p>
+                    <p className="text-adsilo-text-secondary">Campaign performance chart will appear here</p>
                   </CardContent>
                 </Card>
                 <Card>
@@ -1153,7 +1153,7 @@ const WhatsAppSender = () => {
                         <div className="flex items-center justify-between">
                           <div className="space-y-0.5">
                             <Label>Auto-reconnect</Label>
-                            <p className="text-sm text-adpilot-text-muted">
+                            <p className="text-sm text-adsilo-text-muted">
                               Automatically attempt to reconnect if connection is lost
                             </p>
                           </div>
@@ -1162,7 +1162,7 @@ const WhatsAppSender = () => {
                         <div className="flex items-center justify-between">
                           <div className="space-y-0.5">
                             <Label>Keep session alive</Label>
-                            <p className="text-sm text-adpilot-text-muted">
+                            <p className="text-sm text-adsilo-text-muted">
                               Prevent WhatsApp Web from logging out due to inactivity
                             </p>
                           </div>
@@ -1177,7 +1177,7 @@ const WhatsAppSender = () => {
                         <div className="flex items-center justify-between">
                           <div className="space-y-0.5">
                             <Label>Delay between messages</Label>
-                            <p className="text-sm text-adpilot-text-muted">
+                            <p className="text-sm text-adsilo-text-muted">
                               Add a random delay between sending bulk messages (recommended)
                             </p>
                           </div>
@@ -1198,7 +1198,7 @@ const WhatsAppSender = () => {
                         <div className="flex items-center justify-between">
                           <div className="space-y-0.5">
                             <Label>Auto-retry failed messages</Label>
-                            <p className="text-sm text-adpilot-text-muted">
+                            <p className="text-sm text-adsilo-text-muted">
                               Automatically retry sending messages that fail to deliver
                             </p>
                           </div>

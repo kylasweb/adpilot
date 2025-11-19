@@ -8,7 +8,7 @@ export interface ApiProvider {
   apiKey: string;
 }
 
-const API_STORAGE_KEY = "adpilot-api-keys";
+const API_STORAGE_KEY = "adsilo-api-keys";
 
 /**
  * Initialize all default API providers
@@ -29,14 +29,14 @@ export const initializeDefaultProviders = (): void => {
 
 // Default API keys for development (would normally be stored in environment variables)
 const defaultApiKeys: Record<string, string> = {
-  openai: import.meta.env.VITE_OPENAI_API_KEY || "",
-  openrouter: import.meta.env.VITE_OPENROUTER_API_KEY || "",
-  gemini: import.meta.env.VITE_GEMINI_API_KEY || "",
-  replicate: import.meta.env.VITE_REPLICATE_API_KEY || "",
-  huggingface: import.meta.env.VITE_HUGGINGFACE_API_KEY || "",
-  agentrouter: import.meta.env.VITE_AGENTROUTER_API_KEY || "",
-  bytez: import.meta.env.VITE_BYTEZ_API_KEY || "",
-  groq: import.meta.env.VITE_GROQ_API_KEY || ""
+  openai: process.env.NEXT_PUBLIC_OPENAI_API_KEY || "",
+  openrouter: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || "",
+  gemini: process.env.NEXT_PUBLIC_GEMINI_API_KEY || "",
+  replicate: process.env.NEXT_PUBLIC_REPLICATE_API_KEY || "",
+  huggingface: process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY || "",
+  agentrouter: process.env.NEXT_PUBLIC_AGENTROUTER_API_KEY || "",
+  bytez: process.env.NEXT_PUBLIC_BYTEZ_API_KEY || "",
+  groq: process.env.NEXT_PUBLIC_GROQ_API_KEY || ""
 };
 
 /**

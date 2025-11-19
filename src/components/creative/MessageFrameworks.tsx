@@ -98,7 +98,7 @@ const MessageFrameworks = () => {
           <Card key={framework.id} className="overflow-hidden">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold">{framework.title}</h3>
-              <p className="text-sm text-adpilot-text-secondary mt-1">{framework.description}</p>
+              <p className="text-sm text-adsilo-text-secondary mt-1">{framework.description}</p>
               
               <Accordion type="single" collapsible className="mt-4">
                 {framework.sections.map((section, index) => (
@@ -106,13 +106,13 @@ const MessageFrameworks = () => {
                     <AccordionTrigger className="text-sm font-medium">{section.title}</AccordionTrigger>
                     <AccordionContent>
                       {Array.isArray(section.content) ? (
-                        <ul className="list-disc pl-6 space-y-1 text-sm text-adpilot-text-secondary">
+                        <ul className="list-disc pl-6 space-y-1 text-sm text-adsilo-text-secondary">
                           {section.content.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-adpilot-text-secondary">{section.content}</p>
+                        <p className="text-sm text-adsilo-text-secondary">{section.content}</p>
                       )}
                     </AccordionContent>
                   </AccordionItem>

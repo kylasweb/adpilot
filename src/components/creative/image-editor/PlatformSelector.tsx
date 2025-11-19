@@ -10,11 +10,11 @@ interface PlatformSelectorProps {
   setSelectedDimension: (dimension: { name: string; width: number; height: number }) => void;
 }
 
-const PlatformSelector = ({ 
-  platform, 
-  onPlatformChange, 
-  selectedDimension, 
-  setSelectedDimension 
+const PlatformSelector = ({
+  platform,
+  onPlatformChange,
+  selectedDimension,
+  setSelectedDimension
 }: PlatformSelectorProps) => {
   return (
     <div className="flex items-center gap-4 mt-4">
@@ -46,15 +46,15 @@ const PlatformSelector = ({
           </SelectContent>
         </Select>
       </div>
-      
+
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium">Size:</span>
-        <Select 
+        <Select
           value={`${selectedDimension.width}x${selectedDimension.height}`}
           onValueChange={(value) => {
             // @ts-ignore - We know that platform will be a key of platforms
             const dimension = platforms[platform].dimensions.find(
-              d => `${d.width}x${d.height}` === value
+              (d: { name: string; width: number; height: number }) => `${d.width}x${d.height}` === value
             );
             if (dimension) setSelectedDimension(dimension);
           }}

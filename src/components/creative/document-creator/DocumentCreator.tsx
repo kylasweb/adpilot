@@ -101,23 +101,23 @@ export const DocumentCreator: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col border rounded-lg bg-white shadow-sm">
       <div className="border-b p-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-adpilot-primary">Document Creator</h2>
+        <h2 className="text-2xl font-semibold text-adsilo-primary">Document Creator</h2>
         <div className="space-x-2 flex">
           <button 
             onClick={() => handleCreateNew('quotation')}
-            className="bg-adpilot-primary hover:bg-adpilot-primary/90 text-white px-3 py-1 rounded-md"
+            className="bg-adsilo-primary hover:bg-adsilo-primary/90 text-white px-3 py-1 rounded-md"
           >
             New Quotation
           </button>
           <button 
             onClick={() => handleCreateNew('proposal')}
-            className="bg-adpilot-secondary hover:bg-adpilot-secondary/90 text-white px-3 py-1 rounded-md"
+            className="bg-adsilo-secondary hover:bg-adsilo-secondary/90 text-white px-3 py-1 rounded-md"
           >
             New Proposal
           </button>
           <button 
             onClick={() => handleCreateNew('invoice')}
-            className="bg-adpilot-accent hover:bg-adpilot-accent/90 text-white px-3 py-1 rounded-md"
+            className="bg-adsilo-accent hover:bg-adsilo-accent/90 text-white px-3 py-1 rounded-md"
           >
             New Invoice
           </button>

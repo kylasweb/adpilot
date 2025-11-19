@@ -73,21 +73,21 @@ const BudgetOverview = () => {
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardContent className="p-6">
-            <h4 className="text-sm font-medium text-adpilot-text-secondary">Total Budget</h4>
+            <h4 className="text-sm font-medium text-adsilo-text-secondary">Total Budget</h4>
             <div className="text-3xl font-bold mt-2">${totalAllocated.toLocaleString()}</div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <h4 className="text-sm font-medium text-adpilot-text-secondary">Total Spent</h4>
+            <h4 className="text-sm font-medium text-adsilo-text-secondary">Total Spent</h4>
             <div className="text-3xl font-bold mt-2">${totalSpent.toLocaleString()}</div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <h4 className="text-sm font-medium text-adpilot-text-secondary">Remaining</h4>
+            <h4 className="text-sm font-medium text-adsilo-text-secondary">Remaining</h4>
             <div className="text-3xl font-bold mt-2">${(totalAllocated - totalSpent).toLocaleString()}</div>
           </CardContent>
         </Card>
@@ -95,7 +95,7 @@ const BudgetOverview = () => {
       
       <Card>
         <CardContent className="p-6">
-          <h4 className="text-sm font-medium text-adpilot-text-secondary mb-4">Budget by Campaign</h4>
+          <h4 className="text-sm font-medium text-adsilo-text-secondary mb-4">Budget by Campaign</h4>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={data}

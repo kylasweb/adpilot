@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./node_modules/.prisma/client"
 }
 
 datasource db {
@@ -12,36 +11,40 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(uuid())
-  email         String       @unique
-  name          String
-  password      String
-  avatarUrl     String?
-  projects      ProjectMember[]
-  tasks         Task[]       @relation("Assignee")
-  createdTasks  Task[]       @relation("Creator")
-  timeEntries   TimeEntry[]
-  comments      Comment[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id           String          @id @default(uuid())
+  email        String          @unique
+  name         String
+  password     String
+  avatarUrl    String?
+  projects     ProjectMember[]
+  tasks        Task[]          @relation("Assignee")
+  createdTasks Task[]          @relation("Creator")
+  timeEntries  TimeEntry[]
+  comments     Comment[]
+  campaigns    Campaign[]
+  cohorts      Cohort[]
+  creatives    Creative[]
+  organization Organization?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 
   @@map("users")
 }
 
 model Project {
-  id            String       @id @default(uuid())
-  name          String
-  description   String?
-  status        ProjectStatus @default(ACTIVE)
-  startDate     DateTime
-  endDate       DateTime?
-  members       ProjectMember[]
-  tasks         Task[]
-  timeEntries   TimeEntry[]
-  roadmaps      Roadmap[]
-  bugs          Bug[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  status      ProjectStatus   @default(ACTIVE)
+  startDate   DateTime
+  endDate     DateTime?
+  members     ProjectMember[]
+  tasks       Task[]
+  timeEntries TimeEntry[]
+  roadmaps    Roadmap[]
+  bugs        Bug[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   @@map("projects")
 }
@@ -60,26 +63,26 @@ model ProjectMember {
 }
 
 model Task {
-  id          String      @id @default(uuid())
-  title       String
-  description String?
-  status      TaskStatus  @default(PENDING)
-  priority    TaskPriority @default(MEDIUM)
-  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
-  assignee    User?       @relation("Assignee", fields: [assigneeId], references: [id])
-  assigneeId  String?
-  creator     User        @relation("Creator", fields: [creatorId], references: [id])
-  creatorId   String
-  parentTask  Task?       @relation("SubTasks", fields: [parentTaskId], references: [id])
+  id           String       @id @default(uuid())
+  title        String
+  description  String?
+  status       TaskStatus   @default(PENDING)
+  priority     TaskPriority @default(MEDIUM)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String
+  assignee     User?        @relation("Assignee", fields: [assigneeId], references: [id])
+  assigneeId   String?
+  creator      User         @relation("Creator", fields: [creatorId], references: [id])
+  creatorId    String
+  parentTask   Task?        @relation("SubTasks", fields: [parentTaskId], references: [id])
   parentTaskId String?
-  subTasks    Task[]      @relation("SubTasks")
-  dueDate     DateTime?
-  timeEntries TimeEntry[]
-  comments    Comment[]
-  bugs        Bug[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  subTasks     Task[]       @relation("SubTasks")
+  dueDate      DateTime?
+  timeEntries  TimeEntry[]
+  comments     Comment[]
+  bugs         Bug[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   @@map("tasks")
 }
@@ -89,7 +92,7 @@ model TimeEntry {
   description String?
   startTime   DateTime
   endTime     DateTime?
-  duration    Int?      // in seconds
+  duration    Int? // in seconds
   ongoing     Boolean   @default(false)
   task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId      String
@@ -104,69 +107,165 @@ model TimeEntry {
 }
 
 model Comment {
-  id          String    @id @default(uuid())
+  id          String       @id @default(uuid())
   content     String
-  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  task        Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   attachments Attachment[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("comments")
 }
 
 model Attachment {
-  id          String    @id @default(uuid())
-  name        String
-  url         String
-  type        String
-  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId   String
-  createdAt   DateTime  @default(now())
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  type      String
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+  createdAt DateTime @default(now())
 
   @@map("attachments")
 }
 
 model WebhookConfig {
-  id          String         @id @default(uuid())
-  url         String
-  events      WebhookEvent[]
-  secret      String
-  active      Boolean        @default(true)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id        String         @id @default(uuid())
+  url       String
+  events    WebhookEvent[]
+  secret    String
+  active    Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   @@map("webhook_configs")
 }
 
 model Roadmap {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
   projectId   String
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("roadmaps")
 }
 
 model Bug {
-  id          String    @id @default(uuid())
+  id          String      @id @default(uuid())
   title       String
   description String?
-  status      BugStatus @default(OPEN)
+  status      BugStatus   @default(OPEN)
   priority    BugPriority @default(MEDIUM)
   projectId   String
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   taskId      String?
-  task        Task?     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  task        Task?       @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@map("bugs")
+}
+
+model Campaign {
+  id          String                @id @default(uuid())
+  name        String
+  description String?
+  objective   String?
+  budget      Float
+  status      String                @default("DRAFT")
+  startDate   DateTime
+  endDate     DateTime?
+  userId      String
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  performance CampaignPerformance[]
+  creatives   Creative[]
+  audience    AudienceInsight[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@map("campaigns")
+}
+
+model Cohort {
+  id           String            @id @default(uuid())
+  name         String
+  description  String?
+  criteria     String?
+  audienceSize Int
+  userId       String
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  audience     AudienceInsight[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@map("cohorts")
+}
+
+model Creative {
+  id         String    @id @default(uuid())
+  title      String
+  type       String
+  size       String
+  previewUrl String
+  tags       String[]
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("creatives")
+}
+
+model CampaignPerformance {
+  id          String   @id @default(uuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  date        DateTime
+  impressions Int
+  clicks      Int
+  conversions Int
+  spend       Float
+  platform    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("campaign_performance")
+}
+
+model AudienceInsight {
+  id         String    @id @default(uuid())
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  cohortId   String?
+  cohort     Cohort?   @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  ageRange   String
+  gender     String
+  deviceType String
+  interest   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("audience_insights")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  website   String?
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("organizations")
 }
 
 enum BugStatus {
@@ -232,6 +331,9 @@ enum WebhookEvent {
   TIME_ENTRY_CREATED
   TIME_ENTRY_UPDATED
   TIME_ENTRY_DELETED
+  CAMPAIGN_CREATED
+  CAMPAIGN_UPDATED
+  CAMPAIGN_DELETED
 
   @@map("webhook_event")
 }

@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { User } from '@/types/auth.types';
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
+  children: React.ReactNode;
 }
 
-export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const navigate = useNavigate();
+export const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
+  const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -16,30 +17,24 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
         const { user } = await getAuthenticatedUser();
         
         if (!user) {
-          navigate('/login', { 
-            replace: true,
-            state: { from: window.location.pathname }
-          });
+          router.push('/auth/login');
           return;
         }
 
         // Check role-based access if roles are specified
         if (allowedRoles && !allowedRoles.includes(user.role)) {
-          navigate('/unauthorized', { replace: true });
+          router.push('/unauthorized');
           return;
         }
 
       } catch (error) {
         console.error('Authentication error:', error);
-        navigate('/login', { 
-          replace: true,
-          state: { from: window.location.pathname }
-        });
+        router.push('/auth/login');
       }
     };
 
     checkAuth();
-  }, [navigate, allowedRoles]);
+  }, [router, allowedRoles]);
 
-  return <Outlet />;
+  return <>{children}</>;
 };
