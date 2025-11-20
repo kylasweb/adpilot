@@ -1,10 +1,10 @@
-export {};
+export { };
 
 declare global {
   // Base test runner types
-  var describe: (name: string, fn: () => void) => void;
-  var beforeEach: (fn: () => void) => void;
-  var it: (name: string, fn: () => void | Promise<void>) => void;
+  let describe: (name: string, fn: () => void) => void;
+  let beforeEach: (fn: () => void) => void;
+  let it: (name: string, fn: () => void | Promise<void>) => void;
 
   // Jest specific types
   interface CustomMatchers<R = unknown> {

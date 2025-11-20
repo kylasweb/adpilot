@@ -52,7 +52,7 @@ const PlatformSelector = ({
         <Select
           value={`${selectedDimension.width}x${selectedDimension.height}`}
           onValueChange={(value) => {
-            // @ts-ignore - We know that platform will be a key of platforms
+            // @ts-expect-error - We know that platform will be a key of platforms
             const dimension = platforms[platform].dimensions.find(
               (d: { name: string; width: number; height: number }) => `${d.width}x${d.height}` === value
             );
@@ -63,7 +63,7 @@ const PlatformSelector = ({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {/* @ts-ignore - We know that platform will be a key of platforms */}
+            {/* @ts-expect-error - We know that platform will be a key of platforms */}
             {platforms[platform].dimensions.map((d) => (
               <SelectItem key={`${d.width}x${d.height}`} value={`${d.width}x${d.height}`}>
                 {d.name} ({d.width}x{d.height})

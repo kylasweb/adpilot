@@ -36,7 +36,7 @@ export const ImageEditor = ({ open, onOpenChange }: ImageEditorProps) => {
 
   const handlePlatformChange = (value: string) => {
     setPlatform(value);
-    // @ts-ignore - We know that value will be a key of platforms
+    // @ts-expect-error - We know that value will be a key of platforms
     setSelectedDimension(platforms[value].dimensions[0]);
   };
 
@@ -71,15 +71,15 @@ export const ImageEditor = ({ open, onOpenChange }: ImageEditorProps) => {
               <Button size="sm" onClick={handleSave}>Save Creative</Button>
             </div>
           </div>
-          
-          <PlatformSelector 
+
+          <PlatformSelector
             platform={platform}
             onPlatformChange={handlePlatformChange}
             selectedDimension={selectedDimension}
             setSelectedDimension={setSelectedDimension}
           />
         </DialogHeader>
-          
+
         <div className="grid grid-cols-[280px_1fr_280px] h-[70vh]">
           {/* Left sidebar */}
           <EditorSidebar
@@ -89,16 +89,16 @@ export const ImageEditor = ({ open, onOpenChange }: ImageEditorProps) => {
             selectedElement={selectedElement}
             setSelectedElement={setSelectedElement}
           />
-          
+
           {/* Canvas area */}
-          <Canvas 
+          <Canvas
             selectedDimension={selectedDimension}
             backgroundColor={backgroundColor}
             selectedElement={selectedElement}
           />
-          
+
           {/* Right sidebar */}
-          <PropertiesPanel 
+          <PropertiesPanel
             backgroundColor={backgroundColor}
             setBackgroundColor={setBackgroundColor}
             opacity={opacity}
@@ -111,7 +111,7 @@ export const ImageEditor = ({ open, onOpenChange }: ImageEditorProps) => {
             handleDownload={handleDownload}
           />
         </div>
-        
+
         <DialogFooter className="p-4 border-t bg-slate-50">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSave}>

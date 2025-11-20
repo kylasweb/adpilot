@@ -1,11 +1,11 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { 
-  DocumentDetails, 
-  DocumentType, 
+import {
+  DocumentDetails,
+  DocumentType,
   ServiceItem,
   ClientInfo,
   ServiceCategory,
@@ -15,7 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle, Trash2, Receipt, Languages, CurrencyIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -84,12 +84,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
     setFormData({ ...document });
   }, [document]);
 
-  useEffect(() => {
-    // Calculate totals whenever items change
-    calculateTotals();
-  }, [formData.items, formData.tax, formData.discount]);
-
-  const calculateTotals = () => {
+  const calculateTotals = useCallback(() => {
     const subtotal = formData.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const taxAmount = (subtotal * formData.tax) / 100;
     const discountAmount = (subtotal * formData.discount) / 100;
@@ -100,11 +95,16 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
       subtotal,
       total
     }));
-  };
+  }, [formData.items, formData.tax, formData.discount]);
+
+  useEffect(() => {
+    // Calculate totals whenever items change
+    calculateTotals();
+  }, [calculateTotals]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       setFormData(prev => ({
@@ -130,7 +130,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
   const handleItemChange = (id: string, field: keyof ServiceItem, value: any) => {
     setFormData(prev => ({
       ...prev,
-      items: prev.items.map(item => 
+      items: prev.items.map(item =>
         item.id === id ? { ...item, [field]: field === 'price' || field === 'quantity' ? parseFloat(value) || 0 : value } : item
       )
     }));
@@ -161,7 +161,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
 
   const handleCurrencyChange = (currency: DocumentCurrency) => {
     const selectedCurrency = currencyOptions.find(c => c.value === currency);
-    
+
     setFormData(prev => ({
       ...prev,
       currency,
@@ -215,7 +215,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
           <TabsTrigger value="terms">Terms & Notes</TabsTrigger>
           <TabsTrigger value="settings">Language & Currency</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="details" className="space-y-6">
           <Card>
             <CardContent className="pt-6">
@@ -223,44 +223,44 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="title">Document Title</Label>
-                    <Input 
-                      id="title" 
-                      name="title" 
-                      value={formData.title} 
+                    <Input
+                      id="title"
+                      name="title"
+                      value={formData.title}
                       onChange={handleInputChange}
                       placeholder="Enter document title"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="date">Issue Date</Label>
-                    <Input 
-                      id="date" 
-                      name="date" 
-                      type="date" 
+                    <Input
+                      id="date"
+                      name="date"
+                      type="date"
                       value={formData.date}
                       onChange={handleInputChange}
                     />
                   </div>
-                  
+
                   {documentType === 'invoice' && (
                     <div>
                       <Label htmlFor="dueDate">Due Date</Label>
-                      <Input 
-                        id="dueDate" 
-                        name="dueDate" 
+                      <Input
+                        id="dueDate"
+                        name="dueDate"
                         type="date"
                         value={formData.dueDate || ''}
                         onChange={handleInputChange}
                       />
                     </div>
                   )}
-                  
+
                   <div>
                     <Label htmlFor="status">Status</Label>
-                    <Select 
-                      value={formData.status} 
-                      onValueChange={(value) => setFormData({...formData, status: value as any})}
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value) => setFormData({ ...formData, status: value as any })}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select status" />
@@ -275,49 +275,49 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                     </Select>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <h4 className="font-medium">Client Information</h4>
-                  
+
                   <div>
                     <Label htmlFor="clientInfo.name">Client Name</Label>
-                    <Input 
-                      id="clientInfo.name" 
-                      name="clientInfo.name" 
+                    <Input
+                      id="clientInfo.name"
+                      name="clientInfo.name"
                       value={formData.clientInfo.name}
                       onChange={handleInputChange}
                       placeholder="Client name"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="clientInfo.email">Client Email</Label>
-                    <Input 
-                      id="clientInfo.email" 
-                      name="clientInfo.email" 
+                    <Input
+                      id="clientInfo.email"
+                      name="clientInfo.email"
                       value={formData.clientInfo.email}
                       onChange={handleInputChange}
                       placeholder="client@example.com"
                       type="email"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="clientInfo.company">Client Company</Label>
-                    <Input 
-                      id="clientInfo.company" 
-                      name="clientInfo.company" 
+                    <Input
+                      id="clientInfo.company"
+                      name="clientInfo.company"
                       value={formData.clientInfo.company || ''}
                       onChange={handleInputChange}
                       placeholder="Company name"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="clientInfo.phone">Client Phone</Label>
-                    <Input 
-                      id="clientInfo.phone" 
-                      name="clientInfo.phone" 
+                    <Input
+                      id="clientInfo.phone"
+                      name="clientInfo.phone"
                       value={formData.clientInfo.phone || ''}
                       onChange={handleInputChange}
                       placeholder="Phone number"
@@ -328,7 +328,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="items" className="space-y-6">
           <Card>
             <CardContent className="pt-6">
@@ -339,7 +339,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                   Add Item
                 </Button>
               </div>
-              
+
               {formData.items.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   No items added. Click "Add Item" to start adding services.
@@ -350,30 +350,30 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                     <div key={item.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-center mb-3">
                         <h5 className="font-medium">Item #{index + 1}</h5>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           onClick={() => removeItem(item.id)}
                           className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                           <Label htmlFor={`item-name-${item.id}`}>Service Name</Label>
-                          <Input 
+                          <Input
                             id={`item-name-${item.id}`}
                             value={item.name}
                             onChange={(e) => handleItemChange(item.id, 'name', e.target.value)}
                             placeholder="Service name"
                           />
                         </div>
-                        
+
                         <div>
                           <Label htmlFor={`item-category-${item.id}`}>Category</Label>
-                          <Select 
+                          <Select
                             value={item.category}
                             onValueChange={(value) => handleItemChange(item.id, 'category', value)}
                           >
@@ -390,10 +390,10 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                           </Select>
                         </div>
                       </div>
-                      
+
                       <div className="mb-4">
                         <Label htmlFor={`item-description-${item.id}`}>Description</Label>
-                        <Textarea 
+                        <Textarea
                           id={`item-description-${item.id}`}
                           value={item.description}
                           onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
@@ -401,11 +401,11 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                           rows={2}
                         />
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor={`item-quantity-${item.id}`}>Quantity</Label>
-                          <Input 
+                          <Input
                             id={`item-quantity-${item.id}`}
                             type="number"
                             value={item.quantity}
@@ -413,14 +413,14 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                             onChange={(e) => handleItemChange(item.id, 'quantity', e.target.value)}
                           />
                         </div>
-                        
+
                         <div>
                           <Label htmlFor={`item-price-${item.id}`}>Price</Label>
                           <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                               <span className="text-gray-500">{getCurrencySymbol()}</span>
                             </div>
-                            <Input 
+                            <Input
                               id={`item-price-${item.id}`}
                               type="number"
                               value={item.price}
@@ -432,7 +432,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="text-right mt-2 text-sm font-medium">
                         Item Total: {getCurrencySymbol()}{(item.price * item.quantity).toFixed(2)}
                       </div>
@@ -440,13 +440,13 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                   ))}
                 </div>
               )}
-              
+
               <div className="mt-6 border-t pt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="tax">Tax Rate (%)</Label>
-                      <Input 
+                      <Input
                         id="tax"
                         name="tax"
                         type="number"
@@ -456,10 +456,10 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                         onChange={handleInputChange}
                       />
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="discount">Discount (%)</Label>
-                      <Input 
+                      <Input
                         id="discount"
                         name="discount"
                         type="number"
@@ -470,23 +470,23 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                       />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2 text-right">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Subtotal:</span>
                       <span>{getCurrencySymbol()}{formData.subtotal.toFixed(2)}</span>
                     </div>
-                    
+
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tax ({formData.tax}%):</span>
                       <span>{getCurrencySymbol()}{((formData.subtotal * formData.tax) / 100).toFixed(2)}</span>
                     </div>
-                    
+
                     <div className="flex justify-between">
                       <span className="text-gray-600">Discount ({formData.discount}%):</span>
                       <span>-{getCurrencySymbol()}{((formData.subtotal * formData.discount) / 100).toFixed(2)}</span>
                     </div>
-                    
+
                     <div className="flex justify-between pt-2 border-t font-medium text-lg">
                       <span>Total:</span>
                       <span>{getCurrencySymbol()}{formData.total.toFixed(2)}</span>
@@ -497,14 +497,14 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="terms" className="space-y-6">
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
                 <div>
                   <Label htmlFor="notes">Notes</Label>
-                  <Textarea 
+                  <Textarea
                     id="notes"
                     name="notes"
                     value={formData.notes}
@@ -513,10 +513,10 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                     rows={4}
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="terms">Terms & Conditions</Label>
-                  <Textarea 
+                  <Textarea
                     id="terms"
                     name="terms"
                     value={formData.terms}
@@ -536,12 +536,12 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h4 className="font-medium">Language Settings</h4>
-                  
+
                   <div>
                     <Label htmlFor="document-language">Document Language</Label>
-                    <Select 
+                    <Select
                       value={formData.language || 'english'}
-                      onValueChange={(value) => setFormData({...formData, language: value as ContentLanguage})}
+                      onValueChange={(value) => setFormData({ ...formData, language: value as ContentLanguage })}
                     >
                       <SelectTrigger id="document-language">
                         <SelectValue placeholder="Select language" />
@@ -559,13 +559,13 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <h4 className="font-medium">Currency Settings</h4>
-                  
+
                   <div>
                     <Label htmlFor="document-currency">Currency</Label>
-                    <Select 
+                    <Select
                       value={formData.currency || 'USD'}
                       onValueChange={(value) => handleCurrencyChange(value as DocumentCurrency)}
                     >
@@ -592,7 +592,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="show-currency-code">Show Currency Code</Label>
-                    <Select 
+                    <Select
                       defaultValue="symbol"
                     >
                       <SelectTrigger id="show-currency-code">
@@ -624,7 +624,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({
           </Card>
         </TabsContent>
       </Tabs>
-      
+
       <div className="mt-6 flex justify-end">
         <Button onClick={handleSave} className="flex items-center gap-2">
           <Receipt className="h-4 w-4" />

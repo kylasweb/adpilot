@@ -34,7 +34,7 @@ export function ConfiguratorExample() {
     };
 
     loadConfig();
-  }, []);
+  }, [handleChange, setError]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

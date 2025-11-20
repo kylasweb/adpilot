@@ -18,9 +18,9 @@ export const createBug = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(bug);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };
 
@@ -40,9 +40,9 @@ export const getBug = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(bug);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };
 
@@ -64,9 +64,9 @@ export const updateBug = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(bug);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };
 
@@ -81,8 +81,8 @@ export const deleteBug = async (req: Request, res: Response) => {
     });
 
     res.status(204).send();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };

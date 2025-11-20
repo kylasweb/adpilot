@@ -19,7 +19,7 @@ export const getCampaigns = async (req: Request, res: Response, next: NextFuncti
 
         const where = {
             userId: req.user.id,
-            ...(status && { status: status as any })
+            ...(status && { status: status as string })
         };
 
         const [campaigns, total] = await Promise.all([

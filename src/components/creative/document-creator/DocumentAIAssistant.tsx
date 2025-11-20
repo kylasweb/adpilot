@@ -95,7 +95,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
   // Dummy suggestions based on document type and language
   const getSuggestions = () => {
     const langPrefix = language !== 'english' ? `in ${languageOptions.find(l => l.value === language)?.label || 'the selected language'}` : '';
-    
+
     switch (documentType) {
       case 'quotation':
         return [
@@ -122,12 +122,12 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
 
   const handleGenerateDocument = async () => {
     setLoading(true);
-    
+
     try {
       // This would be a real API call in a production environment
       const apiKey = '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';
       const openRouterModel = getOpenRouterModel(model as any);
-      
+
       const finalPrompt = `
         Create a complete ${documentType} for ${category} services in ${languageOptions.find(l => l.value === language)?.label || 'English'}.
         ${clientName ? `The client's name is "${clientName}".` : ''}
@@ -163,19 +163,19 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
         
         Make it realistic and professional. Include 3-5 service items with realistic pricing.
       `;
-      
+
       console.log("Generating document with OpenRouter API...");
       console.log("Using model:", openRouterModel);
       console.log("Using language:", language);
       console.log("Using currency:", currency);
-      
+
       // In a real implementation, you'd make an actual API call
       // For demo purposes, we'll simulate a delay and return a mock response
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Mock AI-generated document
       const mockAIResponse = generateMockDocument(documentType, category, clientName, budget, language, currency);
-      
+
       // Make sure all required properties are present before passing to onGenerate
       const completeDocument: DocumentDetails = {
         id: uuidv4(),
@@ -199,9 +199,9 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
         currency: currency,
         currencySymbol: getCurrencySymbol(currency)
       };
-      
+
       onGenerate(completeDocument);
-      
+
       toast.success(`${documentType.charAt(0).toUpperCase() + documentType.slice(1)} generated successfully!`);
     } catch (error) {
       console.error("Error generating document:", error);
@@ -213,7 +213,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
 
   // Helper function to generate a realistic mock document for demo purposes
   const generateMockDocument = (
-    type: DocumentType, 
+    type: DocumentType,
     serviceCategory: ServiceCategory,
     clientNameValue: string,
     budgetValue: string,
@@ -221,19 +221,19 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
     documentCurrency: DocumentCurrency
   ): Partial<DocumentDetails> => {
     const currentDate = new Date().toISOString().split('T')[0];
-    let dueDate = new Date();
+    const dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + 30);
-    
+
     const clientCompany = clientNameValue ? `${clientNameValue}'s Company` : "Acme Corporation";
     const actualClientName = clientNameValue || "John Smith";
     const currencySymbol = getCurrencySymbol(documentCurrency);
-    
+
     // Create items based on service category
     const items = [];
-    const multiplier = documentCurrency === 'INR' ? 75 : 
-                      documentCurrency === 'JPY' ? 150 :
-                      documentCurrency === 'EUR' ? 0.9 : 1;
-    
+    const multiplier = documentCurrency === 'INR' ? 75 :
+      documentCurrency === 'JPY' ? 150 :
+        documentCurrency === 'EUR' ? 0.9 : 1;
+
     switch (serviceCategory) {
       case 'digital-marketing':
         items.push({
@@ -261,7 +261,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           category: serviceCategory
         });
         break;
-        
+
       case 'web-design':
         items.push({
           id: uuidv4(),
@@ -288,7 +288,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           category: serviceCategory
         });
         break;
-        
+
       case 'social-media':
         items.push({
           id: uuidv4(),
@@ -315,7 +315,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           category: serviceCategory
         });
         break;
-        
+
       default:
         items.push({
           id: uuidv4(),
@@ -326,7 +326,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
           category: serviceCategory
         });
     }
-    
+
     // Calculate totals
     const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const tax = 10; // 10% tax
@@ -334,30 +334,30 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
     const taxAmount = (subtotal * tax) / 100;
     const discountAmount = (subtotal * discount) / 100;
     const total = subtotal + taxAmount - discountAmount;
-    
+
     // Create type-specific details
     let title, notes, terms;
-    
+
     switch (type) {
       case 'quotation':
         title = `${serviceCategory.charAt(0).toUpperCase() + serviceCategory.slice(1).replace('-', ' ')} Services Quotation`;
         notes = "This quotation is valid for 30 days from the date of issue. All prices are subject to change after this period.";
         terms = "50% payment is required upfront to commence work. The remainder is due upon project completion. All deliverables remain the property of Adsilo until full payment is received.";
         break;
-        
+
       case 'proposal':
         title = `${serviceCategory.charAt(0).toUpperCase() + serviceCategory.slice(1).replace('-', ' ')} Services Proposal`;
         notes = "This proposal outlines our suggested approach based on the information provided. We're happy to adjust the scope or deliverables to better fit your needs.";
         terms = "Timeline: The project is estimated to take 8-10 weeks from kickoff to completion. Weekly progress updates will be provided throughout the project lifecycle.";
         break;
-        
+
       case 'invoice':
         title = `${serviceCategory.charAt(0).toUpperCase() + serviceCategory.slice(1).replace('-', ' ')} Services Invoice`;
         notes = "Thank you for your business! Please make payment by the due date.";
         terms = "Payment is due within 15 days of invoice date. Late payments are subject to a 1.5% monthly fee. We accept bank transfers and major credit cards.";
         break;
     }
-    
+
     return {
       title,
       date: currentDate,
@@ -386,7 +386,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
         <Sparkles className="h-5 w-5 mr-2 text-adsilo-primary" />
         <h3 className="text-xl font-medium">AI Document Generator</h3>
       </div>
-      
+
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
         <TabsList className="mb-6">
           <TabsTrigger value="basic">Basic</TabsTrigger>
@@ -399,7 +399,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
               <Card className="p-6">
                 <div className="mb-6">
                   <h4 className="text-lg font-medium mb-4">Document Details</h4>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <Label htmlFor="ai-category">Service Category</Label>
@@ -414,7 +414,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="ai-model">AI Model</Label>
                       <Select value={model} onValueChange={setModel}>
@@ -429,25 +429,25 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       </Select>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <Label htmlFor="client-name">Client Name (Optional)</Label>
-                      <Input 
+                      <Input
                         id="client-name"
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
                         placeholder="Enter client name"
                       />
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="budget">Budget (Optional)</Label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                           <span className="text-gray-500">{getCurrencySymbol(currency)}</span>
                         </div>
-                        <Input 
+                        <Input
                           id="budget"
                           value={budget}
                           onChange={(e) => setBudget(e.target.value)}
@@ -457,7 +457,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       </div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="ai-prompt">Tell AI what you need</Label>
                     <Textarea
@@ -469,9 +469,9 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end">
-                  <Button 
+                  <Button
                     onClick={handleGenerateDocument}
                     disabled={loading}
                     className="flex items-center gap-2"
@@ -486,18 +486,18 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                 </div>
               </Card>
             </div>
-            
+
             <div>
               <Card className="p-6 h-full">
                 <h4 className="text-lg font-medium mb-4">AI Suggestions</h4>
                 <p className="text-sm text-gray-600 mb-4">
                   Try one of these prompts to get started quickly:
                 </p>
-                
+
                 <div className="space-y-3">
                   {getSuggestions().map((suggestion, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => setPrompt(suggestion)}
                     >
@@ -509,10 +509,10 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
                   <p className="text-sm text-blue-700">
-                    <strong>Tip:</strong> Provide specific details about the services, 
+                    <strong>Tip:</strong> Provide specific details about the services,
                     pricing strategy, and any special terms to get more accurate results.
                   </p>
                 </div>
@@ -520,7 +520,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
             </div>
           </div>
         </TabsContent>
-      
+
         <TabsContent value="advanced">
           <Card className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -529,7 +529,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                   <Globe className="h-5 w-5 mr-2 text-adsilo-primary" />
                   <h4 className="text-lg font-medium">Language & Localization</h4>
                 </div>
-                
+
                 <div className="space-y-4 mb-6">
                   <div>
                     <Label htmlFor="document-language">Document Language</Label>
@@ -547,7 +547,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       The AI will generate document content in this language
                     </p>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="document-currency">Currency</Label>
                     <Select value={currency} onValueChange={value => setCurrency(value as DocumentCurrency)}>
@@ -568,13 +568,13 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <div className="flex items-center mb-4">
                   <Building className="h-5 w-5 mr-2 text-adsilo-primary" />
                   <h4 className="text-lg font-medium">Business Context</h4>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="target-audience">Target Industry</Label>
@@ -593,7 +593,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="business-size">Client Business Size</Label>
                     <Select defaultValue="small">
@@ -608,7 +608,7 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="complexity">Document Complexity</Label>
                     <Select defaultValue="standard">
@@ -626,9 +626,9 @@ const DocumentAIAssistant: React.FC<DocumentAIAssistantProps> = ({
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-6 flex justify-end">
-              <Button 
+              <Button
                 onClick={handleGenerateDocument}
                 disabled={loading}
                 className="flex items-center gap-2"

@@ -144,11 +144,11 @@ export const getCampaignMetrics = async (req: Request, res: Response, next: Next
         });
 
         // Calculate metrics for each campaign
-        const campaignMetrics = campaigns.map(campaign => {
-            const totalImpressions = campaign.performance.reduce((sum, perf) => sum + perf.impressions, 0);
-            const totalClicks = campaign.performance.reduce((sum, perf) => sum + perf.clicks, 0);
-            const totalConversions = campaign.performance.reduce((sum, perf) => sum + perf.conversions, 0);
-            const totalSpend = campaign.performance.reduce((sum, perf) => sum + perf.spend, 0);
+        const campaignMetrics = campaigns.map((campaign: any) => {
+            const totalImpressions = campaign.performance.reduce((sum: number, perf: any) => sum + perf.impressions, 0);
+            const totalClicks = campaign.performance.reduce((sum: number, perf: any) => sum + perf.clicks, 0);
+            const totalConversions = campaign.performance.reduce((sum: number, perf: any) => sum + perf.conversions, 0);
+            const totalSpend = campaign.performance.reduce((sum: number, perf: any) => sum + perf.spend, 0);
 
             const ctr = totalImpressions > 0 ? parseFloat(((totalClicks / totalImpressions) * 100).toFixed(2)) : 0;
             const cpc = totalClicks > 0 ? parseFloat((totalSpend / totalClicks).toFixed(2)) : 0;

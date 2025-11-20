@@ -143,7 +143,7 @@ const mockFile = (
 
 // Mock date
 const createMockDate = (defaultDate: string) => {
-  let currentDate = new Date(defaultDate);
+  const currentDate = new Date(defaultDate);
 
   class MockDate {
     private date: Date;
@@ -175,9 +175,9 @@ const createMockDate = (defaultDate: string) => {
 const mockDate = (isoDate: string) => {
   const RealDate = global.Date;
   const MockDate = createMockDate(isoDate);
-  
+
   global.Date = MockDate as unknown as DateConstructor;
-  
+
   return () => {
     global.Date = RealDate;
   };

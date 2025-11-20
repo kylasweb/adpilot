@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,10 +15,10 @@ import { toast } from "sonner";
 
 const AdminAPIManagementPage = () => {
   // API Providers configuration
-  const apiProviders = [
-    { 
-      id: "openai", 
-      name: "OpenAI", 
+  const apiProviders = useMemo(() => [
+    {
+      id: "openai",
+      name: "OpenAI",
       description: "GPT models for text and code generation",
       models: [
         { id: "gpt-4o", name: "GPT-4o" },
@@ -27,9 +27,9 @@ const AdminAPIManagementPage = () => {
         { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" }
       ]
     },
-    { 
-      id: "openrouter", 
-      name: "OpenRouter", 
+    {
+      id: "openrouter",
+      name: "OpenRouter",
       description: "Access to multiple AI models through a single API",
       models: [
         { id: "deepseek/deepseek-coder-33b-instruct", name: "DeepSeek Coder 33B" },
@@ -39,52 +39,52 @@ const AdminAPIManagementPage = () => {
         { id: "google/gemini-pro", name: "Gemini Pro" }
       ]
     },
-    { 
-      id: "gemini", 
-      name: "Google Gemini", 
+    {
+      id: "gemini",
+      name: "Google Gemini",
       description: "Google's AI models for text and multimodal tasks",
       models: [
         { id: "gemini-pro", name: "Gemini Pro" },
         { id: "gemini-pro-vision", name: "Gemini Pro Vision" }
       ]
     },
-    { 
-      id: "replicate", 
-      name: "Replicate", 
+    {
+      id: "replicate",
+      name: "Replicate",
       description: "AI models for image and audio generation",
       models: [
         { id: "stability-ai/sdxl", name: "Stable Diffusion XL" },
         { id: "stability-ai/stable-diffusion", name: "Stable Diffusion" }
       ]
     },
-    { 
-      id: "huggingface", 
-      name: "Hugging Face", 
+    {
+      id: "huggingface",
+      name: "Hugging Face",
       description: "Access to thousands of open-source AI models",
       models: [
         { id: "meta-llama/Llama-2-70b-chat-hf", name: "Llama 2 70B" },
         { id: "mistralai/Mistral-7B-v0.1", name: "Mistral 7B" }
       ]
     },
-    { 
-      id: "agentrouter", 
-      name: "AgentRouter", 
+    {
+      id: "agentrouter",
+      name: "AgentRouter",
       description: "Specialized AI agents for specific tasks",
       models: [
         { id: "agentrouter-default", name: "Default Agent" }
       ]
     },
-    { 
-      id: "bytez", 
-      name: "Bytez", 
+    {
+      id: "bytez",
+      name: "Bytez",
       description: "AI model marketplace and deployment",
       models: [
         { id: "bytez-default", name: "Bytez Models" }
       ]
     },
-    { 
-      id: "groq", 
-      name: "Groq", 
+    {
+      id: "groq",
+      name: "Groq",
       description: "Ultra-fast inference for Llama models",
       models: [
         { id: "llama3-70b-8192", name: "Llama 3 70B (8K)" },
@@ -92,25 +92,25 @@ const AdminAPIManagementPage = () => {
         { id: "mixtral-8x7b-32768", name: "Mixtral 8x7B (32K)" }
       ]
     }
-  ];
+  ], []);
 
   // State for API keys
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
   const [enabledProviders, setEnabledProviders] = useState<Record<string, boolean>>({});
-  
+
   // State for model selection
   const [selectedModels, setSelectedModels] = useState<Record<string, string>>({
     contentGeneration: "openrouter",
     imageGeneration: "replicate",
     storyGeneration: "openai"
   });
-  
+
   // Define types for model assignments
   type ModelAssignment = {
     provider: string;
     model: string;
   };
-  
+
   type ModelAssignments = {
     contentGeneration: ModelAssignment[];
     imageGeneration: ModelAssignment[];
@@ -138,18 +138,18 @@ const AdminAPIManagementPage = () => {
     const loadApiKeys = () => {
       const keys: Record<string, string> = {};
       const enabled: Record<string, boolean> = {};
-      
+
       apiProviders.forEach(provider => {
         keys[provider.id] = getApiKey(provider.id, false) || "";
         enabled[provider.id] = isProviderEnabled(provider.id);
       });
-      
+
       setApiKeys(keys);
       setEnabledProviders(enabled);
     };
-    
+
     loadApiKeys();
-  }, []);
+  }, [apiProviders]);
 
   // Handle API key changes
   const handleApiKeyChange = (providerId: string, value: string) => {
@@ -276,7 +276,7 @@ const AdminAPIManagementPage = () => {
                 </Card>
               ))}
             </div>
-            
+
             <div className="flex justify-end">
               <Button onClick={saveAllApiKeys}>
                 <Save className="mr-2 h-4 w-4" />
@@ -301,7 +301,7 @@ const AdminAPIManagementPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <Label>Content Generation</Label>
-                <Select 
+                <Select
                   value={selectedModels.contentGeneration}
                   onValueChange={(value) => setSelectedModels(prev => ({ ...prev, contentGeneration: value }))}
                 >
@@ -316,7 +316,7 @@ const AdminAPIManagementPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                
+
                 <div className="mt-2">
                   <Label className="text-sm text-adsilo-text-secondary">Available Models</Label>
                   <Select>
@@ -335,10 +335,10 @@ const AdminAPIManagementPage = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div>
                 <Label>Image Generation</Label>
-                <Select 
+                <Select
                   value={selectedModels.imageGeneration}
                   onValueChange={(value) => setSelectedModels(prev => ({ ...prev, imageGeneration: value }))}
                 >
@@ -353,7 +353,7 @@ const AdminAPIManagementPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                
+
                 <div className="mt-2">
                   <Label className="text-sm text-adsilo-text-secondary">Available Models</Label>
                   <Select>
@@ -372,10 +372,10 @@ const AdminAPIManagementPage = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div>
                 <Label>Story Generation</Label>
-                <Select 
+                <Select
                   value={selectedModels.storyGeneration}
                   onValueChange={(value) => setSelectedModels(prev => ({ ...prev, storyGeneration: value }))}
                 >
@@ -390,7 +390,7 @@ const AdminAPIManagementPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                
+
                 <div className="mt-2">
                   <Label className="text-sm text-adsilo-text-secondary">Available Models</Label>
                   <Select>
@@ -429,9 +429,9 @@ const AdminAPIManagementPage = () => {
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-medium">Content Generation Models</h3>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => addModelAssignment("contentGeneration")}
                   >
                     <Plus className="h-4 w-4 mr-1" />
@@ -442,7 +442,7 @@ const AdminAPIManagementPage = () => {
                   {modelAssignments.contentGeneration.map((assignment, index) => (
                     <div key={index} className="flex gap-3 items-center">
                       <div className="flex-1 grid grid-cols-2 gap-3">
-                        <Select 
+                        <Select
                           value={assignment.provider}
                           onValueChange={(value) => updateModelAssignment("contentGeneration", index, "provider", value)}
                         >
@@ -457,8 +457,8 @@ const AdminAPIManagementPage = () => {
                             ))}
                           </SelectContent>
                         </Select>
-                        
-                        <Select 
+
+                        <Select
                           value={assignment.model}
                           onValueChange={(value) => updateModelAssignment("contentGeneration", index, "model", value)}
                         >
@@ -476,9 +476,9 @@ const AdminAPIManagementPage = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => removeModelAssignment("contentGeneration", index)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -487,13 +487,13 @@ const AdminAPIManagementPage = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-medium">Image Generation Models</h3>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => addModelAssignment("imageGeneration")}
                   >
                     <Plus className="h-4 w-4 mr-1" />
@@ -504,7 +504,7 @@ const AdminAPIManagementPage = () => {
                   {modelAssignments.imageGeneration.map((assignment, index) => (
                     <div key={index} className="flex gap-3 items-center">
                       <div className="flex-1 grid grid-cols-2 gap-3">
-                        <Select 
+                        <Select
                           value={assignment.provider}
                           onValueChange={(value) => updateModelAssignment("imageGeneration", index, "provider", value)}
                         >
@@ -519,8 +519,8 @@ const AdminAPIManagementPage = () => {
                             ))}
                           </SelectContent>
                         </Select>
-                        
-                        <Select 
+
+                        <Select
                           value={assignment.model}
                           onValueChange={(value) => updateModelAssignment("imageGeneration", index, "model", value)}
                         >
@@ -538,9 +538,9 @@ const AdminAPIManagementPage = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => removeModelAssignment("imageGeneration", index)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -549,13 +549,13 @@ const AdminAPIManagementPage = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-medium">Story Generation Models</h3>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => addModelAssignment("storyGeneration")}
                   >
                     <Plus className="h-4 w-4 mr-1" />
@@ -566,7 +566,7 @@ const AdminAPIManagementPage = () => {
                   {modelAssignments.storyGeneration.map((assignment, index) => (
                     <div key={index} className="flex gap-3 items-center">
                       <div className="flex-1 grid grid-cols-2 gap-3">
-                        <Select 
+                        <Select
                           value={assignment.provider}
                           onValueChange={(value) => updateModelAssignment("storyGeneration", index, "provider", value)}
                         >
@@ -581,8 +581,8 @@ const AdminAPIManagementPage = () => {
                             ))}
                           </SelectContent>
                         </Select>
-                        
-                        <Select 
+
+                        <Select
                           value={assignment.model}
                           onValueChange={(value) => updateModelAssignment("storyGeneration", index, "model", value)}
                         >
@@ -600,9 +600,9 @@ const AdminAPIManagementPage = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => removeModelAssignment("storyGeneration", index)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -612,7 +612,7 @@ const AdminAPIManagementPage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex justify-end gap-3">
               <Button variant="outline">
                 <RefreshCw className="mr-2 h-4 w-4" />
