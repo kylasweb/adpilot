@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:api": "npx tsx src/server.ts",
-    "build": "next build && tsc src/server.ts --outDir dist",
+    "build": "next build && tsc --project tsconfig.server.json",
     "build:dev": "next build",
     "start": "next start",
     "lint": "next lint",

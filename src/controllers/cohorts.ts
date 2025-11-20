@@ -81,7 +81,7 @@ export const getCohortById = async (req: Request, res: Response, next: NextFunct
             throw new ApiError(403, 'FORBIDDEN', 'You do not have permission to access this cohort');
         }
 
-        return res.json(cohort);
+        res.json(cohort);
     } catch (error) {
         next(error);
     }

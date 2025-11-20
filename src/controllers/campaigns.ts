@@ -82,7 +82,7 @@ export const getCampaignById = async (req: Request, res: Response, next: NextFun
             throw new ApiError(403, 'FORBIDDEN', 'You do not have permission to access this campaign');
         }
 
-        return res.json(campaign);
+        res.json(campaign);
     } catch (error) {
         next(error);
     }

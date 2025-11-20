@@ -31,11 +31,11 @@ export const getRoadmap = async (req: Request, res: Response) => {
     });
 
     if (!roadmap) {
-      return res.status(404).json({ error: "Roadmap not found" });
+      res.status(404).json({ error: "Roadmap not found" });
+      return;
     }
 
     res.status(200).json(roadmap);
-    return;
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: error.message });

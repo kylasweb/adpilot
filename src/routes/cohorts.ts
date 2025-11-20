@@ -24,7 +24,7 @@ router.get('/',
 // Get specific cohort
 router.get('/:id',
     authorize(),
-    getCohortById as RequestHandler
+    getCohortById
 );
 
 // Create new cohort

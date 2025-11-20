@@ -98,7 +98,7 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
       throw ApiError.notFound('Project not found');
     }
 
-    return res.json(project);
+    res.json(project);
   } catch (error) {
     next(error);
   }

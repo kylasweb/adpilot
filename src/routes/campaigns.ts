@@ -24,7 +24,7 @@ router.get('/',
 // Get specific campaign
 router.get('/:id',
     authorize(),
-    getCampaignById as RequestHandler
+    getCampaignById
 );
 
 // Create new campaign

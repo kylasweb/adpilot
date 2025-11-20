@@ -37,7 +37,7 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
         });
 
         // Calculate performance metrics
-        const campaignIds = campaigns.map(c => c.id);
+        const campaignIds = campaigns.map((c: { id: string }) => c.id);
 
         // Get impressions, clicks, conversions data
         const performanceData: any[] = await prisma.$queryRaw`

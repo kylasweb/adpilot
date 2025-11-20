@@ -29,7 +29,7 @@ router.get('/',
 // Get specific project
 router.get('/:id',
   authorize(),
-  getProjectById as RequestHandler
+  getProjectById
 );
 
 // Create new project

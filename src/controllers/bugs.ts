@@ -17,10 +17,10 @@ export const createBug = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(201).json(bug);
+    res.status(201).json(bug);
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -35,13 +35,14 @@ export const getBug = async (req: Request, res: Response) => {
     });
 
     if (!bug) {
-      return res.status(404).json({ error: "Bug not found" });
+      res.status(404).json({ error: "Bug not found" });
+      return;
     }
 
-    return res.status(200).json(bug);
+    res.status(200).json(bug);
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -62,10 +63,10 @@ export const updateBug = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json(bug);
+    res.status(200).json(bug);
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -79,9 +80,9 @@ export const deleteBug = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(204).send();
+    res.status(204).send();
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
