@@ -57,11 +57,11 @@ const SocialMediaScheduler = () => {
     }
   };
   
-  const deletePost = (id) => {
+  const deletePost = (id: number) => {
     setPosts(posts.filter(post => post.id !== id));
   };
-  
-  const getCharacterCount = (content, platformId) => {
+
+  const getCharacterCount = (content: string, platformId: string) => {
     const platform = platforms.find(p => p.id === platformId);
     return {
       current: content.length,

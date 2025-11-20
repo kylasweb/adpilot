@@ -111,7 +111,7 @@ const EmailMarketingAutomation = () => {
     }));
   };
   
-  const duplicateCampaign = (id) => {
+  const duplicateCampaign = (id: number) => {
     const campaign = campaigns.find(c => c.id === id);
     if (campaign) {
       const newCampaign = {

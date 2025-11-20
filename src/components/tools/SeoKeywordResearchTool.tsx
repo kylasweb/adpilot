@@ -80,13 +80,13 @@ const SeoKeywordResearchTool = () => {
     return matchesSearch && matchesVolume && matchesDifficulty && matchesCpc;
   });
   
-  const getDifficultyColor = (difficulty) => {
+  const getDifficultyColor = (difficulty: number) => {
     if (difficulty >= 70) return 'bg-red-100 text-red-800';
     if (difficulty >= 40) return 'bg-yellow-100 text-yellow-800';
     return 'bg-green-100 text-green-800';
   };
   
-  const getCompetitionColor = (competition) => {
+  const getCompetitionColor = (competition: string) => {
     if (competition === 'High') return 'bg-red-100 text-red-800';
     if (competition === 'Medium') return 'bg-yellow-100 text-yellow-800';
     return 'bg-green-100 text-green-800';
