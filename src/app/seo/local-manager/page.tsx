@@ -2,59 +2,50 @@
 
 import React from "react";
 import AppLayout from "@/components/layouts/AppLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Globe } from "lucide-react";
+import { MapPin, Plus, Star } from "lucide-react";
 
-const LocalSEOPage = () => {
+const SEOLocalManagerPage = () => {
+  const listings = [
+    { platform: 'Google Business', status: 'Active', rating: 4.8, reviews: 124 },
+    { platform: 'Bing Places', status: 'Active', rating: 4.6, reviews: 45 },
+    { platform: 'Yelp', status: 'Needs Update', rating: 4.5, reviews: 89 },
+  ];
+
   return (
     <AppLayout>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="space-y-6">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Local SEO Manager</h1>
-            <p className="text-adsilo-text-secondary mt-1">
-              Manage local SEO and business listings.
-            </p>
+            <p className="text-adsilo-text-secondary mt-1">Manage local business listings</p>
           </div>
+          <Button><Plus className="h-4 w-4 mr-2" />Add Listing</Button>
         </div>
       </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card className="border-adsilo-border shadow-sm mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Globe className="mr-2 h-5 w-5" />
-              Local Business Listings
-            </CardTitle>
-            <CardDescription>
-              Optimize your local business presence.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <Globe className="mx-auto h-12 w-12 text-adsilo-text-muted" />
-                <h3 className="mt-4 text-lg font-medium">Local SEO Manager</h3>
-                <p className="mt-2 text-adsilo-text-secondary">
-                  This feature is currently under development. Please check back later.
-                </p>
+      <Card className="mt-6">
+        <CardHeader><CardTitle className="flex items-center gap-2"><MapPin className="h-5 w-5" />Business Listings</CardTitle></CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {listings.map((listing, i) => (
+              <div key={i} className="flex items-center justify-between p-4 border border-adsilo-border rounded-lg">
+                <div>
+                  <div className="font-semibold">{listing.platform}</div>
+                  <div className="text-sm text-adsilo-text-muted flex items-center gap-2 mt-1">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span>{listing.rating} ({listing.reviews} reviews)</span>
+                  </div>
+                </div>
+                <div className="text-sm">{listing.status}</div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </AppLayout>
   );
 };
 
-export default LocalSEOPage;
+export default SEOLocalManagerPage;

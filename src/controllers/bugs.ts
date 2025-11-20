@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
-import { BugStatus, BugPriority } from "../../prisma/node_modules/.prisma/client";
+import { BugStatus, BugPriority } from "@prisma/client";
 
 export const createBug = async (req: Request, res: Response) => {
   try {

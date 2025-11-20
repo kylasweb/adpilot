@@ -2,57 +2,48 @@
 
 import React from "react";
 import AppLayout from "@/components/layouts/AppLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
-import { Database } from "lucide-react";
+import { Package, User, Clock } from "lucide-react";
 
 const ProjectResourcesPage = () => {
+  const resources = [
+    { name: 'Developers', allocated: 8, available: 12, utilization: 67 },
+    { name: 'Designers', allocated: 4, available: 6, utilization: 67 },
+    { name: 'Budget', allocated: 45000, available: 60000, utilization: 75 },
+  ];
+
   return (
     <AppLayout>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold">Project Resources</h1>
-            <p className="text-adsilo-text-secondary mt-1">
-              Manage project resources and assets efficiently.
-            </p>
-          </div>
-        </div>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <h1 className="text-3xl font-bold">Resource Allocation</h1>
+        <p className="text-adsilo-text-secondary mt-1">Manage project resources and capacity</p>
       </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card className="border-adsilo-border shadow-sm mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Database className="mr-2 h-5 w-5" />
-              Resource Management
-            </CardTitle>
-            <CardDescription>
-              Track and allocate project resources.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <Database className="mx-auto h-12 w-12 text-adsilo-text-muted" />
-                <h3 className="mt-4 text-lg font-medium">Resource Dashboard</h3>
-                <p className="mt-2 text-adsilo-text-secondary">
-                  This feature is currently under development. Please check back later.
-                </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        {resources.map((resource, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {i === 2 ? <Package className="h-5 w-5" /> : <User className="h-5 w-5" />}
+                {resource.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span>Allocated</span>
+                  <span className="font-medium">{resource.allocated}{i === 2 ? '' : ' people'}</span>
+                </div>
+                <Progress value={resource.utilization} className="h-2" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+              <div className="text-sm text-adsilo-text-muted">
+                {resource.available - resource.allocated} {i === 2 ? 'remaining' : 'available'}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </AppLayout>
   );
 };

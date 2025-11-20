@@ -4,55 +4,63 @@ import React from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Plug } from "lucide-react";
+import { Plug, Check, Settings, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
+
+const integrations = [
+  { name: 'Slack', desc: 'Team communication', status: 'Connected', icon: '💬', category: 'Communication' },
+  { name: 'Google Analytics', desc: 'Website analytics', status: 'Connected', icon: '📊', category: 'Analytics' },
+  { name: 'Stripe', desc: 'Payment processing', status: 'Available', icon: '💳', category: 'Payment' },
+  { name: 'Mailchimp', desc: 'Email marketing', status: 'Available', icon: '📧', category: 'Marketing' },
+  { name: 'Salesforce', desc: 'CRM platform', status: 'Available', icon: '🔗', category: 'CRM' },
+  { name: 'Zapier', desc: 'Automation', status: 'Connected', icon: '⚡', category: 'Automation' },
+];
 
 const AdminIntegrationsPage = () => {
   return (
     <AppLayout>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold">Integrations</h1>
-            <p className="text-adsilo-text-secondary mt-1">
-              Manage third-party integrations.
-            </p>
-          </div>
-        </div>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <h1 className="text-3xl font-bold">Integrations</h1>
+        <p className="text-adsilo-text-secondary mt-1">Connect with third-party services</p>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card className="border-adsilo-border shadow-sm mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Plug className="mr-2 h-5 w-5" />
-              Integration Management
-            </CardTitle>
-            <CardDescription>
-              Connect and manage third-party services.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <Plug className="mx-auto h-12 w-12 text-adsilo-text-muted" />
-                <h3 className="mt-4 text-lg font-medium">Integrations</h3>
-                <p className="mt-2 text-adsilo-text-secondary">
-                  This feature is currently under development. Please check back later.
-                </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {integrations.map((integration, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">{integration.icon}</div>
+                  <div>
+                    <CardTitle className="text-lg">{integration.name}</CardTitle>
+                    <CardDescription className="text-xs">{integration.category}</CardDescription>
+                  </div>
+                </div>
+                <Badge variant={integration.status === 'Connected' ? 'default' : 'outline'}>
+                  {integration.status}
+                </Badge>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-adsilo-text-muted mb-4">{integration.desc}</p>
+              <Button
+                variant={integration.status === 'Connected' ? 'outline' : 'default'}
+                className="w-full"
+                size="sm"
+                onClick={() => toast.success(`${integration.name} ${integration.status === 'Connected' ? 'disconnected' : 'connected'}`)}
+              >
+                {integration.status === 'Connected' ? (
+                  <><Settings className="h-4 w-4 mr-2" />Configure</>
+                ) : (
+                  <><Plug className="h-4 w-4 mr-2" />Connect</>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </AppLayout>
   );
 };

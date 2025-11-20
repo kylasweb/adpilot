@@ -2,57 +2,58 @@
 
 import React from "react";
 import AppLayout from "@/components/layouts/AppLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Users } from "lucide-react";
+import { Users, Plus, Mail } from "lucide-react";
+
+const team = [
+  { name: 'John Doe', role: 'Project Manager', email: 'john@example.com', status: 'Active' },
+  { name: 'Jane Smith', role: 'Developer', email: 'jane@example.com', status: 'Active' },
+  { name: 'Bob Wilson', role: 'Designer', email: 'bob@example.com', status: 'Busy' },
+];
 
 const ProjectTeamPage = () => {
   return (
     <AppLayout>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="space-y-6">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Project Team</h1>
-            <p className="text-adsilo-text-secondary mt-1">
-              Manage your project teams and collaboration.
-            </p>
+            <h1 className="text-3xl font-bold">Team Management</h1>
+            <p className="text-adsilo-text-secondary mt-1">Manage project team members</p>
           </div>
+          <Button><Plus className="h-4 w-4 mr-2" />Add Member</Button>
         </div>
       </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card className="border-adsilo-border shadow-sm mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Users className="mr-2 h-5 w-5" />
-              Team Management
-            </CardTitle>
-            <CardDescription>
-              Organize and manage your project team members.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <Users className="mx-auto h-12 w-12 text-adsilo-text-muted" />
-                <h3 className="mt-4 text-lg font-medium">Team Dashboard</h3>
-                <p className="mt-2 text-adsilo-text-secondary">
-                  This feature is currently under development. Please check back later.
-                </p>
+      <Card className="mt-6">
+        <CardHeader><CardTitle className="flex items-center gap-2"><Users className="h-5 w-5" />Team Members</CardTitle></CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {team.map((member, i) => (
+              <div key={i} className="flex items-center justify-between p-4 border border-adsilo-border rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-adsilo-primary/10 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-adsilo-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">{member.name}</div>
+                    <div className="text-sm text-adsilo-text-muted flex items-center gap-2">
+                      <Mail className="h-3 w-3" />{member.email}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Badge variant="outline">{member.role}</Badge>
+                  <Badge className={member.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                    {member.status}
+                  </Badge>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </AppLayout>
   );
 };

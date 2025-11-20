@@ -11,22 +11,28 @@ datasource db {
 }
 
 model User {
-  id           String          @id @default(uuid())
-  email        String          @unique
-  name         String
-  password     String
-  avatarUrl    String?
-  projects     ProjectMember[]
-  tasks        Task[]          @relation("Assignee")
-  createdTasks Task[]          @relation("Creator")
-  timeEntries  TimeEntry[]
-  comments     Comment[]
-  campaigns    Campaign[]
-  cohorts      Cohort[]
-  creatives    Creative[]
-  organization Organization?
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id            String          @id @default(uuid())
+  email         String          @unique
+  name          String
+  password      String
+  avatarUrl     String?
+  role          UserRole        @default(USER)
+  status        UserStatus      @default(ACTIVE)
+  projects      ProjectMember[]
+  tasks         Task[]          @relation("Assignee")
+  createdTasks  Task[]          @relation("Creator")
+  timeEntries   TimeEntry[]
+  comments      Comment[]
+  campaigns     Campaign[]
+  cohorts       Cohort[]
+  creatives     Creative[]
+  organization  Organization?
+  subscription  Subscription?
+  assignedLeads Lead[]          // ACSP: Leads assigned to this user
+  acspCampaigns ACSPCampaign[]  @relation("ACSPCampaignCreator") // ACSP: Campaigns created by this user
+  staffRole     StaffRole?      // ACSP: Staff role for RBAC
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
   @@map("users")
 }
@@ -336,4 +342,279 @@ enum WebhookEvent {
   CAMPAIGN_DELETED
 
   @@map("webhook_event")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  VIEWER
+
+  @@map("user_role")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+
+  @@map("user_status")
+}
+
+enum SubscriptionPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+
+  @@map("subscription_plan")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+
+  @@map("subscription_status")
+}
+
+model Subscription {
+  id             String             @id @default(uuid())
+  userId         String             @unique
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan           SubscriptionPlan   @default(FREE)
+  status         SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean        @default(false)
+  stripeCustomerId   String?
+  stripeSubscriptionId String?
+  invoices       Invoice[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  amount         Float
+  currency       String       @default("USD")
+  status         String       @default("PENDING")
+  paidAt         DateTime?
+  invoiceNumber  String       @unique
+  invoiceUrl     String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("invoices")
+}
+
+// ==========================================
+// ACSP (Advanced Conversational Sales Platform) Models
+// ==========================================
+
+model Lead {
+  id              String          @id @default(uuid())
+  name            String
+  email           String?
+  phone           String
+  company         String?
+  title           String?
+  score           Int             @default(0) // 0-100
+  status          LeadStatus      @default(NEW)
+  source          LeadSource
+  urgency         LeadUrgency     @default(MEDIUM)
+  accountType     String?
+  industry        String?
+  companySize     String?
+  estimatedValue  Float?
+  assignedTo      String?
+  assignedToUser  User?           @relation(fields: [assignedTo], references: [id])
+  nextAction      String?
+  lastContactedAt DateTime?
+  fairGoMemory    Json?           // FairGo user data as JSON
+  ivrTranscripts  IVRTranscript[]
+  scores          LeadScore[]
+  activities      LeadActivity[]
+  campaigns       CampaignLead[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("leads")
+}
+
+model IVRTranscript {
+  id          String    @id @default(uuid())
+  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId      String
+  callDate    DateTime
+  duration    Int       // in seconds
+  transcript  String    @db.Text
+  sentiment   Sentiment @default(NEUTRAL)
+  intent      String?
+  entities    Json?     // Extracted entities as JSON
+  callerId    String?
+  agentId     String?
+  recordingUrl String?
+  createdAt   DateTime  @default(now())
+
+  @@map("ivr_transcripts")
+}
+
+model ACSPCampaign {
+  id              String         @id @default(uuid())
+  name            String
+  type            CampaignType
+  status          CampaignStatus @default(DRAFT)
+  targetSegment   String
+  goal            String?
+  scriptInstructions String?    @db.Text
+  maxContactsPerDay Int?
+  priority        String?
+  successRate     Float?
+  totalContacts   Int           @default(0)
+  completedContacts Int         @default(0)
+  successfulContacts Int        @default(0)
+  avgCallDuration Int?          // in seconds
+  createdBy       String
+  creator         User          @relation("ACSPCampaignCreator", fields: [createdBy], references: [id])
+  leads           CampaignLead[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("acsp_campaigns")
+}
+
+model CampaignLead {
+  id          String        @id @default(uuid())
+  campaign    ACSPCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaignId  String
+  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId      String
+  status      String    @default("PENDING") // PENDING, CONTACTED, SUCCESS, FAILED
+  contactedAt DateTime?
+  result      String?
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now())
+
+  @@unique([campaignId, leadId])
+  @@map("campaign_leads")
+}
+
+model LeadScore {
+  id            String   @id @default(uuid())
+  lead          Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId        String
+  score         Int      // 0-100
+  ivrUrgency    Int?     // Factor score
+  accountType   Int?     // Factor score
+  engagement    Int?     // Factor score
+  companySize   Int?     // Factor score
+  industry      Int?     // Factor score
+  confidence    Float?   // 0-1
+  calculatedBy  String?  // AI_SYSTEM or USER_ID
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@map("lead_scores")
+}
+
+model LeadActivity {
+  id          String       @id @default(uuid())
+  lead        Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId      String
+  type        ActivityType
+  action      String
+  details     String?      @db.Text
+  performedBy String?
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+
+  @@map("lead_activities")
+}
+
+model StaffRole {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        StaffRoleType @default(STAFF)
+  permissions Json?    // Custom permissions as JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("staff_roles")
+}
+
+// ==========================================
+// ACSP Enums
+// ==========================================
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+  NURTURE
+}
+
+enum LeadSource {
+  IVR
+  WEB
+  EMAIL
+  REFERRAL
+  CHAT
+  SOCIAL
+  OTHER
+}
+
+enum LeadUrgency {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum CampaignType {
+  OUTBOUND_VOICE
+  EMAIL
+  SMS
+  MULTI_CHANNEL
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum ActivityType {
+  CALL
+  EMAIL
+  NOTE
+  SCORE_UPDATE
+  STATUS_CHANGE
+  ASSIGNMENT
+  CAMPAIGN
+  MEETING
+}
+
+enum StaffRoleType {
+  STAFF
+  C_LEVEL
+  ADMIN
+  MANAGER
 }
