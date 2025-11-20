@@ -34,13 +34,13 @@ export const DocumentCreator: React.FC = () => {
   const handleSaveDocument = (document: DocumentDetails) => {
     // Update or add the document
     const exists = documents.find(doc => doc.id === document.id);
-    
+
     if (exists) {
       setDocuments(documents.map(doc => doc.id === document.id ? document : doc));
     } else {
       setDocuments([...documents, document]);
     }
-    
+
     setCurrentDocument(document);
     setActiveTab('preview');
   };
@@ -99,23 +99,23 @@ export const DocumentCreator: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col border rounded-lg bg-white shadow-sm">
+    <div className="w-full h-full flex flex-col border rounded-lg bg-card shadow-sm">
       <div className="border-b p-4 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-adsilo-primary">Document Creator</h2>
         <div className="space-x-2 flex">
-          <button 
+          <button
             onClick={() => handleCreateNew('quotation')}
             className="bg-adsilo-primary hover:bg-adsilo-primary/90 text-white px-3 py-1 rounded-md"
           >
             New Quotation
           </button>
-          <button 
+          <button
             onClick={() => handleCreateNew('proposal')}
             className="bg-adsilo-secondary hover:bg-adsilo-secondary/90 text-white px-3 py-1 rounded-md"
           >
             New Proposal
           </button>
-          <button 
+          <button
             onClick={() => handleCreateNew('invoice')}
             className="bg-adsilo-accent hover:bg-adsilo-accent/90 text-white px-3 py-1 rounded-md"
           >
@@ -131,33 +131,33 @@ export const DocumentCreator: React.FC = () => {
           <TabsTrigger value="ai">AI Assistant</TabsTrigger>
           <TabsTrigger value="list">Documents</TabsTrigger>
         </TabsList>
-        
+
         <div className="flex-1 overflow-y-auto">
           <TabsContent value="create" className="mt-0 h-full">
-            <DocumentForm 
+            <DocumentForm
               document={currentDocument}
               onSave={handleSaveDocument}
               documentType={documentType}
             />
           </TabsContent>
-          
+
           <TabsContent value="preview" className="mt-0 h-full">
-            <DocumentPreview 
-              document={currentDocument} 
+            <DocumentPreview
+              document={currentDocument}
               onEdit={() => setActiveTab('create')}
               onDuplicate={() => handleDuplicateDocument(currentDocument)}
             />
           </TabsContent>
-          
+
           <TabsContent value="ai" className="mt-0 h-full">
             <DocumentAIAssistant
               onGenerate={handleGenerateAI}
               documentType={documentType}
             />
           </TabsContent>
-          
+
           <TabsContent value="list" className="mt-0 h-full">
-            <DocumentList 
+            <DocumentList
               documents={documents}
               onEdit={handleEditDocument}
               onDelete={handleDeleteDocument}

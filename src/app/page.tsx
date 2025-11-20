@@ -30,42 +30,42 @@ export default function Home() {
       description: "Create, track, and optimize your marketing campaigns across all channels.",
       icon: Target,
       href: "/campaigns",
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-adsilo-primary text-adsilo-text-primary",
     },
     {
       title: "Audience Segmentation",
       description: "Build and manage audience cohorts for targeted marketing efforts.",
       icon: Users,
       href: "/cohorts",
-      color: "bg-green-100 text-green-600",
+      color: "bg-adsilo-secondary text-adsilo-text-primary",
     },
     {
       title: "Creative Studio",
       description: "Design, store, and manage all your marketing creative assets.",
       icon: Palette,
       href: "/creative",
-      color: "bg-purple-100 text-purple-600",
+      color: "bg-adsilo-accent text-adsilo-text-primary",
     },
     {
       title: "Analytics Dashboard",
       description: "Get detailed insights into campaign performance and audience behavior.",
       icon: BarChart3,
       href: "/analytics",
-      color: "bg-orange-100 text-orange-600",
+      color: "bg-adsilo-success text-adsilo-text-primary",
     },
     {
       title: "AI-Powered Insights",
       description: "Leverage AI to discover opportunities and optimize your marketing strategy.",
       icon: Lightbulb,
       href: "/tools/ai-insights",
-      color: "bg-yellow-100 text-yellow-600",
+      color: "bg-adsilo-warning text-adsilo-text-primary",
     },
     {
       title: "Performance Tracking",
       description: "Monitor ROI, conversion rates, and other key performance metrics.",
       icon: TrendingUp,
       href: "/analytics",
-      color: "bg-teal-100 text-teal-600",
+      color: "bg-adsilo-destructive text-adsilo-text-primary",
     },
   ];
 
@@ -80,8 +80,8 @@ export default function Home() {
         >
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold">Welcome back, {user.name}!</h1>
-              <p className="text-adsilo-text-secondary mt-1">
+              <h1 className="text-heading1 font-bold">Welcome back, {user.name}!</h1>
+              <p className="text-body text-adsilo-text-secondary mt-1">
                 Here's what's happening with your campaigns today.
               </p>
             </div>
@@ -108,7 +108,7 @@ export default function Home() {
                       <div className={`w-10 h-10 rounded-full ${feature.color} flex items-center justify-center mb-2`}>
                         <feature.icon className="h-5 w-5" />
                       </div>
-                      <CardTitle className="text-lg">{feature.title}</CardTitle>
+                      <CardTitle className="text-heading2">{feature.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <CardDescription>{feature.description}</CardDescription>

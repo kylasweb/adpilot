@@ -10,8 +10,8 @@ interface CanvasProps {
   selectedElement: string | null;
 }
 
-const Canvas = ({ 
-  selectedDimension, 
+const Canvas = ({
+  selectedDimension,
   backgroundColor,
   selectedElement
 }: CanvasProps) => {
@@ -31,9 +31,9 @@ const Canvas = ({
           Clear
         </Button>
       </div>
-      
+
       <div
-        className="bg-white shadow-md relative"
+        className="bg-card shadow-md relative"
         style={{
           width: selectedDimension.width / 2,
           height: selectedDimension.height / 2,
@@ -49,7 +49,7 @@ const Canvas = ({
             </div>
           </div>
         )}
-        
+
         {/* If an element is selected, we would show it here */}
         {selectedElement && (
           <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
@@ -57,7 +57,7 @@ const Canvas = ({
           </div>
         )}
       </div>
-      
+
       <div className="mt-4 text-xs text-gray-500">
         Canvas: {selectedDimension.width} x {selectedDimension.height} px • Scale: 50%
       </div>

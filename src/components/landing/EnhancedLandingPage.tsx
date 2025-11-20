@@ -4,12 +4,12 @@ import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Rocket, 
-  BarChart3, 
-  Users, 
-  Zap, 
-  Shield, 
+import {
+  Rocket,
+  BarChart3,
+  Users,
+  Zap,
+  Shield,
   Globe,
   Sparkles,
   TrendingUp,
@@ -32,7 +32,7 @@ const EnhancedLandingPage = () => {
       const heroTitle = heroRef.current.querySelector('.hero-title');
       const heroSubtitle = heroRef.current.querySelector('.hero-subtitle');
       const heroButtons = heroRef.current.querySelectorAll('.hero-button');
-      
+
       if (heroTitle && heroSubtitle && heroButtons.length > 0) {
         const tl = new anime.Timeline()
           .add(heroTitle, {
@@ -56,7 +56,7 @@ const EnhancedLandingPage = () => {
             easing: 'spring(1, 80, 10, 0)',
             duration: 800
           }, '-=300');
-        
+
         tl.play();
       }
     }
@@ -66,7 +66,7 @@ const EnhancedLandingPage = () => {
       entries.forEach(entry => {
         if (entry.isIntersecting && featuresRef.current) {
           const featureCards = featuresRef.current.querySelectorAll('.feature-card');
-          
+
           anime.remove(featureCards as any);
           const featureTl = new anime.Timeline()
             .add(featureCards, {
@@ -76,9 +76,9 @@ const EnhancedLandingPage = () => {
               easing: 'easeOutQuad',
               duration: 600
             });
-          
+
           featureTl.play();
-          
+
           observer.unobserve(entry.target);
         }
       });
@@ -100,9 +100,9 @@ const EnhancedLandingPage = () => {
               duration: 800,
               easing: 'spring(1, 80, 10, 0)'
             });
-          
+
           ctaTl.play();
-          
+
           ctaObserver.unobserve(entry.target);
         }
       });
@@ -168,7 +168,7 @@ const EnhancedLandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-adsilo-background to-adsilo-accent/5">
       {/* Header */}
-      <header className="border-b border-adsilo-border sticky top-0 z-50 bg-white/80 backdrop-blur-sm">
+      <header className="border-b border-adsilo-border sticky top-0 z-50 bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="relative">
@@ -193,7 +193,7 @@ const EnhancedLandingPage = () => {
               <Button variant="outline" className="font-medium">Sign In</Button>
             </Link>
             <Link href="/auth/register">
-              <Button className="font-medium">Get Started</Button>
+              <Button variant="cta" className="font-medium">Get Started</Button>
             </Link>
           </div>
         </div>
@@ -210,12 +210,12 @@ const EnhancedLandingPage = () => {
             AI-Powered <span className="text-adsilo-primary">Marketing</span> Platform
           </h1>
           <p className="hero-subtitle text-xl text-adsilo-text-secondary max-w-3xl mx-auto mb-12">
-            Streamline your marketing efforts with our comprehensive suite of tools designed to boost engagement, 
+            Streamline your marketing efforts with our comprehensive suite of tools designed to boost engagement,
             optimize campaigns, and drive measurable results through artificial intelligence.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/auth/register">
-              <Button size="lg" className="hero-button text-lg px-8 py-6 font-bold">
+              <Button variant="cta" className="hero-button">
                 Start Free Trial
                 <Rocket className="ml-2 h-5 w-5" />
               </Button>
@@ -241,7 +241,7 @@ const EnhancedLandingPage = () => {
               Everything you need to create, manage, and optimize your digital marketing campaigns with the power of artificial intelligence.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
@@ -298,10 +298,10 @@ const EnhancedLandingPage = () => {
               </div>
             </div>
             <div className="lg:w-1/2 relative">
-              <div className="relative rounded-2xl overflow-hidden border border-adsilo-border shadow-xl">
+              <div className="relative rounded-2xl overflow-hidden border border-adsilo-border shadow-xl bg-card">
                 <div className="bg-gradient-to-br from-adsilo-primary/10 to-adsilo-accent/10 p-8">
                   <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <TrendingUp className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Performance</span>
@@ -309,7 +309,7 @@ const EnhancedLandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">324%</div>
                       <div className="text-adsilo-text-secondary">Avg. ROAS Increase</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <Target className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Targeting</span>
@@ -317,7 +317,7 @@ const EnhancedLandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">87%</div>
                       <div className="text-adsilo-text-secondary">Audience Match Rate</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <Zap className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Efficiency</span>
@@ -325,7 +325,7 @@ const EnhancedLandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">75%</div>
                       <div className="text-adsilo-text-secondary">Time Saved</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <MessageSquare className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Engagement</span>
@@ -354,7 +354,7 @@ const EnhancedLandingPage = () => {
               Join thousands of marketers who are already using Adsilo to drive better results.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-adsilo-border">
               <CardContent className="p-6">
@@ -377,7 +377,7 @@ const EnhancedLandingPage = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-adsilo-border">
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">
@@ -399,7 +399,7 @@ const EnhancedLandingPage = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-adsilo-border">
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">

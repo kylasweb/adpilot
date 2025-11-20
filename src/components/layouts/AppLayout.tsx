@@ -21,12 +21,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-adsilo-background">
-      <header className="h-16 border-b border-adsilo-border flex items-center px-4 lg:px-6 bg-white">
+      <header className="h-16 border-b border-adsilo-border flex items-center px-4 lg:px-6 bg-card">
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-4">
             {isMobile && (
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={toggleSidebar}
               >
@@ -43,9 +43,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       <div className="flex flex-1 overflow-hidden">
         <AppSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-        
+
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <div className="mx-auto max-w-7xl animate-fade-in">
+          <div className="mx-auto max-w-7xl animate-fade-in page-wrapper">
             {children}
           </div>
         </main>

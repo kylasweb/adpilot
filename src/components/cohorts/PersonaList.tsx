@@ -51,7 +51,7 @@ const PersonaList = () => {
           <CardContent className="p-0">
             <div className="bg-adsilo-muted px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-lg">
+                <div className="h-10 w-10 rounded-full bg-card flex items-center justify-center text-lg">
                   {persona.avatar}
                 </div>
                 <h3 className="font-semibold">{persona.name}</h3>
@@ -86,8 +86,8 @@ const PersonaList = () => {
                 <h4 className="text-xs font-semibold uppercase text-adsilo-text-muted tracking-wider">Characteristics</h4>
                 <div className="flex flex-wrap gap-2">
                   {persona.characteristics.map((char, index) => (
-                    <span 
-                      key={index} 
+                    <span
+                      key={index}
                       className="text-xs bg-adsilo-muted px-2 py-1 rounded-full text-adsilo-text-secondary"
                     >
                       {char}

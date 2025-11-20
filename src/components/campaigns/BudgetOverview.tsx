@@ -2,15 +2,15 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
 } from "recharts";
 
 const data = [
@@ -48,11 +48,11 @@ const data = [
 
 const BudgetOverview = () => {
   const [period, setPeriod] = React.useState("current");
-  
+
   const totalAllocated = data.reduce((sum, item) => sum + item.allocated, 0);
   const totalSpent = data.reduce((sum, item) => sum + item.spent, 0);
   const spentPercentage = (totalSpent / totalAllocated) * 100;
-  
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -69,7 +69,7 @@ const BudgetOverview = () => {
           </SelectContent>
         </Select>
       </div>
-      
+
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardContent className="p-6">
@@ -77,14 +77,14 @@ const BudgetOverview = () => {
             <div className="text-3xl font-bold mt-2">${totalAllocated.toLocaleString()}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h4 className="text-sm font-medium text-adsilo-text-secondary">Total Spent</h4>
             <div className="text-3xl font-bold mt-2">${totalSpent.toLocaleString()}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h4 className="text-sm font-medium text-adsilo-text-secondary">Remaining</h4>
@@ -92,7 +92,7 @@ const BudgetOverview = () => {
           </CardContent>
         </Card>
       </div>
-      
+
       <Card>
         <CardContent className="p-6">
           <h4 className="text-sm font-medium text-adsilo-text-secondary mb-4">Budget by Campaign</h4>
@@ -111,8 +111,8 @@ const BudgetOverview = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="spent" name="Spent" fill="#4F46E5" />
-              <Bar dataKey="remaining" name="Remaining" fill="#8B5CF6" />
+              <Bar dataKey="spent" name="Spent" fill="hsl(var(--primary))" />
+              <Bar dataKey="remaining" name="Remaining" fill="hsl(var(--accent))" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

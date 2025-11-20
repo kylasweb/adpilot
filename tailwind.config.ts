@@ -65,22 +65,42 @@ export default {
 				},
 				// Adsilo custom colors
 				adsilo: {
-					primary: '#4F46E5',
-					secondary: '#6366F1',
-					accent: '#8B5CF6',
-					muted: '#E2E8F0',
-					hover: '#4338CA',
-					background: '#F8FAFC',
-					card: '#FFFFFF',
-					success: '#10B981',
-					warning: '#F59E0B',
-					danger: '#EF4444',
+					// Border exists in many components as `border-adsilo-border` — map it to the global CSS variable
+					border: 'hsl(var(--border))',
+					primary: 'hsl(var(--primary))',
+					secondary: 'hsl(var(--secondary))',
+					accent: 'hsl(var(--accent))',
+					muted: 'hsl(var(--muted))',
+					hover: 'hsl(var(--ring))',
+					background: 'hsl(var(--background))',
+					card: 'hsl(var(--card))',
+					success: 'hsl(var(--success, 145 63% 40%))',
+					warning: 'hsl(var(--warning, 42 96% 48%))',
+					danger: 'hsl(var(--destructive))',
 					text: {
-						primary: '#1E293B',
-						secondary: '#64748B',
-						muted: '#94A3B8'
+						primary: 'hsl(var(--foreground))',
+						secondary: 'hsl(var(--muted-foreground))',
+						muted: 'hsl(var(--muted-foreground))'
 					}
 				}
+			},
+			fontSize: {
+				'heading1': 'var(--heading1)',
+				'heading2': 'var(--heading2)',
+				'heading3': 'var(--heading3)',
+				'body': 'var(--body)',
+				'caption': 'var(--caption)'
+			},
+			spacing: {
+				'1': 'var(--space-1)',
+				'2': 'var(--space-2)',
+				'3': 'var(--space-3)',
+				'4': 'var(--space-4)',
+				'5': 'var(--space-5)',
+				'6': 'var(--space-6)',
+				'8': 'var(--space-8)',
+				'10': 'var(--space-10)',
+				'12': 'var(--space-12)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -22,12 +22,12 @@ const StatementPiece: React.FC<{ className?: string }> = ({ className }) => {
                 <rect width="1200" height="600" fill="url(#g1)" />
                 <rect width="1200" height="600" fill="url(#g2)" />
                 <g opacity="0.08">
-                    <circle cx="150" cy="100" r="120" fill="#4F46E5" />
-                    <circle cx="1050" cy="450" r="150" fill="#8B5CF6" />
-                    <circle cx="800" cy="150" r="80" fill="#6366F1" />
+                    <circle cx="150" cy="100" r="120" fill="hsl(var(--primary))" />
+                    <circle cx="1050" cy="450" r="150" fill="hsl(var(--accent))" />
+                    <circle cx="800" cy="150" r="80" fill="hsl(var(--secondary))" />
                 </g>
                 <g opacity="0.05">
-                    <path d="M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z" fill="#4F46E5" />
+                    <path d="M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z" fill="hsl(var(--primary))" />
                 </g>
             </svg>
         </div>

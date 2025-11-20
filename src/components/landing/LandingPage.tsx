@@ -6,12 +6,12 @@ import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Rocket, 
-  BarChart3, 
-  Users, 
-  Zap, 
-  Shield, 
+import {
+  Rocket,
+  BarChart3,
+  Users,
+  Zap,
+  Shield,
   Globe,
   Sparkles,
   TrendingUp,
@@ -136,8 +136,8 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-adsilo-background to-adsilo-accent/5">
       {/* Header */}
-      <motion.header 
-        className="border-b border-adsilo-border sticky top-0 z-50 bg-white/80 backdrop-blur-sm"
+      <motion.header
+        className="border-b border-adsilo-border sticky top-0 z-50 bg-card/80 backdrop-blur-sm"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
@@ -150,7 +150,7 @@ const LandingPage = () => {
             </div>
             <span className="text-2xl font-bold text-adsilo-text-primary" style={{ fontFamily: "var(--font-display)" }}>Adsilo</span>
           </div>
-          
+
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             <Link href="#features" className="text-adsilo-text-secondary hover:text-adsilo-primary transition-colors font-medium">
@@ -163,30 +163,30 @@ const LandingPage = () => {
               Testimonials
             </Link>
           </nav>
-          
+
           <div className="hidden md:flex space-x-3">
             <Link href="/auth/login">
               <Button variant="outline" className="font-medium">Sign In</Button>
             </Link>
             <Link href="/auth/register">
-              <Button className="font-medium">Get Started</Button>
+              <Button variant="cta" className="font-medium">Get Started</Button>
             </Link>
           </div>
-          
+
           {/* Mobile menu button */}
-          <button 
+          <button
             className="md:hidden text-adsilo-text-primary"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
-        
+
         {/* Mobile Navigation */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              className="md:hidden bg-white border-t border-adsilo-border"
+            <motion.div
+              className="md:hidden bg-card border-t border-adsilo-border"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -207,7 +207,7 @@ const LandingPage = () => {
                     <Button variant="outline" className="w-full font-medium">Sign In</Button>
                   </Link>
                   <Link href="/auth/register">
-                    <Button className="w-full font-medium">Get Started</Button>
+                    <Button variant="cta" className="w-full">Get Started</Button>
                   </Link>
                 </div>
               </div>
@@ -219,7 +219,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section ref={heroRef} className="py-20 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <motion.div 
+          <motion.div
             className="absolute top-1/4 left-1/4 w-64 h-64 bg-adsilo-primary/10 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.2, 1],
@@ -231,7 +231,7 @@ const LandingPage = () => {
               repeatType: "reverse"
             }}
           ></motion.div>
-          <motion.div 
+          <motion.div
             className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-adsilo-accent/10 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.3, 1],
@@ -245,7 +245,7 @@ const LandingPage = () => {
           ></motion.div>
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-6xl font-bold text-adsilo-text-primary mb-6"
             style={{ fontFamily: "var(--font-display)" }}
             initial={{ y: 30, opacity: 0 }}
@@ -254,23 +254,23 @@ const LandingPage = () => {
           >
             AI-Powered <span className="text-adsilo-primary">Marketing</span> Platform
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-xl text-adsilo-text-secondary max-w-3xl mx-auto mb-12"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
-            Streamline your marketing efforts with our comprehensive suite of tools designed to boost engagement, 
+            Streamline your marketing efforts with our comprehensive suite of tools designed to boost engagement,
             optimize campaigns, and drive measurable results through artificial intelligence.
           </motion.p>
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row justify-center gap-4"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <Link href="/auth/register">
-              <Button size="lg" className="text-lg px-8 py-6 font-bold group">
+              <Button size="lg" variant="cta" className="text-lg px-8 py-6 font-bold group">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -286,8 +286,8 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <motion.section 
-        id="features" 
+      <motion.section
+        id="features"
         ref={featuresRef}
         className="py-20 bg-adsilo-accent/5"
         initial="hidden"
@@ -295,7 +295,7 @@ const LandingPage = () => {
         variants={containerVariants}
       >
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             variants={itemVariants}
           >
@@ -306,8 +306,8 @@ const LandingPage = () => {
               Everything you need to create, manage, and optimize your digital marketing campaigns with the power of artificial intelligence.
             </p>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={containerVariants}
           >
@@ -341,8 +341,8 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Benefits Section */}
-      <motion.section 
-        id="benefits" 
+      <motion.section
+        id="benefits"
         ref={benefitsRef}
         className="py-20"
         initial="hidden"
@@ -351,7 +351,7 @@ const LandingPage = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12">
-            <motion.div 
+            <motion.div
               className="lg:w-1/2"
               variants={itemVariants}
             >
@@ -363,8 +363,8 @@ const LandingPage = () => {
               </p>
               <ul className="space-y-4 mb-8">
                 {benefits.map((benefit, index) => (
-                  <motion.li 
-                    key={index} 
+                  <motion.li
+                    key={index}
                     className="flex items-start"
                     variants={itemVariants}
                   >
@@ -373,7 +373,7 @@ const LandingPage = () => {
                   </motion.li>
                 ))}
               </ul>
-              <motion.div 
+              <motion.div
                 className="flex flex-col sm:flex-row gap-4"
                 variants={itemVariants}
               >
@@ -389,14 +389,14 @@ const LandingPage = () => {
                 </Link>
               </motion.div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="lg:w-1/2 relative"
               variants={itemVariants}
             >
-              <div className="relative rounded-2xl overflow-hidden border border-adsilo-border shadow-xl">
+              <div className="relative rounded-2xl overflow-hidden border border-adsilo-border shadow-xl bg-card">
                 <div className="bg-gradient-to-br from-adsilo-primary/10 to-adsilo-accent/10 p-8">
                   <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <TrendingUp className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Performance</span>
@@ -404,7 +404,7 @@ const LandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">324%</div>
                       <div className="text-adsilo-text-secondary">Avg. ROAS Increase</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <Target className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Targeting</span>
@@ -412,7 +412,7 @@ const LandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">87%</div>
                       <div className="text-adsilo-text-secondary">Audience Match Rate</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <Zap className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Efficiency</span>
@@ -420,7 +420,7 @@ const LandingPage = () => {
                       <div className="text-3xl font-bold text-adsilo-text-primary mb-1">75%</div>
                       <div className="text-adsilo-text-secondary">Time Saved</div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    <div className="bg-card p-6 rounded-xl shadow-sm">
                       <div className="flex items-center mb-4">
                         <MessageSquare className="h-8 w-8 text-adsilo-primary mr-2" />
                         <span className="font-bold text-lg">Engagement</span>
@@ -431,7 +431,7 @@ const LandingPage = () => {
                   </div>
                 </div>
               </div>
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-6 -right-6 w-32 h-32 bg-adsilo-primary/10 rounded-full blur-xl"
                 animate={{
                   x: [0, 10, 0],
@@ -443,7 +443,7 @@ const LandingPage = () => {
                   repeatType: "reverse"
                 }}
               ></motion.div>
-              <motion.div 
+              <motion.div
                 className="absolute -top-6 -left-6 w-24 h-24 bg-adsilo-accent/10 rounded-full blur-xl"
                 animate={{
                   x: [0, -10, 0],
@@ -461,8 +461,8 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Testimonials Section */}
-      <motion.section 
-        id="testimonials" 
+      <motion.section
+        id="testimonials"
         ref={testimonialsRef}
         className="py-20 bg-adsilo-accent/10"
         initial="hidden"
@@ -470,7 +470,7 @@ const LandingPage = () => {
         variants={containerVariants}
       >
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             variants={itemVariants}
           >
@@ -481,8 +481,8 @@ const LandingPage = () => {
               Join thousands of marketers who are already using Adsilo to drive better results.
             </p>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
             variants={containerVariants}
           >
@@ -524,7 +524,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* CTA Section */}
-      <motion.section 
+      <motion.section
         className="py-20"
         ref={ctaRef}
         initial="hidden"
@@ -543,7 +543,7 @@ const LandingPage = () => {
                 <p className="text-xl text-adsilo-text-secondary max-w-2xl mx-auto mb-10">
                   Join thousands of marketers who are already using Adsilo to drive better results.
                 </p>
-                <motion.div 
+                <motion.div
                   className="flex flex-col sm:flex-row justify-center gap-4"
                   variants={itemVariants}
                 >

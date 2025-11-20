@@ -101,7 +101,7 @@ const EmailMarketingAutomation = () => {
     }
   };
   
-  const toggleCampaignStatus = (id) => {
+  const toggleCampaignStatus = (id: number) => {
     setCampaigns(campaigns.map(campaign => {
       if (campaign.id === id) {
         const newStatus = campaign.status === 'active' ? 'paused' : 'active';

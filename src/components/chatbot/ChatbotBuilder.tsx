@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label"; 
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,7 +23,7 @@ import {
   PanelRight,
   HelpCircle
 } from "lucide-react";
-import { 
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -98,8 +98,8 @@ const emptyChatbot: Chatbot = {
   isPublished: false,
   useAI: false,
   theme: {
-    primaryColor: "#3b82f6",
-    secondaryColor: "#f3f4f6",
+    primaryColor: "hsl(var(--primary))",
+    secondaryColor: "hsl(var(--card))",
     fontFamily: "Inter, sans-serif",
   },
 };
@@ -130,7 +130,7 @@ const ChatbotBuilder = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast({
         title: "Success",
         description: "Chatbot saved successfully",
@@ -160,9 +160,9 @@ const ChatbotBuilder = () => {
       ...prev,
       nodes: [...prev.nodes, newNode],
     }));
-    
+
     setSelectedNodeId(newNode.id);
-    
+
     toast({
       title: "Node created",
       description: `New ${type} node added to the flow`,
@@ -175,11 +175,11 @@ const ChatbotBuilder = () => {
       ...prev,
       nodes: prev.nodes.filter((node) => node.id !== nodeId),
     }));
-    
+
     if (selectedNodeId === nodeId) {
       setSelectedNodeId(null);
     }
-    
+
     toast({
       description: "Node deleted",
     });
@@ -201,7 +201,7 @@ const ChatbotBuilder = () => {
                   className="mt-1"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="chatbot-description">Description</Label>
                 <Textarea
@@ -214,7 +214,7 @@ const ChatbotBuilder = () => {
                 />
               </div>
             </div>
-            
+
             <div className="flex-1 space-y-4">
               <div>
                 <Label htmlFor="platform">Platform</Label>
@@ -237,7 +237,7 @@ const ChatbotBuilder = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <Label htmlFor="welcome-message">Welcome Message</Label>
                 <Input
@@ -250,7 +250,7 @@ const ChatbotBuilder = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -260,7 +260,7 @@ const ChatbotBuilder = () => {
                   onCheckedChange={(checked) => handleSettingsChange("useAI", checked)}
                 />
                 <Label htmlFor="ai-toggle">Enable AI</Label>
-                
+
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -272,7 +272,7 @@ const ChatbotBuilder = () => {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <Switch
                   id="publish-toggle"
@@ -282,7 +282,7 @@ const ChatbotBuilder = () => {
                 <Label htmlFor="publish-toggle">Published</Label>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
@@ -291,21 +291,21 @@ const ChatbotBuilder = () => {
               >
                 <Plus className="mr-2 h-4 w-4" /> New
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="sm"
               >
                 <Upload className="mr-2 h-4 w-4" /> Import
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="sm"
               >
                 <Download className="mr-2 h-4 w-4" /> Export
               </Button>
-              
+
               <Button
                 variant="default"
                 size="sm"
@@ -319,7 +319,7 @@ const ChatbotBuilder = () => {
           </div>
         </div>
       </Card>
-      
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex items-center justify-between mb-4">
           <TabsList>
@@ -334,46 +334,46 @@ const ChatbotBuilder = () => {
             </TabsTrigger>
           </TabsList>
         </div>
-        
+
         <TabsContent value="builder" className="space-y-4">
           <div className="grid grid-cols-12 gap-4 h-[600px]">
             <div className="col-span-12 md:col-span-3 lg:col-span-2 border rounded-md p-4">
               <h3 className="text-sm font-medium mb-3">Node Types</h3>
               <div className="space-y-2">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => createNode("message")}
                 >
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Message
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => createNode("question")}
                 >
                   <HelpCircle className="mr-2 h-4 w-4" />
                   Question
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => createNode("condition")}
                 >
                   <Layers className="mr-2 h-4 w-4" />
                   Condition
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => createNode("api")}
                 >
                   <Globe className="mr-2 h-4 w-4" />
                   API Call
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => createNode("action")}
                 >
@@ -381,7 +381,7 @@ const ChatbotBuilder = () => {
                   Action
                 </Button>
               </div>
-              
+
               <div className="mt-6">
                 <h3 className="text-sm font-medium mb-3">Templates</h3>
                 <Select defaultValue="blank">
@@ -395,13 +395,13 @@ const ChatbotBuilder = () => {
                     <SelectItem value="faq">FAQ Bot</SelectItem>
                   </SelectContent>
                 </Select>
-                
+
                 <Button className="w-full mt-2" size="sm">
                   Apply Template
                 </Button>
               </div>
             </div>
-            
+
             <div className="col-span-12 md:col-span-6 lg:col-span-7 border rounded-md bg-slate-50 p-4 relative overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">
                 {chatbot.nodes.length === 0 ? (
@@ -415,16 +415,14 @@ const ChatbotBuilder = () => {
                     <div className="absolute inset-0 p-4">
                       <div className="flex flex-wrap gap-4">
                         {chatbot.nodes.map((node) => (
-                          <div 
+                          <div
                             key={node.id}
-                            className={`p-3 rounded-md border-2 cursor-move ${
-                              selectedNodeId === node.id ? "border-primary" : "border-gray-200"
-                            } ${
-                              node.type === "message" ? "bg-blue-50" :
-                              node.type === "question" ? "bg-green-50" :
-                              node.type === "condition" ? "bg-yellow-50" :
-                              node.type === "api" ? "bg-purple-50" : "bg-gray-50"
-                            }`}
+                            className={`p-3 rounded-md border-2 cursor-move ${selectedNodeId === node.id ? "border-primary" : "border-gray-200"
+                              } ${node.type === "message" ? "bg-blue-50" :
+                                node.type === "question" ? "bg-green-50" :
+                                  node.type === "condition" ? "bg-yellow-50" :
+                                    node.type === "api" ? "bg-purple-50" : "bg-gray-50"
+                              }`}
                             onClick={() => setSelectedNodeId(node.id)}
                             style={{
                               position: 'absolute',
@@ -442,8 +440,8 @@ const ChatbotBuilder = () => {
                                 {node.type === "action" && <Settings className="h-4 w-4 mr-1" />}
                                 <span className="text-xs font-medium capitalize">{node.type}</span>
                               </div>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0"
                                 onClick={(e) => {
@@ -463,17 +461,17 @@ const ChatbotBuilder = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="col-span-12 md:col-span-3 border rounded-md p-4">
               <h3 className="text-sm font-medium mb-3">Properties</h3>
-              
+
               {selectedNodeId ? (
-                <ChatbotNodeEditor 
+                <ChatbotNodeEditor
                   node={chatbot.nodes.find(n => n.id === selectedNodeId)!}
                   updateNode={(updatedNode) => {
                     setChatbot(prev => ({
                       ...prev,
-                      nodes: prev.nodes.map(n => 
+                      nodes: prev.nodes.map(n =>
                         n.id === selectedNodeId ? updatedNode : n
                       )
                     }));
@@ -487,7 +485,7 @@ const ChatbotBuilder = () => {
             </div>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="preview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -496,7 +494,7 @@ const ChatbotBuilder = () => {
                 <ChatbotPreview chatbot={chatbot} />
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-medium mb-4">Test Console</h3>
               <div className="border rounded-md h-[500px] p-4">
@@ -507,7 +505,7 @@ const ChatbotBuilder = () => {
                     Reset Conversation
                   </Button>
                 </div>
-                
+
                 <div className="h-[350px] overflow-y-auto border rounded-md mb-4 p-3 bg-slate-50">
                   <div className="flex flex-col gap-3">
                     <div className="flex items-start gap-2 max-w-[80%]">
@@ -515,14 +513,14 @@ const ChatbotBuilder = () => {
                         {chatbot.welcomeMessage}
                       </div>
                     </div>
-                    
+
                     {/* Sample conversation */}
                     <div className="flex items-start gap-2 max-w-[80%] self-end">
                       <div className="bg-secondary text-secondary-foreground rounded-lg p-2 text-sm">
                         Hello, I need some help
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start gap-2 max-w-[80%]">
                       <div className="bg-primary text-primary-foreground rounded-lg p-2 text-sm">
                         I'd be happy to help! What do you need assistance with?
@@ -530,7 +528,7 @@ const ChatbotBuilder = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-2">
                   <Input placeholder="Type a message..." className="flex-1" />
                   <Button>Send</Button>
@@ -539,7 +537,7 @@ const ChatbotBuilder = () => {
             </div>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="settings" className="space-y-4">
           <Card>
             <div className="p-6">
@@ -564,7 +562,7 @@ const ChatbotBuilder = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="ai-temperature">
                     AI Temperature
@@ -589,7 +587,7 @@ const ChatbotBuilder = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-6">
                 <Label htmlFor="system-prompt">System Prompt</Label>
                 <Textarea
@@ -605,7 +603,7 @@ const ChatbotBuilder = () => {
               </div>
             </div>
           </Card>
-          
+
           <Card>
             <div className="p-6">
               <h3 className="text-lg font-medium mb-4">Appearance</h3>
@@ -628,7 +626,7 @@ const ChatbotBuilder = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="secondary-color">Secondary Color</Label>
                   <div className="flex mt-1">
@@ -647,7 +645,7 @@ const ChatbotBuilder = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="font-family">Font Family</Label>
                   <Select
@@ -666,7 +664,7 @@ const ChatbotBuilder = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="mt-6">
                 <h4 className="text-sm font-medium mb-2">Widget Position</h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -682,11 +680,11 @@ const ChatbotBuilder = () => {
               </div>
             </div>
           </Card>
-          
+
           <Card>
             <div className="p-6">
               <h3 className="text-lg font-medium mb-4">Integration</h3>
-              
+
               <div className="mb-6">
                 <Label htmlFor="embed-code">Embed Code</Label>
                 <pre className="mt-2 p-4 bg-slate-100 rounded-md text-xs overflow-x-auto">
@@ -697,7 +695,7 @@ const ChatbotBuilder = () => {
                   Copy Code
                 </Button>
               </div>
-              
+
               <div className="mb-6">
                 <h4 className="text-sm font-medium mb-2">Webhook (Advanced)</h4>
                 <Input
@@ -707,7 +705,7 @@ const ChatbotBuilder = () => {
                   Send chatbot conversations to your API endpoint
                 </p>
               </div>
-              
+
               <div>
                 <Dialog>
                   <DialogTrigger asChild>

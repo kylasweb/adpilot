@@ -18,6 +18,12 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                {/* Load display fonts in head to avoid @import placement issues in compiled CSS */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet" />
+            </head>
             <body className={inter.className}>
                 <App>
                     {children}

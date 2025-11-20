@@ -82,7 +82,7 @@ export const ContentCreator = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-80px)] flex flex-col border rounded-lg bg-white shadow-sm">
+    <div className="w-full h-[calc(100vh-80px)] flex flex-col border rounded-lg bg-card shadow-sm">
       <div className="border-b p-4 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-adsilo-primary">AI Content Creator</h2>
       </div>

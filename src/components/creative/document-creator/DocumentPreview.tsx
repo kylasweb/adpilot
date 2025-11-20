@@ -44,31 +44,31 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           <h3 className="text-xl font-medium">Document Preview</h3>
         </div>
         <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={onEdit}
             className="flex items-center gap-2"
           >
             <Edit className="h-4 w-4" />
             Edit
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={onDuplicate}
             className="flex items-center gap-2"
           >
             <Copy className="h-4 w-4" />
             Duplicate
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handlePrint}
             className="flex items-center gap-2"
           >
             <Printer className="h-4 w-4" />
             Print
           </Button>
-          <Button 
+          <Button
             onClick={handleDownloadPDF}
             className="flex items-center gap-2"
           >
@@ -78,7 +78,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         </div>
       </div>
 
-      <Card className="p-8 max-w-4xl mx-auto bg-white shadow-sm">
+      <Card className="p-8 max-w-4xl mx-auto bg-card shadow-sm">
         <div className="print:block" id="printable-document">
           <div className="flex justify-between items-start mb-8">
             <div>
@@ -175,7 +175,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <p className="whitespace-pre-wrap text-gray-700">{document.notes}</p>
                 </div>
               )}
-              
+
               {document.terms && (
                 <div>
                   <h3 className="text-lg font-medium mb-2">Terms & Conditions</h3>

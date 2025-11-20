@@ -18,7 +18,7 @@ import {
 import { getPerformanceOverview } from "@/services/analyticsService";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const COLORS = ["#4F46E5", "#6366F1", "#8B5CF6", "#A78BFA"];
+const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--accent))"];
 
 const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
   const [data, setData] = useState<any>(null);
@@ -56,7 +56,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             </Card>
           ))}
         </div>
-        
+
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardContent className="p-6">
@@ -66,7 +66,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-48 mb-4" />
@@ -76,7 +76,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             </CardContent>
           </Card>
         </div>
-        
+
         <Card>
           <CardContent className="p-6">
             <Skeleton className="h-6 w-40 mb-4" />
@@ -115,7 +115,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             <p className="text-xs text-green-600 mt-1">↑ 12.3% vs. prev. period</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-sm font-medium text-adsilo-text-secondary">Clicks</h3>
@@ -125,7 +125,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             <p className="text-xs text-green-600 mt-1">↑ 8.7% vs. prev. period</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-sm font-medium text-adsilo-text-secondary">CTR</h3>
@@ -135,7 +135,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             <p className="text-xs text-red-600 mt-1">↓ 0.5% vs. prev. period</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-sm font-medium text-adsilo-text-secondary">Conversions</h3>
@@ -146,7 +146,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardContent className="p-6">
@@ -171,7 +171,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
                   yAxisId="left"
                   type="monotone"
                   dataKey="impressions"
-                  stroke="#4F46E5"
+                  stroke="hsl(var(--primary))"
                   name="Impressions"
                   strokeWidth={2}
                 />
@@ -179,7 +179,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
                   yAxisId="left"
                   type="monotone"
                   dataKey="clicks"
-                  stroke="#8B5CF6"
+                  stroke="hsl(var(--accent))"
                   name="Clicks"
                   strokeWidth={2}
                 />
@@ -187,7 +187,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
                   yAxisId="right"
                   type="monotone"
                   dataKey="conversions"
-                  stroke="#10B981"
+                  stroke="hsl(var(--success))"
                   name="Conversions"
                   strokeWidth={2}
                 />
@@ -195,7 +195,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-lg font-medium mb-4">Ad Placement Distribution</h3>
@@ -208,7 +208,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
                   labelLine={false}
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="hsl(var(--accent))"
                   dataKey="value"
                 >
                   {data.placementDistribution.map((entry: any, index: number) => (
@@ -221,7 +221,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
           </CardContent>
         </Card>
       </div>
-      
+
       <Card>
         <CardContent className="p-6">
           <h3 className="text-lg font-medium mb-4">ROAS by Campaign</h3>
@@ -240,7 +240,7 @@ const PerformanceOverview = ({ dateRange }: { dateRange: string }) => {
               <YAxis />
               <Tooltip formatter={(value) => [`${value}x`, "ROAS"]} />
               <Legend />
-              <Bar dataKey="value" name="ROAS (Return on Ad Spend)" fill="#4F46E5" />
+              <Bar dataKey="value" name="ROAS (Return on Ad Spend)" fill="hsl(var(--primary))" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

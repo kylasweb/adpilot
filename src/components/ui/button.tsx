@@ -9,15 +9,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        cta: "bg-adsilo-primary text-adsilo-text-primary hover:bg-adsilo-primary/90 shadow-md hover:shadow-lg px-6 py-3 rounded-lg text-lg font-semibold",
+        default: "bg-adsilo-primary text-adsilo-text-primary hover:bg-adsilo-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-adsilo-error text-adsilo-text-primary hover:bg-adsilo-error/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-adsilo-border bg-adsilo-background hover:bg-adsilo-accent hover:text-adsilo-text-primary",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-adsilo-secondary text-adsilo-text-secondary hover:bg-adsilo-secondary/80",
+        ghost: "hover:bg-adsilo-accent hover:text-adsilo-text-primary",
+        link: "text-adsilo-primary underline-offset-4 hover:underline",
+        success: "bg-adsilo-success text-adsilo-text-primary hover:bg-adsilo-success/90",
+        warning: "bg-adsilo-warning text-adsilo-text-primary hover:bg-adsilo-warning/90",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -35,7 +38,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 

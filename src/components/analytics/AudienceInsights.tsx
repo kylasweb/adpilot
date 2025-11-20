@@ -16,9 +16,9 @@ import {
 import { getAudienceInsights } from "@/services/analyticsService";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const COLORS = ["#4F46E5", "#6366F1", "#8B5CF6", "#A78BFA", "#C084FC", "#E879F9"];
-const GENDER_COLORS = ["#4F46E5", "#EC4899", "#8B5CF6"];
-const DEVICE_COLORS = ["#4F46E5", "#10B981", "#F59E0B"];
+const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--accent))", "hsl(var(--accent))", "hsl(var(--accent))"];
+const GENDER_COLORS = ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--accent))"];
+const DEVICE_COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))"];
 
 const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
   const [data, setData] = useState<any>(null);
@@ -54,7 +54,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-48 mb-4" />
@@ -64,7 +64,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardContent className="p-6">
@@ -74,7 +74,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-48 mb-4" />
@@ -84,7 +84,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
             </CardContent>
           </Card>
         </div>
-        
+
         <Card>
           <CardContent className="p-6">
             <Skeleton className="h-6 w-48 mb-4" />
@@ -149,12 +149,12 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
                 <YAxis unit="%" />
                 <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
                 <Legend />
-                <Bar dataKey="value" name="Percentage" fill="#4F46E5" />
+                <Bar dataKey="value" name="Percentage" fill="hsl(var(--primary))" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-lg font-medium mb-4">Gender Distribution</h3>
@@ -167,7 +167,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
                   labelLine={false}
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="hsl(var(--accent))"
                   dataKey="value"
                 >
                   {data.genderDistribution.map((entry: any, index: number) => (
@@ -180,7 +180,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardContent className="p-6">
@@ -206,7 +206,7 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3 className="text-lg font-medium mb-4">Interest Categories</h3>
@@ -226,13 +226,13 @@ const AudienceInsights = ({ dateRange }: { dateRange: string }) => {
                 <YAxis dataKey="name" type="category" width={80} />
                 <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
                 <Legend />
-                <Bar dataKey="value" name="Percentage" fill="#8B5CF6" />
+                <Bar dataKey="value" name="Percentage" fill="hsl(var(--accent))" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
-      
+
       <Card>
         <CardContent className="p-6">
           <h3 className="text-lg font-medium mb-4">Audience Insights Summary</h3>

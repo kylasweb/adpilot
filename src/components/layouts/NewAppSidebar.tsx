@@ -59,7 +59,7 @@ interface NewAppSidebarProps {
 const NewAppSidebar = ({ isOpen, setIsOpen }: NewAppSidebarProps) => {
   const pathname = usePathname() || '';
   const { user } = useAuth();
-  
+
   const isAdmin = user?.role === 'admin';
   const organizationId = user?.organizationId;
 
@@ -137,7 +137,7 @@ const NewAppSidebar = ({ isOpen, setIsOpen }: NewAppSidebarProps) => {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:z-auto", 
+        "fixed inset-y-0 left-0 z-30 w-64 bg-sidebar shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}
     >
@@ -145,9 +145,9 @@ const NewAppSidebar = ({ isOpen, setIsOpen }: NewAppSidebarProps) => {
         <Link href="/" className="flex items-center">
           <span className="text-xl font-semibold text-adsilo-primary">Adsilo</span>
         </Link>
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setIsOpen(false)}
           className="lg:hidden"
         >
@@ -185,7 +185,7 @@ const NewAppSidebar = ({ isOpen, setIsOpen }: NewAppSidebarProps) => {
                 </nav>
               </div>
             ))}
-            
+
             <div className="mt-4">
               <div className="rounded-lg bg-muted p-3">
                 <div className="flex items-center mb-2">

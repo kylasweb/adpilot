@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
@@ -14,7 +14,7 @@ const StyleGuide = () => {
           Edit Guide
         </Button>
       </div>
-      
+
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -25,42 +25,24 @@ const StyleGuide = () => {
               <div>
                 <h3 className="text-sm font-medium mb-2">Primary Colors</h3>
                 <div className="flex flex-wrap gap-3">
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-primary rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#4F46E5</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-secondary rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#6366F1</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-accent rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#8B5CF6</span>
-                  </div>
+                  <ColorSwatch token="--primary" label="Primary" />
+                  <ColorSwatch token="--secondary" label="Secondary" />
+                  <ColorSwatch token="--accent" label="Accent" />
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="text-sm font-medium mb-2">Secondary Colors</h3>
                 <div className="flex flex-wrap gap-3">
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-success rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#10B981</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-warning rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#F59E0B</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-adsilo-danger rounded-md"></div>
-                    <span className="text-xs mt-1 text-adsilo-text-secondary">#EF4444</span>
-                  </div>
+                  <ColorSwatch token="--success" label="Success" />
+                  <ColorSwatch token="--warning" label="Warning" />
+                  <ColorSwatch token="--destructive" label="Danger" />
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Typography</CardTitle>
@@ -84,7 +66,7 @@ const StyleGuide = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="text-sm font-medium mb-2">Body Text</h3>
                 <div className="space-y-3">
@@ -105,7 +87,7 @@ const StyleGuide = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Image Guidelines</CardTitle>
@@ -120,7 +102,7 @@ const StyleGuide = () => {
                 <li>Carousel: 1080 x 1080 pixels (1:1)</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-sm font-medium mb-2">Style Guidelines</h3>
               <ul className="list-disc pl-5 space-y-1 text-sm text-adsilo-text-secondary">
@@ -133,18 +115,18 @@ const StyleGuide = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Logo Usage</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-white border p-4 rounded-md flex items-center justify-center">
+            <div className="bg-card border p-4 rounded-md flex items-center justify-center">
               <div className="h-16 w-32 bg-adsilo-muted flex items-center justify-center text-adsilo-primary font-bold">
                 LOGO
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-sm font-medium mb-2">Logo Guidelines</h3>
               <ul className="list-disc pl-5 space-y-1 text-sm text-adsilo-text-secondary">
@@ -161,5 +143,29 @@ const StyleGuide = () => {
     </div>
   );
 };
+
+function ColorSwatch({ token, label }: { token: string; label?: string }) {
+  const [value, setValue] = useState<string>("");
+
+  useEffect(() => {
+    // getComputedStyle on documentElement to read CSS variable
+    const root = document.documentElement;
+    const val = getComputedStyle(root).getPropertyValue(token).trim();
+    // if it's hsl() or rgb, we resolve to hsl(var(--...)) fallback
+    setValue(val || "var(" + token + ")");
+  }, [token]);
+
+  const style: React.CSSProperties = {
+    background: `hsl(var(${token}))`,
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="w-16 h-16 rounded-md border" style={style} />
+      <span className="text-xs mt-1 text-adsilo-text-secondary">{label ?? token}</span>
+      <span className="text-xs mt-0.5 text-adsilo-text-secondary">{value}</span>
+    </div>
+  );
+}
 
 export default StyleGuide;

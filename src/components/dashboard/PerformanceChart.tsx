@@ -30,13 +30,13 @@ const PerformanceChart = () => {
           </SelectContent>
         </Select>
       </div>
-      
+
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
           data={data}
           margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
           <XAxis dataKey="name" tick={{ fontSize: 12 }} />
           <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
           <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
@@ -46,7 +46,7 @@ const PerformanceChart = () => {
             yAxisId="left"
             type="monotone"
             dataKey="impressions"
-            stroke="#6366F1"
+            stroke="hsl(var(--secondary))"
             name="Impressions"
             activeDot={{ r: 8 }}
           />
@@ -54,14 +54,14 @@ const PerformanceChart = () => {
             yAxisId="left"
             type="monotone"
             dataKey="clicks"
-            stroke="#4F46E5"
+            stroke="hsl(var(--primary))"
             name="Clicks"
           />
           <Line
             yAxisId="right"
             type="monotone"
             dataKey="ctr"
-            stroke="#8B5CF6"
+            stroke="hsl(var(--accent))"
             name="CTR (%)"
           />
         </LineChart>
