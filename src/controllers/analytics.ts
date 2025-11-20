@@ -204,7 +204,7 @@ export const getAudienceInsights = async (req: Request, res: Response, next: Nex
             }
         });
 
-        const campaignIds = campaigns.map(c => c.id);
+        const campaignIds = campaigns.map((c: { id: string }) => c.id);
 
         // Get age distribution data
         const ageData: any[] = await prisma.$queryRaw`

@@ -3,9 +3,15 @@ import '@testing-library/jest-dom/extend-expect';
 
 declare global {
   function afterEach(fn: () => void): void;
+
+  interface Window {
+    ResizeObserver: typeof ResizeObserver;
+    IntersectionObserver: typeof IntersectionObserver;
+  }
 }
 
 // Define basic mock function type with implementation details
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface MockFnImplementation<T extends (...args: any[]) => any> {
   (...args: Parameters<T>): ReturnType<T>;
   mockImplementation: (fn: T) => MockFnImplementation<T>;
@@ -14,19 +20,20 @@ interface MockFnImplementation<T extends (...args: any[]) => any> {
 }
 
 // Create mock function helper
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createMockFn<T extends (...args: any[]) => any>(): MockFnImplementation<T> {
-  const mockFn = function(...args: Parameters<T>): ReturnType<T> {
-    return mockFn._implementation 
+  const mockFn = function (...args: Parameters<T>): ReturnType<T> {
+    return mockFn._implementation
       ? mockFn._implementation(...args)
       : undefined as unknown as ReturnType<T>;
   } as MockFnImplementation<T>;
 
-  mockFn.mockImplementation = function(implementation: T) {
+  mockFn.mockImplementation = function (implementation: T) {
     this._implementation = implementation;
     return this;
   };
 
-  mockFn.mockClear = function() {
+  mockFn.mockClear = function () {
     this._implementation = undefined;
   };
 
@@ -34,7 +41,7 @@ function createMockFn<T extends (...args: any[]) => any>(): MockFnImplementation
 }
 
 // Types for MediaQueryList listeners
-type MediaQueryListener = ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null;
+type MediaQueryListener = ((this: MediaQueryList, ev: MediaQueryListEvent) => void) | null;
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -58,7 +65,7 @@ class MockResizeObserver implements Partial<ResizeObserver> {
   disconnect = createMockFn<ResizeObserver['disconnect']>();
 }
 
-(global as any).ResizeObserver = MockResizeObserver;
+window.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 
 // Mock IntersectionObserver
 class MockIntersectionObserver implements Partial<IntersectionObserver> {
@@ -79,7 +86,7 @@ class MockIntersectionObserver implements Partial<IntersectionObserver> {
   }
 }
 
-(global as any).IntersectionObserver = MockIntersectionObserver;
+window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
 
 // Type for console methods that can be mocked
 type MockableConsoleMethods = 'error' | 'warn';
@@ -115,9 +122,9 @@ afterEach(() => {
 });
 
 // Export types for use in tests
-export type { 
-  MockFnImplementation, 
-  MockableConsoleMethods, 
+export type {
+  MockFnImplementation,
+  MockableConsoleMethods,
   MockedConsole,
-  MediaQueryListener 
+  MediaQueryListener
 };

@@ -15,29 +15,30 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [settings, setSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Profile form state
   const [profileForm, setProfileForm] = useState({
     name: "",
     email: ""
   });
-  
+
   // Password form state
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: ""
   });
-  
+
   // Organization form state
   const [orgForm, setOrgForm] = useState({
     name: "",
     website: ""
   });
-  
+
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -121,7 +122,7 @@ const SettingsPage: React.FC = () => {
             </div>
           </div>
         </motion.div>
-        
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -179,7 +180,7 @@ const SettingsPage: React.FC = () => {
           </div>
         </div>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -197,21 +198,21 @@ const SettingsPage: React.FC = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input 
-                    id="name" 
-                    value={profileForm.name} 
-                    onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
-                    className="border-adsilo-border" 
+                  <Input
+                    id="name"
+                    value={profileForm.name}
+                    onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email" 
+                  <Input
+                    id="email"
                     type="email"
-                    value={profileForm.email} 
-                    onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
-                    className="border-adsilo-border" 
+                    value={profileForm.email}
+                    onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
               </div>
@@ -220,7 +221,7 @@ const SettingsPage: React.FC = () => {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -238,32 +239,32 @@ const SettingsPage: React.FC = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="current-password">Current Password</Label>
-                  <Input 
-                    id="current-password" 
-                    type="password" 
+                  <Input
+                    id="current-password"
+                    type="password"
                     value={passwordForm.currentPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
-                    className="border-adsilo-border" 
+                    onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="new-password">New Password</Label>
-                  <Input 
-                    id="new-password" 
-                    type="password" 
+                  <Input
+                    id="new-password"
+                    type="password"
                     value={passwordForm.newPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
-                    className="border-adsilo-border" 
+                    onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirm-password">Confirm New Password</Label>
-                  <Input 
-                    id="confirm-password" 
-                    type="password" 
+                  <Input
+                    id="confirm-password"
+                    type="password"
                     value={passwordForm.confirmPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
-                    className="border-adsilo-border" 
+                    onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
               </div>
@@ -272,7 +273,7 @@ const SettingsPage: React.FC = () => {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -290,21 +291,21 @@ const SettingsPage: React.FC = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="org-name">Organization Name</Label>
-                  <Input 
-                    id="org-name" 
-                    value={orgForm.name} 
-                    onChange={(e) => setOrgForm({...orgForm, name: e.target.value})}
-                    className="border-adsilo-border" 
+                  <Input
+                    id="org-name"
+                    value={orgForm.name}
+                    onChange={(e) => setOrgForm({ ...orgForm, name: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="org-website">Organization Website</Label>
-                  <Input 
-                    id="org-website" 
+                  <Input
+                    id="org-website"
                     type="url"
-                    value={orgForm.website} 
-                    onChange={(e) => setOrgForm({...orgForm, website: e.target.value})}
-                    className="border-adsilo-border" 
+                    value={orgForm.website}
+                    onChange={(e) => setOrgForm({ ...orgForm, website: e.target.value })}
+                    className="border-adsilo-border"
                   />
                 </div>
               </div>
@@ -313,7 +314,7 @@ const SettingsPage: React.FC = () => {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

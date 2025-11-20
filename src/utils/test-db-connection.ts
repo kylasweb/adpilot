@@ -51,18 +51,18 @@ export async function getDatabaseInfo(): Promise<{ version: string; tables: stri
 
     try {
         // Get database version
-        const versionResult: any = await prisma.$queryRaw`SELECT version()`;
+        const versionResult = await prisma.$queryRaw<{ version: string }[]>`SELECT version()`;
         const version = versionResult[0].version;
 
         // Get table list
-        const tablesResult: any = await prisma.$queryRaw`
+        const tablesResult = await prisma.$queryRaw<{ table_name: string }[]>`
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public'
       ORDER BY table_name
     `;
 
-        const tables = tablesResult.map((row: any) => row.table_name);
+        const tables = tablesResult.map((row) => row.table_name);
 
         return { version, tables };
     } catch (error) {
