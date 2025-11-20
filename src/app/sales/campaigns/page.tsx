@@ -25,7 +25,7 @@ import {
 import { toast } from "sonner";
 
 const SalesCampaignsPage = () => {
-    const [showCreateDialog, setShow CreateDialog] = useState(false);
+    const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
 
     const stats = [
         { label: 'Active Campaigns', value: '5', icon: Play, color: 'bg-green-500' },
