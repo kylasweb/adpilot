@@ -11,7 +11,7 @@ export interface AuthenticatedRequest extends Request {
         name: string;
         role: string;
         staffRole?: 'STAFF' | 'C_LEVEL' | 'ADMIN' | 'MANAGER';
-    };
+    } | undefined;
 }
 
 // Middleware to check if user is authenticated
@@ -143,14 +143,17 @@ export const filterLeadsByRole = async (req: AuthenticatedRequest) => {
 
 // Log access for audit trail
 export const logAccess = (resource: string) => {
-    return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-        if (req.user) {
-            console.log(`[AUDIT] ${new Date().toISOString()} - User ${req.user.email} accessed ${resource} - Method: ${req.method} - Path: ${req.path}`);
+    return async (req: Request, res: Response, next: NextFunction) => {
+        // Cast req to AuthenticatedRequest to access user
+        const authReq = req as unknown as AuthenticatedRequest;
+        
+        if (authReq.user) {
+            console.log(`[AUDIT] ${new Date().toISOString()} - User ${authReq.user.email} accessed ${resource} - Method: ${req.method} - Path: ${req.path}`);
 
             // In production, this should write to a database audit log
             // await prisma.auditLog.create({
             //   data: {
-            //     userId: req.user.id,
+            //     userId: authReq.user.id,
             //     resource,
             //     action: req.method,
             //     path: req.path,
