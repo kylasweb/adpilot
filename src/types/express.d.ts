@@ -3,12 +3,14 @@
 declare global {
   namespace Express {
     interface Request {
-      user: {
+      user?: {
         id: string;
         email: string;
         name: string;
+        role: string;
+        staffRole?: 'ADMIN' | 'STAFF' | 'C_LEVEL' | 'MANAGER';
       };
-      projectRole?: ProjectRole; // Current user's role in the project context
+      projectRole?: string; // Current user's role in the project context
     }
   }
 }

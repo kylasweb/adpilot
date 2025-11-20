@@ -9,19 +9,6 @@ interface JWTPayload {
   name: string;
 }
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        email: string;
-        name: string;
-      };
-      projectRole?: string;
-    }
-  }
-}
-
 export const authorize = (allowedRoles?: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -39,13 +26,22 @@ export const authorize = (allowedRoles?: string[]) => {
         process.env.JWT_SECRET as string
       ) as JWTPayload;
 
-      // Set user info in request
-      const user = {
-        id: decoded.userId,
-        email: decoded.email,
-        name: decoded.name
+      // Fetch user from database to get role information
+      const user = await prisma.user.findUnique({
+        where: { id: decoded.userId }
+      });
+
+      if (!user) {
+        throw ApiError.unauthorized('User not found');
+      }
+
+      // Set user info in request with role information
+      req.user = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
       };
-      req.user = user;
 
       // If roles are specified, check project-specific permissions
       if (allowedRoles && req.params.id) {
@@ -53,7 +49,7 @@ export const authorize = (allowedRoles?: string[]) => {
           where: {
             projectId_userId: {
               projectId: req.params.id,
-              userId: decoded.userId
+              userId: user.id
             }
           }
         });

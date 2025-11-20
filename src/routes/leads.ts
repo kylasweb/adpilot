@@ -1,21 +1,21 @@
-import express, { Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import {
-    requireAuth,
     canAccessLead,
     filterLeadsByRole,
     logAccess,
     AuthenticatedRequest
 } from '../middleware/rbac.js';
+import { authorize as requireAuth } from '../middleware/authorize.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Apply authentication to all routes
-router.use(requireAuth);
+router.use(requireAuth());
 
 // GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/', logAccess('leads'), async (req: Request, res: Response) => {
     try {
         const { status, source, urgency, minScore, search, page = '1', limit = '20' } = req.query;
 
@@ -90,7 +90,7 @@ router.get('/', logAccess('leads'), async (req: AuthenticatedRequest, res: Respo
 });
 
 // GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/stats', logAccess('lead-stats'), async (req: Request, res: Response) => {
     try {
         const roleFilter = await filterLeadsByRole(req);
 
@@ -127,7 +127,7 @@ router.get('/stats', logAccess('lead-stats'), async (req: AuthenticatedRequest, 
 });
 
 // GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -166,7 +166,7 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Authenti
 });
 
 // POST /api/leads - Create new lead
-router.post('/', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     try {
         const {
             name,
@@ -215,7 +215,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
                 type: 'NOTE',
                 action: 'Lead created',
                 details: `Lead created from ${source}`,
-                performedBy: req.user?.id
+                performedBy: (req as AuthenticatedRequest).user?.id
             }
         });
 
@@ -227,7 +227,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead, async (req: AuthenticatedRequest, res: Response) => {
+router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -244,7 +244,7 @@ router.put('/:id', canAccessLead, async (req: AuthenticatedRequest, res: Respons
                 type: 'NOTE',
                 action: 'Lead updated',
                 details: `Fields updated: ${Object.keys(updateData).join(', ')}`,
-                performedBy: req.user?.id
+                performedBy: (req as AuthenticatedRequest).user?.id
             }
         });
 
@@ -256,7 +256,7 @@ router.put('/:id', canAccessLead, async (req: AuthenticatedRequest, res: Respons
 });
 
 // POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { score, factors, confidence, notes } = req.body;
@@ -276,7 +276,7 @@ router.post('/:id/score', canAccessLead, async (req: AuthenticatedRequest, res: 
                 companySize: factors?.companySize,
                 industry: factors?.industry,
                 confidence,
-                calculatedBy: req.user?.id,
+                calculatedBy: (req as AuthenticatedRequest).user?.id,
                 notes
             }
         });
@@ -294,7 +294,7 @@ router.post('/:id/score', canAccessLead, async (req: AuthenticatedRequest, res: 
                 type: 'SCORE_UPDATE',
                 action: 'Score updated',
                 details: `Score changed to ${score}`,
-                performedBy: req.user?.id
+                performedBy: (req as AuthenticatedRequest).user?.id
             }
         });
 
@@ -306,7 +306,7 @@ router.post('/:id/score', canAccessLead, async (req: AuthenticatedRequest, res: 
 });
 
 // POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/ivr-transcript', async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const {
@@ -355,7 +355,7 @@ router.post('/:id/ivr-transcript', async (req: AuthenticatedRequest, res: Respon
 });
 
 // POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { type, action, details, metadata } = req.body;
@@ -366,7 +366,7 @@ router.post('/:id/activity', canAccessLead, async (req: AuthenticatedRequest, re
                 type,
                 action,
                 details,
-                performedBy: req.user?.id,
+                performedBy: (req as AuthenticatedRequest).user?.id,
                 metadata
             }
         });
@@ -379,7 +379,7 @@ router.post('/:id/activity', canAccessLead, async (req: AuthenticatedRequest, re
 });
 
 // DELETE /api/leads/:id - Delete lead (soft delete)
-router.delete('/:id', canAccessLead, async (req: AuthenticatedRequest, res: Response) => {
+router.delete('/:id', canAccessLead, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 

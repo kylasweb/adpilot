@@ -3,42 +3,31 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Extended request type with user info
+// Define the AuthenticatedRequest type
 export interface AuthenticatedRequest extends Request {
     user?: {
         id: string;
         email: string;
         name: string;
         role: string;
-        staffRole?: 'STAFF' | 'C_LEVEL' | 'ADMIN' | 'MANAGER';
-    } | undefined;
+        staffRole?: 'ADMIN' | 'STAFF' | 'C_LEVEL' | 'MANAGER';
+    };
 }
-
-// Middleware to check if user is authenticated
-export const requireAuth = async (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-) => {
-    // In production, this would validate JWT token
-    // For now, we'll assume user is set by previous middleware
-    if (!req.user) {
-        return res.status(401).json({ error: 'Authentication required' });
-    }
-    next();
-};
 
 // Middleware to check staff role
 export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 'MANAGER')[]) => {
-    return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-        if (!req.user) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        // Cast req to access user property
+        const authReq = req as AuthenticatedRequest;
+
+        if (!authReq.user) {
             return res.status(401).json({ error: 'Authentication required' });
         }
 
         try {
             // Fetch user's staff role from database
             const staffRole = await prisma.staffRole.findUnique({
-                where: { userId: req.user.id }
+                where: { userId: authReq.user.id }
             });
 
             if (!staffRole) {
@@ -58,7 +47,7 @@ export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 
             }
 
             // Add staff role to request for use in route handlers
-            req.user.staffRole = staffRole.role;
+            authReq.user.staffRole = staffRole.role;
             next();
         } catch (error) {
             console.error('Error checking staff role:', error);
@@ -72,11 +61,14 @@ export const requireCLevel = requireStaffRole(['C_LEVEL', 'ADMIN']);
 
 // Middleware to check if user can access specific lead
 export const canAccessLead = async (
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    if (!req.user) {
+    // Cast req to access user property
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
         return res.status(401).json({ error: 'Authentication required' });
     }
 
@@ -88,7 +80,7 @@ export const canAccessLead = async (
         }
 
         const staffRole = await prisma.staffRole.findUnique({
-            where: { userId: req.user.id }
+            where: { userId: authReq.user.id }
         });
 
         // C-Level and Admins can access all leads
@@ -105,7 +97,7 @@ export const canAccessLead = async (
             return res.status(404).json({ error: 'Lead not found' });
         }
 
-        if (lead.assignedTo !== req.user.id) {
+        if (lead.assignedTo !== authReq.user.id) {
             return res.status(403).json({
                 error: 'Access denied: Lead not assigned to you',
                 leadId,
@@ -121,13 +113,16 @@ export const canAccessLead = async (
 };
 
 // Middleware for lead filtering based on role
-export const filterLeadsByRole = async (req: AuthenticatedRequest) => {
-    if (!req.user) {
+export const filterLeadsByRole = async (req: Request) => {
+    // Cast req to access user property
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
         return {};
     }
 
     const staffRole = await prisma.staffRole.findUnique({
-        where: { userId: req.user.id }
+        where: { userId: authReq.user.id }
     });
 
     // C-Level and Admins see all leads
@@ -137,16 +132,16 @@ export const filterLeadsByRole = async (req: AuthenticatedRequest) => {
 
     // Staff only see their assigned leads
     return {
-        assignedTo: req.user.id
+        assignedTo: authReq.user.id
     };
 };
 
 // Log access for audit trail
 export const logAccess = (resource: string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        // Cast req to AuthenticatedRequest to access user
-        const authReq = req as unknown as AuthenticatedRequest;
-        
+        // Cast req to access user property
+        const authReq = req as AuthenticatedRequest;
+
         if (authReq.user) {
             console.log(`[AUDIT] ${new Date().toISOString()} - User ${authReq.user.email} accessed ${resource} - Method: ${req.method} - Path: ${req.path}`);
 
