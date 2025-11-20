@@ -8,6 +8,7 @@ export interface AuthenticatedRequest extends Request {
     user?: {
         id: string;
         email: string;
+        name: string;
         role: string;
         staffRole?: 'STAFF' | 'C_LEVEL' | 'ADMIN' | 'MANAGER';
     };
@@ -51,7 +52,7 @@ export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 
             if (!allowedRoles.includes(staffRole.role)) {
                 return res.status(403).json({
                     error: 'Access denied: Insufficient permissions',
-                    userRole: staff Role.role,
+                    userRole: staffRole.role,
                     required: allowedRoles
                 });
             }
