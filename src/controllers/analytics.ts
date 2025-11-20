@@ -3,7 +3,6 @@ import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
 import { AnalyticsFilterSchema } from '../schemas/analytics';
-import { Prisma } from '@prisma/client';
 
 // Get performance overview data
 export const getPerformanceOverview = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +20,7 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
         const { dateRange, campaignId, platform } = filterResult.data;
 
         // Get user's campaigns
-        const campaigns: Prisma.CampaignGetPayload<{ select: { id: true, name: true, budget: true, status: true, startDate: true, endDate: true } }>[] = await prisma.campaign.findMany({
+        const campaigns = await prisma.campaign.findMany({
             where: {
                 userId: req.user.id,
                 ...(campaignId && { id: campaignId })
