@@ -1,4 +1,4 @@
-import express, { Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth, logAccess, AuthenticatedRequest } from '../middleware/rbac.js';
 
@@ -6,10 +6,13 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 // Apply authentication
-router.use(requireAuth);
+router.use((req, res, next) => {
+    // Wrap the async middleware to handle Express 5.x compatibility
+    Promise.resolve(requireAuth(req as AuthenticatedRequest, res, next)).catch(next);
+});
 
 // GET /api/acsp-campaigns - Get all campaigns
-router.get('/', logAccess('campaigns'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/', logAccess('campaigns'), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { status, type, page = '1', limit = '20' } = req.query;
 
@@ -55,13 +58,12 @@ router.get('/', logAccess('campaigns'), async (req: AuthenticatedRequest, res: R
             }
         });
     } catch (error) {
-        console.error('Error fetching campaigns:', error);
-        res.status(500).json({ error: 'Failed to fetch campaigns' });
+        next(error);
     }
 });
 
 // GET /api/acsp-campaigns/stats - Get campaign statistics
-router.get('/stats', logAccess('campaign-stats'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/stats', logAccess('campaign-stats'), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const [
             activeCampaigns,
@@ -88,13 +90,12 @@ router.get('/stats', logAccess('campaign-stats'), async (req: AuthenticatedReque
             leadsConverted: successfulContacts._sum.successfulContacts || 0
         });
     } catch (error) {
-        console.error('Error fetching campaign stats:', error);
-        res.status(500).json({ error: 'Failed to fetch statistics' });
+        next(error);
     }
 });
 
 // GET /api/acsp-campaigns/:id - Get single campaign
-router.get('/:id', logAccess('campaign-detail'), async (req: AuthenticatedRequest, res: Response) => {
+router.get('/:id', logAccess('campaign-detail'), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -130,13 +131,12 @@ router.get('/:id', logAccess('campaign-detail'), async (req: AuthenticatedReques
 
         res.json(campaign);
     } catch (error) {
-        console.error('Error fetching campaign:', error);
-        res.status(500).json({ error: 'Failed to fetch campaign' });
+        next(error);
     }
 });
 
 // POST /api/acsp-campaigns - Create new campaign
-router.post('/', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {
             name,
@@ -155,6 +155,9 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
             });
         }
 
+        // Cast req to AuthenticatedRequest to access user
+        const authReq = req as unknown as AuthenticatedRequest;
+        
         const campaign = await prisma.aCSPCampaign.create({
             data: {
                 name,
@@ -165,7 +168,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
                 maxContactsPerDay,
                 priority,
                 status: 'DRAFT',
-                createdBy: req.user!.id
+                createdBy: authReq.user!.id
             }
         });
 
@@ -187,13 +190,12 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
 
         res.status(201).json(campaign);
     } catch (error) {
-        console.error('Error creating campaign:', error);
-        res.status(500).json({ error: 'Failed to create campaign' });
+        next(error);
     }
 });
 
 // PUT /api/acsp-campaigns/:id - Update campaign
-router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -205,13 +207,12 @@ router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
 
         res.json(campaign);
     } catch (error) {
-        console.error('Error updating campaign:', error);
-        res.status(500).json({ error: 'Failed to update campaign' });
+        next(error);
     }
 });
 
 // POST /api/acsp-campaigns/:id/launch - Launch campaign
-router.post('/:id/launch', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/launch', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -222,13 +223,12 @@ router.post('/:id/launch', async (req: AuthenticatedRequest, res: Response) => {
 
         res.json({ message: 'Campaign launched successfully', campaign });
     } catch (error) {
-        console.error('Error launching campaign:', error);
-        res.status(500).json({ error: 'Failed to launch campaign' });
+        next(error);
     }
 });
 
 // POST /api/acsp-campaigns/:id/pause - Pause campaign
-router.post('/:id/pause', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/pause', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -239,21 +239,21 @@ router.post('/:id/pause', async (req: AuthenticatedRequest, res: Response) => {
 
         res.json({ message: 'Campaign paused successfully', campaign });
     } catch (error) {
-        console.error('Error pausing campaign:', error);
-        res.status(500).json({ error: 'Failed to pause campaign' });
+        next(error);
     }
 });
 
 // POST /api/acsp-campaigns/:id/leads - Add leads to campaign
-router.post('/:id/leads', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/leads', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const { leadIds } = req.body;
 
-        if (!Array.isArray(leadIds) || leadIds.length === 0) {
-            return res.status(400).json({ error: 'leadIds must be a non-empty array' });
+        if (!leadIds || !Array.isArray(leadIds)) {
+            return res.status(400).json({ error: 'leadIds array is required' });
         }
 
+        // Add leads to campaign
         await prisma.campaignLead.createMany({
             data: leadIds.map((leadId: string) => ({
                 campaignId: id,
@@ -262,34 +262,40 @@ router.post('/:id/leads', async (req: AuthenticatedRequest, res: Response) => {
             skipDuplicates: true
         });
 
-        const campaign = await prisma.aCSPCampaign.update({
+        // Update campaign contact count
+        const campaign = await prisma.aCSPCampaign.findUnique({
             where: { id },
-            data: {
-                totalContacts: {
-                    increment: leadIds.length
-                }
-            },
-            include: {
-                _count: {
-                    select: { leads: true }
-                }
-            }
+            select: { totalContacts: true }
         });
 
-        res.json({ message: `Added ${leadIds.length} leads to campaign`, campaign });
+        if (campaign) {
+            await prisma.aCSPCampaign.update({
+                where: { id },
+                data: { totalContacts: campaign.totalContacts + leadIds.length }
+            });
+        }
+
+        res.json({ message: `${leadIds.length} leads added to campaign` });
     } catch (error) {
-        console.error('Error adding leads to campaign:', error);
-        res.status(500).json({ error: 'Failed to add leads to campaign' });
+        next(error);
     }
 });
 
 // POST /api/acsp-campaigns/:id/contact-result - Record contact result
-router.post('/:id/contact-result', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/contact-result', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const { leadId, status, result, notes } = req.body;
+        const { leadId, status, notes } = req.body;
 
-        await prisma.campaignLead.update({
+        // Validate required fields
+        if (!leadId || !status) {
+            return res.status(400).json({
+                error: 'Missing required fields: leadId, status'
+            });
+        }
+
+        // Update campaign lead status
+        const campaignLead = await prisma.campaignLead.update({
             where: {
                 campaignId_leadId: {
                     campaignId: id,
@@ -298,54 +304,41 @@ router.post('/:id/contact-result', async (req: AuthenticatedRequest, res: Respon
             },
             data: {
                 status,
-                result,
-                notes,
-                contactedAt: new Date()
+                contactedAt: new Date(),
+                notes
             }
         });
 
-        const isSuccess = status === 'SUCCESS';
-        await prisma.aCSPCampaign.update({
-            where: { id },
-            data: {
-                completedContacts: { increment: 1 },
-                successfulContacts: { increment: isSuccess ? 1 : 0 }
-            }
-        });
-
-        const campaign = await prisma.aCSPCampaign.findUnique({
-            where: { id }
-        });
-
-        if (campaign && campaign.completedContacts > 0) {
-            const successRate = (campaign.successfulContacts / campaign.completedContacts) * 100;
+        // Update campaign stats
+        if (status === 'SUCCESSFUL') {
             await prisma.aCSPCampaign.update({
                 where: { id },
-                data: { successRate }
+                data: {
+                    successfulContacts: {
+                        increment: 1
+                    }
+                }
             });
         }
 
-        res.json({ message: 'Contact result recorded successfully' });
+        res.json({ message: 'Contact result recorded', campaignLead });
     } catch (error) {
-        console.error('Error recording contact result:', error);
-        res.status(500).json({ error: 'Failed to record contact result' });
+        next(error);
     }
 });
 
 // DELETE /api/acsp-campaigns/:id - Delete campaign
-router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
-        await prisma.aCSPCampaign.update({
-            where: { id },
-            data: { status: 'ARCHIVED' }
+        await prisma.aCSPCampaign.delete({
+            where: { id }
         });
 
-        res.json({ message: 'Campaign archived successfully' });
+        res.json({ message: 'Campaign deleted successfully' });
     } catch (error) {
-        console.error('Error deleting campaign:', error);
-        res.status(500).json({ error: 'Failed to delete campaign' });
+        next(error);
     }
 });
 
