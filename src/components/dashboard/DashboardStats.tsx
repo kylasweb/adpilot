@@ -88,14 +88,14 @@ const DashboardStats: React.FC = () => {
       trend: "neutral",
     },
   ]);
-  
+
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const data = await getDashboardStats();
-        
+
         setStats([
           {
             title: "Active Campaigns",
@@ -126,14 +126,14 @@ const DashboardStats: React.FC = () => {
             trend: data.avgCTR > 2.5 ? "up" : data.avgCTR < 2.5 ? "down" : "neutral",
           },
         ]);
-        
+
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch dashboard stats:", error);
         setLoading(false);
       }
     };
-    
+
     fetchStats();
   }, []);
 
@@ -144,7 +144,7 @@ const DashboardStats: React.FC = () => {
 
     const targets = containerRef.current.querySelectorAll('.dashboard-card');
 
-    anime.remove(targets as any);
+    anime.remove(targets);
     const tl = new anime.Timeline()
       .add(targets, {
         translateY: [20, 0],

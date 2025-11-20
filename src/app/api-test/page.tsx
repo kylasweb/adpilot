@@ -1,17 +1,27 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layouts/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface TestResult {
+  status: number;
+  ok: boolean;
+  endpoint: string;
+}
+
+interface TestResults {
+  [key: string]: TestResult;
+}
+
 const ApiTestPage = () => {
-  const [testResults, setTestResults] = useState<any>({});
+  const [testResults, setTestResults] = useState<TestResults>({});
   const [loading, setLoading] = useState(false);
 
   const runAllTests = async () => {
     setLoading(true);
-    const results: any = {};
+    const results: TestResults = {};
 
     try {
       // Test campaigns API
@@ -84,8 +94,8 @@ const ApiTestPage = () => {
             <CardTitle>API Tests</CardTitle>
           </CardHeader>
           <CardContent>
-            <Button 
-              onClick={runAllTests} 
+            <Button
+              onClick={runAllTests}
               disabled={loading}
               className="mb-6"
             >
@@ -94,14 +104,13 @@ const ApiTestPage = () => {
 
             {Object.keys(testResults).length > 0 && (
               <div className="space-y-4">
-                {Object.entries(testResults).map(([key, result]: [string, any]) => (
-                  <div 
-                    key={key} 
-                    className={`p-4 rounded-lg border ${
-                      result.ok 
-                        ? 'bg-green-50 border-green-200' 
+                {Object.entries(testResults).map(([key, result]) => (
+                  <div
+                    key={key}
+                    className={`p-4 rounded-lg border ${result.ok
+                        ? 'bg-green-50 border-green-200'
                         : 'bg-red-50 border-red-200'
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-center">
                       <div>
@@ -110,11 +119,10 @@ const ApiTestPage = () => {
                           Status: {result.status}
                         </p>
                       </div>
-                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        result.ok 
-                          ? 'bg-green-100 text-green-800' 
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${result.ok
+                          ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
-                      }`}>
+                        }`}>
                         {result.ok ? 'SUCCESS' : 'FAILED'}
                       </div>
                     </div>
