@@ -1,9 +1,8 @@
+/// <reference types="jest" />
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
 declare global {
-  function afterEach(fn: () => void): void;
-
   interface Window {
     ResizeObserver: typeof ResizeObserver;
     IntersectionObserver: typeof IntersectionObserver;

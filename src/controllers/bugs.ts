@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import type { AuthRequest } from '@/types/express-types';
 import { prisma } from "../lib/prisma";
 import { BugStatus, BugPriority } from "@prisma/client";
 
-export const createBug = async (req: Request, res: Response) => {
+export const createBug = async (req: AuthRequest, res: Response) => {
   try {
     const { title, description, projectId, taskId, status, priority } = req.body;
 
@@ -24,7 +25,7 @@ export const createBug = async (req: Request, res: Response) => {
   }
 };
 
-export const getBug = async (req: Request, res: Response) => {
+export const getBug = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -46,7 +47,7 @@ export const getBug = async (req: Request, res: Response) => {
   }
 };
 
-export const updateBug = async (req: Request, res: Response) => {
+export const updateBug = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { title, description, status, priority } = req.body;
@@ -70,7 +71,7 @@ export const updateBug = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteBug = async (req: Request, res: Response) => {
+export const deleteBug = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 

@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient, ProjectRole } from '@prisma/client';
 import { ApiError } from '../utils/ApiError';
 
 const prisma = new PrismaClient();
 
 // Get all projects with pagination and filters
-export const getProjects = async (req: Request, res: Response, next: NextFunction) => {
+export const getProjects = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -69,7 +70,7 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Get project by ID
-export const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
+export const getProjectById = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const project = await prisma.project.findUnique({
       where: { id: req.params.id },
@@ -105,7 +106,7 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
 };
 
 // Create new project
-export const createProject = async (req: Request, res: Response, next: NextFunction) => {
+export const createProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -152,7 +153,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 };
 
 // Update project
-export const updateProject = async (req: Request, res: Response, next: NextFunction) => {
+export const updateProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { name, description, status, startDate, endDate } = req.body;
 
@@ -188,7 +189,7 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
 };
 
 // Delete project
-export const deleteProject = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await prisma.project.delete({
       where: { id: req.params.id }
@@ -201,7 +202,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 };
 
 // Add project member
-export const addProjectMember = async (req: Request, res: Response, next: NextFunction) => {
+export const addProjectMember = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { userId, role } = req.body;
 
@@ -229,7 +230,7 @@ export const addProjectMember = async (req: Request, res: Response, next: NextFu
 };
 
 // Update project member role
-export const updateProjectMember = async (req: Request, res: Response, next: NextFunction) => {
+export const updateProjectMember = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { role } = req.body;
 
@@ -259,7 +260,7 @@ export const updateProjectMember = async (req: Request, res: Response, next: Nex
 };
 
 // Remove project member
-export const removeProjectMember = async (req: Request, res: Response, next: NextFunction) => {
+export const removeProjectMember = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await prisma.projectMember.delete({
       where: {

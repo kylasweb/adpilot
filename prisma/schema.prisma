@@ -419,7 +419,7 @@ model Invoice {
 model Lead {
   id              String          @id @default(uuid())
   name            String
-  email           String?
+  email           String? @unique
   phone           String
   company         String?
   title           String?

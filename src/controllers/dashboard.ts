@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
 
 // Get dashboard statistics
-export const getDashboardStats = async (req: Request, res: Response, next: NextFunction) => {
+export const getDashboardStats = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -57,7 +58,7 @@ export const getDashboardStats = async (req: Request, res: Response, next: NextF
 };
 
 // Get recent activity
-export const getRecentActivity = async (req: Request, res: Response, next: NextFunction) => {
+export const getRecentActivity = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');

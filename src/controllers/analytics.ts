@@ -1,12 +1,12 @@
 import { Response, NextFunction } from 'express';
-import type { Request } from '../types/express';
+import type { AuthRequest } from '@/types/express-types';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
 import { AnalyticsFilterSchema } from '../schemas/analytics';
 
 // Get performance overview data
-export const getPerformanceOverview = async (req: Request, res: Response, next: NextFunction) => {
+export const getPerformanceOverview = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -40,7 +40,8 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
         const campaignIds = campaigns.map((c: { id: string }) => c.id);
 
         // Get impressions, clicks, conversions data
-        const performanceData: any[] = await prisma.$queryRaw`
+        type PerformanceRow = { date: string; impressions: string | number; clicks: string | number; conversions: string | number };
+        const performanceData: PerformanceRow[] = await prisma.$queryRaw`
       SELECT 
         DATE(created_at) as date,
         SUM(impressions) as impressions,
@@ -53,7 +54,8 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
     `;
 
         // Get campaign ROAS data
-        const campaignRoasData: any[] = await prisma.$queryRaw`
+        type CampaignRoasRow = { name: string; total_spend: string | number; total_value: string | number };
+        const campaignRoasData: CampaignRoasRow[] = await prisma.$queryRaw`
       SELECT 
         c.name,
         SUM(cp.spend) as total_spend,
@@ -65,13 +67,14 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
     `;
 
         // Calculate ROAS for each campaign
-        const roasData = campaignRoasData.map((data: any) => ({
+        const roasData = campaignRoasData.map((data: CampaignRoasRow) => ({
             name: data.name,
-            value: data.total_spend > 0 ? parseFloat((data.total_value / data.total_spend).toFixed(2)) : 0
+            value: data.total_spend > 0 ? parseFloat((Number(data.total_value) / Number(data.total_spend)).toFixed(2)) : 0
         }));
 
         // Get placement distribution data
-        const placementData: any[] = await prisma.$queryRaw`
+        type PlacementRow = { platform: string; count: number };
+        const placementData: PlacementRow[] = await prisma.$queryRaw`
       SELECT 
         platform,
         COUNT(*) as count
@@ -81,20 +84,20 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
     `;
 
         // Format placement data as percentages
-        const totalPlacements = placementData.reduce((sum: number, item: any) => sum + item.count, 0);
-        const placementDistribution = placementData.map((item: any) => ({
+        const totalPlacements = placementData.reduce((sum: number, item: PlacementRow) => sum + item.count, 0);
+        const placementDistribution = placementData.map((item: PlacementRow) => ({
             name: item.platform,
             value: parseFloat(((item.count / totalPlacements) * 100).toFixed(0))
         }));
 
         // Calculate summary statistics
-        const totalImpressions = performanceData.reduce((sum: number, day: any) => sum + parseInt(day.impressions), 0);
-        const totalClicks = performanceData.reduce((sum: number, day: any) => sum + parseInt(day.clicks), 0);
-        const totalConversions = performanceData.reduce((sum: number, day: any) => sum + parseInt(day.conversions), 0);
+        const totalImpressions = performanceData.reduce((sum: number, day: PerformanceRow) => sum + parseInt(String(day.impressions)), 0);
+        const totalClicks = performanceData.reduce((sum: number, day: PerformanceRow) => sum + parseInt(String(day.clicks)), 0);
+        const totalConversions = performanceData.reduce((sum: number, day: PerformanceRow) => sum + parseInt(String(day.conversions)), 0);
 
         const ctr = totalImpressions > 0 ? parseFloat(((totalClicks / totalImpressions) * 100).toFixed(2)) : 0;
         const avgRoas = roasData.length > 0
-            ? parseFloat((roasData.reduce((sum: number, item: any) => sum + item.value, 0) / roasData.length).toFixed(2))
+            ? parseFloat((roasData.reduce((sum: number, item: { value: number }) => sum + item.value, 0) / roasData.length).toFixed(2))
             : 0;
 
         res.json({
@@ -115,7 +118,7 @@ export const getPerformanceOverview = async (req: Request, res: Response, next: 
 };
 
 // Get campaign metrics
-export const getCampaignMetrics = async (req: Request, res: Response, next: NextFunction) => {
+export const getCampaignMetrics = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -145,11 +148,12 @@ export const getCampaignMetrics = async (req: Request, res: Response, next: Next
         });
 
         // Calculate metrics for each campaign
-        const campaignMetrics = campaigns.map((campaign: any) => {
-            const totalImpressions = campaign.performance.reduce((sum: number, perf: any) => sum + perf.impressions, 0);
-            const totalClicks = campaign.performance.reduce((sum: number, perf: any) => sum + perf.clicks, 0);
-            const totalConversions = campaign.performance.reduce((sum: number, perf: any) => sum + perf.conversions, 0);
-            const totalSpend = campaign.performance.reduce((sum: number, perf: any) => sum + perf.spend, 0);
+        type Perf = { impressions: number; clicks: number; conversions: number; spend?: number };
+        const campaignMetrics = campaigns.map((campaign: { performance?: Perf[] } ) => {
+            const totalImpressions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.impressions || 0), 0);
+            const totalClicks = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.clicks || 0), 0);
+            const totalConversions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.conversions || 0), 0);
+            const totalSpend = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.spend || 0), 0);
 
             const ctr = totalImpressions > 0 ? parseFloat(((totalClicks / totalImpressions) * 100).toFixed(2)) : 0;
             const cpc = totalClicks > 0 ? parseFloat((totalSpend / totalClicks).toFixed(2)) : 0;
@@ -180,7 +184,7 @@ export const getCampaignMetrics = async (req: Request, res: Response, next: Next
 };
 
 // Get audience insights
-export const getAudienceInsights = async (req: Request, res: Response, next: NextFunction) => {
+export const getAudienceInsights = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -204,7 +208,8 @@ export const getAudienceInsights = async (req: Request, res: Response, next: Nex
 
         // Get audience data
         const campaignIds = campaigns.map((c: { id: string }) => c.id);
-        const audienceData: any[] = await prisma.$queryRaw`
+        type AudienceRow = { age_group: string; gender: string; location: string; interests: string; count: number };
+        const audienceData: AudienceRow[] = await prisma.$queryRaw`
       SELECT 
         age_group,
         gender,
@@ -219,7 +224,8 @@ export const getAudienceInsights = async (req: Request, res: Response, next: Nex
     `;
 
         // Get demographic breakdown
-        const demographics: any[] = await prisma.$queryRaw`
+        type DemographicsRow = { age_group: string; gender: string; count: number };
+        const demographics: DemographicsRow[] = await prisma.$queryRaw`
       SELECT 
         age_group,
         gender,
@@ -231,7 +237,8 @@ export const getAudienceInsights = async (req: Request, res: Response, next: Nex
     `;
 
         // Get top interests
-        const interests: any[] = await prisma.$queryRaw`
+        type InterestsRow = { interests: string; count: number };
+        const interests: InterestsRow[] = await prisma.$queryRaw`
       SELECT 
         interests,
         COUNT(*) as count
@@ -243,7 +250,8 @@ export const getAudienceInsights = async (req: Request, res: Response, next: Nex
     `;
 
         // Get geographic distribution
-        const locations: any[] = await prisma.$queryRaw`
+        type LocationRow = { location: string; count: number };
+        const locations: LocationRow[] = await prisma.$queryRaw`
       SELECT 
         location,
         COUNT(*) as count

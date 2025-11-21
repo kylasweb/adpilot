@@ -121,7 +121,8 @@ router.get('/:id', async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
+            return;
         }
 
         res.json(user);
@@ -138,7 +139,8 @@ router.post('/', async (req, res) => {
 
         // Validation
         if (!email || !name || !password) {
-            return res.status(400).json({ error: 'Email, name, and password are required' });
+            res.status(400).json({ error: 'Email, name, and password are required' });
+            return;
         }
 
         // Check if user already exists
@@ -147,7 +149,8 @@ router.post('/', async (req, res) => {
         });
 
         if (existingUser) {
-            return res.status(409).json({ error: 'User with this email already exists' });
+            res.status(409).json({ error: 'User with this email already exists' });
+            return;
         }
 
         // In production, hash the password before storing
@@ -212,7 +215,8 @@ router.put('/:id', async (req, res) => {
         res.json(user);
     } catch (error: any) {
         if (error.code === 'P2025') {
-            return res.status(404).json({ error: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
+            return;
         }
         console.error('Error updating user:', error);
         res.status(500).json({ error: 'Failed to update user' });
@@ -231,7 +235,8 @@ router.delete('/:id', async (req, res) => {
         res.json({ message: 'User deleted successfully' });
     } catch (error: any) {
         if (error.code === 'P2025') {
-            return res.status(404).json({ error: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
+            return;
         }
         console.error('Error deleting user:', error);
         res.status(500).json({ error: 'Failed to delete user' });
@@ -244,7 +249,8 @@ router.post('/bulk-action', async (req, res) => {
         const { action, userIds } = req.body;
 
         if (!action || !userIds || !Array.isArray(userIds)) {
-            return res.status(400).json({ error: 'Action and userIds array are required' });
+            res.status(400).json({ error: 'Action and userIds array are required' });
+            return;
         }
 
         let result;
@@ -278,7 +284,8 @@ router.post('/bulk-action', async (req, res) => {
                 break;
 
             default:
-                return res.status(400).json({ error: 'Invalid action' });
+                res.status(400).json({ error: 'Invalid action' });
+                return;
         }
 
         res.json({

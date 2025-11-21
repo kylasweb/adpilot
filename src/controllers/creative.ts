@@ -1,7 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { ApiError } from '../utils/ApiError';
+import type { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
+import type { AuthRequest } from '@/types/express-types';
 import {
     CreateCreativeSchema,
     UpdateCreativeSchema,
@@ -9,7 +11,7 @@ import {
 } from '../schemas/creative';
 
 // Get all creatives with filtering and pagination
-export const getCreatives = async (req: Request, res: Response, next: NextFunction) => {
+export const getCreatives = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -24,7 +26,7 @@ export const getCreatives = async (req: Request, res: Response, next: NextFuncti
         const { search, type, campaignId, sortBy } = filterResult.data;
 
         // Build where clause
-        const where: any = {
+        const where: Prisma.CreativeWhereInput = {
             userId: req.user.id,
             ...(search && {
                 OR: [
@@ -37,7 +39,7 @@ export const getCreatives = async (req: Request, res: Response, next: NextFuncti
         };
 
         // Build orderBy clause
-        let orderBy: any = { createdAt: 'desc' };
+        let orderBy: Prisma.CreativeOrderByWithRelationInput = { createdAt: 'desc' };
         if (sortBy === 'oldest') {
             orderBy = { createdAt: 'asc' };
         } else if (sortBy === 'alphabetical') {
@@ -96,7 +98,7 @@ export const getCreatives = async (req: Request, res: Response, next: NextFuncti
 };
 
 // Get a single creative by ID
-export const getCreativeById = async (req: Request, res: Response, next: NextFunction) => {
+export const getCreativeById = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -144,7 +146,7 @@ export const getCreativeById = async (req: Request, res: Response, next: NextFun
 };
 
 // Create a new creative
-export const createCreative = async (req: Request, res: Response, next: NextFunction) => {
+export const createCreative = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -203,7 +205,7 @@ export const createCreative = async (req: Request, res: Response, next: NextFunc
 };
 
 // Update a creative
-export const updateCreative = async (req: Request, res: Response, next: NextFunction) => {
+export const updateCreative = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -272,7 +274,7 @@ export const updateCreative = async (req: Request, res: Response, next: NextFunc
 };
 
 // Delete a creative
-export const deleteCreative = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCreative = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -280,7 +282,6 @@ export const deleteCreative = async (req: Request, res: Response, next: NextFunc
 
         const { id } = req.params;
 
-        // Verify creative belongs to user
         const creative = await prisma.creative.findFirst({
             where: {
                 id,

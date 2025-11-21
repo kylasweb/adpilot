@@ -39,7 +39,9 @@
         "src/services/**/*.ts",
         "src/lib/**/*.ts",
         "src/utils/**/*.ts",
-        "src/config/**/*.ts"
+        "src/config/**/*.ts",
+        "src/types/**/*.ts",
+        "src/types/**/*.d.ts"
     ],
     "exclude": [
         "node_modules",

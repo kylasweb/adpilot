@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient } from '@prisma/client';
 import {
     canAccessLead,
     filterLeadsByRole,
-    logAccess,
-    AuthenticatedRequest
+    logAccess
 } from '../middleware/rbac.js';
 import { authorize as requireAuth } from '../middleware/authorize.js';
 
@@ -15,12 +15,12 @@ const prisma = new PrismaClient();
 router.use(requireAuth());
 
 // GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads'), async (req: Request, res: Response) => {
+router.get('/', logAccess('leads'), async (req: import('express').Request, res: Response, next: NextFunction) => {
     try {
         const { status, source, urgency, minScore, search, page = '1', limit = '20' } = req.query;
 
         // Build filter based on user role
-        const roleFilter = await filterLeadsByRole(req);
+        const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
         const where: any = {
             ...roleFilter
@@ -90,9 +90,9 @@ router.get('/', logAccess('leads'), async (req: Request, res: Response) => {
 });
 
 // GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats'), async (req: Request, res: Response) => {
+router.get('/stats', logAccess('lead-stats'), async (req: import('express').Request, res: Response, next: NextFunction) => {
     try {
-        const roleFilter = await filterLeadsByRole(req);
+        const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
         const [
             totalLeads,
@@ -127,7 +127,7 @@ router.get('/stats', logAccess('lead-stats'), async (req: Request, res: Response
 });
 
 // GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request, res: Response) => {
+router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { id } = req.params;
 
@@ -155,7 +155,7 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request,
         });
 
         if (!lead) {
-            return res.status(404).json({ error: 'Lead not found' });
+            res.status(404).json({ error: 'Lead not found' });
         }
 
         res.json(lead);
@@ -166,7 +166,7 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request,
 });
 
 // POST /api/leads - Create new lead
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', async (req: import('express').Request, res: Response, next: NextFunction) => {
     try {
         const {
             name,
@@ -185,7 +185,7 @@ router.post('/', async (req: Request, res: Response) => {
 
         // Validate required fields
         if (!name || !phone || !source) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: 'Missing required fields: name, phone, source'
             });
         }
@@ -215,7 +215,7 @@ router.post('/', async (req: Request, res: Response) => {
                 type: 'NOTE',
                 action: 'Lead created',
                 details: `Lead created from ${source}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -227,7 +227,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
+router.put('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -244,7 +244,7 @@ router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
                 type: 'NOTE',
                 action: 'Lead updated',
                 details: `Fields updated: ${Object.keys(updateData).join(', ')}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -256,13 +256,13 @@ router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
 });
 
 // POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => {
+router.post('/:id/score', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { id } = req.params;
         const { score, factors, confidence, notes } = req.body;
 
         if (!score || score < 0 || score > 100) {
-            return res.status(400).json({ error: 'Score must be between 0 and 100' });
+            res.status(400).json({ error: 'Score must be between 0 and 100' });
         }
 
         // Create score record
@@ -276,7 +276,7 @@ router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => 
                 companySize: factors?.companySize,
                 industry: factors?.industry,
                 confidence,
-                calculatedBy: (req as AuthenticatedRequest).user?.id,
+                calculatedBy: (req as AuthRequest).user?.id,
                 notes
             }
         });
@@ -294,7 +294,7 @@ router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => 
                 type: 'SCORE_UPDATE',
                 action: 'Score updated',
                 details: `Score changed to ${score}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -306,7 +306,7 @@ router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => 
 });
 
 // POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', async (req: Request, res: Response) => {
+router.post('/:id/ivr-transcript', async (req: import('express').Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const {
@@ -355,7 +355,7 @@ router.post('/:id/ivr-transcript', async (req: Request, res: Response) => {
 });
 
 // POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) => {
+router.post('/:id/activity', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { id } = req.params;
         const { type, action, details, metadata } = req.body;
@@ -366,7 +366,7 @@ router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) 
                 type,
                 action,
                 details,
-                performedBy: (req as AuthenticatedRequest).user?.id,
+                performedBy: (req as AuthRequest).user?.id,
                 metadata
             }
         });
@@ -379,7 +379,7 @@ router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) 
 });
 
 // DELETE /api/leads/:id - Delete lead (soft delete)
-router.delete('/:id', canAccessLead, async (req: Request, res: Response) => {
+router.delete('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { id } = req.params;
 

@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import * as jwt from 'jsonwebtoken';
 import { prisma } from '../lib/prisma';
 import { ApiError } from '../utils/ApiError';
@@ -10,7 +11,7 @@ interface JWTPayload {
 }
 
 export const authorize = (allowedRoles?: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       // Extract token from authorization header
       const authHeader = req.headers.authorization;
@@ -77,7 +78,7 @@ export const authorize = (allowedRoles?: string[]) => {
 
 // Middleware to check if user has required project role
 export const requireProjectRole = (allowedRoles: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const { projectId } = req.params;
       const userId = req.user?.id;

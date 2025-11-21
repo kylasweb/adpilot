@@ -15,13 +15,20 @@ export interface Campaign {
 }
 
 // Get all campaigns
+export interface Meta {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+}
+
 export const getCampaigns = async (params: {
     page?: number;
     limit?: number;
     status?: string;
     sort?: string;
     order?: string;
-}): Promise<{ data: Campaign[]; meta: any }> => {
+}): Promise<{ data: Campaign[]; meta: Meta }> => {
     const searchParams = new URLSearchParams();
 
     if (params.page) searchParams.append('page', params.page.toString());

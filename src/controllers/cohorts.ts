@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
@@ -8,7 +9,7 @@ import {
 } from '../schemas/cohort';
 
 // Get all cohorts with pagination and filters
-export const getCohorts = async (req: Request, res: Response, next: NextFunction) => {
+export const getCohorts = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -57,7 +58,7 @@ export const getCohorts = async (req: Request, res: Response, next: NextFunction
 };
 
 // Get cohort by ID
-export const getCohortById = async (req: Request, res: Response, next: NextFunction) => {
+export const getCohortById = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const cohort = await prisma.cohort.findUnique({
             where: { id: req.params.id },
@@ -88,7 +89,7 @@ export const getCohortById = async (req: Request, res: Response, next: NextFunct
 };
 
 // Create new cohort
-export const createCohort = async (req: Request, res: Response, next: NextFunction) => {
+export const createCohort = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -122,7 +123,7 @@ export const createCohort = async (req: Request, res: Response, next: NextFuncti
 };
 
 // Update cohort
-export const updateCohort = async (req: Request, res: Response, next: NextFunction) => {
+export const updateCohort = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const { name, description, criteria, audienceSize } = req.body;
 
@@ -165,7 +166,7 @@ export const updateCohort = async (req: Request, res: Response, next: NextFuncti
 };
 
 // Delete cohort
-export const deleteCohort = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCohort = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         // First, check if cohort exists and user has permission
         const existingCohort = await prisma.cohort.findUnique({

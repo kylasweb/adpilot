@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import type { AuthRequest } from '@/types/express-types';
 import { prisma } from "../lib/prisma";
 
-export const createRoadmap = async (req: Request, res: Response) => {
+export const createRoadmap = async (req: AuthRequest, res: Response) => {
   try {
     const { name, description, projectId } = req.body;
 
@@ -14,13 +15,13 @@ export const createRoadmap = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(roadmap);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
   }
 };
 
-export const getRoadmap = async (req: Request, res: Response) => {
+export const getRoadmap = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -36,14 +37,14 @@ export const getRoadmap = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(roadmap);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
     return;
   }
 };
 
-export const updateRoadmap = async (req: Request, res: Response) => {
+export const updateRoadmap = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body;
@@ -59,13 +60,13 @@ export const updateRoadmap = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(roadmap);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
   }
 };
 
-export const deleteRoadmap = async (req: Request, res: Response) => {
+export const deleteRoadmap = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -76,8 +77,8 @@ export const deleteRoadmap = async (req: Request, res: Response) => {
     });
 
     res.status(204).send();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
   }
 };
