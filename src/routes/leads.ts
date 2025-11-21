@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient } from '@prisma/client';
 import {
@@ -87,10 +87,17 @@ router.get('/', logAccess('leads'), async (req: import('express').Request, res: 
         console.error('Error fetching leads:', error);
         res.status(500).json({ error: 'Failed to fetch leads' });
     }
-});
+};
 
+<<<<<<< HEAD
 // GET /api/leads/stats - Get lead statistics
 router.get('/stats', logAccess('lead-stats'), async (req: import('express').Request, res: Response, next: NextFunction) => {
+=======
+// GET /api/leads - Get all leads (filtered by role)
+router.get('/', logAccess('leads') as any, getLeadsHandler as any);
+
+const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
@@ -124,10 +131,17 @@ router.get('/stats', logAccess('lead-stats'), async (req: import('express').Requ
         console.error('Error fetching lead stats:', error);
         res.status(500).json({ error: 'Failed to fetch statistics' });
     }
-});
+};
 
+<<<<<<< HEAD
 // GET /api/leads/:id - Get single lead
 router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
+=======
+// GET /api/leads/stats - Get lead statistics
+router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
+
+const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
 
@@ -156,6 +170,10 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: import('
 
         if (!lead) {
             res.status(404).json({ error: 'Lead not found' });
+<<<<<<< HEAD
+=======
+            return;
+>>>>>>> origin/nextjs-migration
         }
 
         res.json(lead);
@@ -163,10 +181,17 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: import('
         console.error('Error fetching lead:', error);
         res.status(500).json({ error: 'Failed to fetch lead' });
     }
-});
+};
 
+<<<<<<< HEAD
 // POST /api/leads - Create new lead
 router.post('/', async (req: import('express').Request, res: Response, next: NextFunction) => {
+=======
+// GET /api/leads/:id - Get single lead
+router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
+
+const createLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const {
             name,
@@ -188,6 +213,7 @@ router.post('/', async (req: import('express').Request, res: Response, next: Nex
             res.status(400).json({
                 error: 'Missing required fields: name, phone, source'
             });
+            return;
         }
 
         const lead = await prisma.lead.create({
@@ -224,10 +250,17 @@ router.post('/', async (req: import('express').Request, res: Response, next: Nex
         console.error('Error creating lead:', error);
         res.status(500).json({ error: 'Failed to create lead' });
     }
-});
+};
 
+<<<<<<< HEAD
 // PUT /api/leads/:id - Update lead
 router.put('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
+=======
+// POST /api/leads - Create new lead
+router.post('/', createLeadHandler as any);
+
+const updateLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -253,16 +286,27 @@ router.put('/:id', canAccessLead, async (req: import('express').Request, res: Re
         console.error('Error updating lead:', error);
         res.status(500).json({ error: 'Failed to update lead' });
     }
-});
+};
 
+<<<<<<< HEAD
 // POST /api/leads/:id/score - Update lead score
 router.post('/:id/score', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
+=======
+// PUT /api/leads/:id - Update lead
+router.put('/:id', canAccessLead as any, updateLeadHandler as any);
+
+const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const { score, factors, confidence, notes } = req.body;
 
         if (!score || score < 0 || score > 100) {
             res.status(400).json({ error: 'Score must be between 0 and 100' });
+<<<<<<< HEAD
+=======
+            return;
+>>>>>>> origin/nextjs-migration
         }
 
         // Create score record
@@ -303,10 +347,17 @@ router.post('/:id/score', canAccessLead, async (req: import('express').Request, 
         console.error('Error updating score:', error);
         res.status(500).json({ error: 'Failed to update score' });
     }
-});
+};
 
+<<<<<<< HEAD
 // POST /api/leads/:id/ivr-transcript - Add IVR transcript
 router.post('/:id/ivr-transcript', async (req: import('express').Request, res: Response, next: NextFunction) => {
+=======
+// POST /api/leads/:id/score - Update lead score
+router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
+
+const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const {
@@ -352,10 +403,17 @@ router.post('/:id/ivr-transcript', async (req: import('express').Request, res: R
         console.error('Error creating IVR transcript:', error);
         res.status(500).json({ error: 'Failed to create transcript' });
     }
-});
+};
 
+<<<<<<< HEAD
 // POST /api/leads/:id/activity - Add activity
 router.post('/:id/activity', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
+=======
+// POST /api/leads/:id/ivr-transcript - Add IVR transcript
+router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
+
+const addActivityHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const { type, action, details, metadata } = req.body;
@@ -376,10 +434,17 @@ router.post('/:id/activity', canAccessLead, async (req: import('express').Reques
         console.error('Error creating activity:', error);
         res.status(500).json({ error: 'Failed to create activity' });
     }
-});
+};
 
+<<<<<<< HEAD
 // DELETE /api/leads/:id - Delete lead (soft delete)
 router.delete('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
+=======
+// POST /api/leads/:id/activity - Add activity
+router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
+
+const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+>>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
 
@@ -393,6 +458,9 @@ router.delete('/:id', canAccessLead, async (req: import('express').Request, res:
         console.error('Error deleting lead:', error);
         res.status(500).json({ error: 'Failed to delete lead' });
     }
-});
+};
+
+// DELETE /api/leads/:id - Delete lead (soft delete)
+router.delete('/:id', canAccessLead as any, deleteLeadHandler as any);
 
 export default router;

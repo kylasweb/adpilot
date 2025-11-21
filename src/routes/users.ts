@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { PrismaClient, UserRole, UserStatus } from '@prisma/client';
 
 const router = Router();
 const prisma = new PrismaClient();
 
 // GET /api/users - List all users with pagination and filtering
-router.get('/', async (req, res) => {
+router.get('/', (async (req: Request, res: Response) => {
     try {
         const {
             page = '1',
@@ -84,10 +84,10 @@ router.get('/', async (req, res) => {
         console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Failed to fetch users' });
     }
-});
+}) as any);
 
 // GET /api/users/:id - Get a single user
-router.get('/:id', async (req, res) => {
+router.get('/:id', (async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -130,10 +130,10 @@ router.get('/:id', async (req, res) => {
         console.error('Error fetching user:', error);
         res.status(500).json({ error: 'Failed to fetch user' });
     }
-});
+}) as any);
 
 // POST /api/users - Create a new user
-router.post('/', async (req, res) => {
+router.post('/', (async (req: Request, res: Response) => {
     try {
         const { email, name, password, role = 'USER', status = 'ACTIVE', avatarUrl } = req.body;
 
@@ -181,10 +181,10 @@ router.post('/', async (req, res) => {
         console.error('Error creating user:', error);
         res.status(500).json({ error: 'Failed to create user' });
     }
-});
+}) as any);
 
 // PUT /api/users/:id - Update a user
-router.put('/:id', async (req, res) => {
+router.put('/:id', (async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { email, name, role, status, avatarUrl } = req.body;
@@ -221,10 +221,10 @@ router.put('/:id', async (req, res) => {
         console.error('Error updating user:', error);
         res.status(500).json({ error: 'Failed to update user' });
     }
-});
+}) as any);
 
 // DELETE /api/users/:id - Delete a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -241,10 +241,10 @@ router.delete('/:id', async (req, res) => {
         console.error('Error deleting user:', error);
         res.status(500).json({ error: 'Failed to delete user' });
     }
-});
+}) as any);
 
 // POST /api/users/bulk-action - Bulk actions on users
-router.post('/bulk-action', async (req, res) => {
+router.post('/bulk-action', (async (req: Request, res: Response) => {
     try {
         const { action, userIds } = req.body;
 
@@ -296,6 +296,6 @@ router.post('/bulk-action', async (req, res) => {
         console.error('Error performing bulk action:', error);
         res.status(500).json({ error: 'Failed to perform bulk action' });
     }
-});
+}) as any);
 
 export default router;

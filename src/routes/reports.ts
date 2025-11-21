@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { requireCLevel, logAccess } from '../middleware/rbac.js';
+import { requireCLevel, logAccess } from '../middleware/rbac';
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // All routes require C-Level access
-router.use(requireCLevel);
+router.use(requireCLevel as any);
 
 // Helper function to wrap async route handlers
 const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>

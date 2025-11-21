@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import App from '../App'
+import { Providers } from './providers'
 import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -25,10 +25,10 @@ export default function RootLayout({
                 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet" />
             </head>
             <body className={inter.className}>
-                <App>
+                <Providers>
                     {children}
                     <Toaster />
-                </App>
+                </Providers>
             </body>
         </html>
     )
