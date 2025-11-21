@@ -1,4 +1,4 @@
-/// <reference path="./types/index.d.ts" />
+// types are picked up automatically from declaration files in the project (no triple-slash references)
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
