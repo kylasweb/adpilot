@@ -1,4 +1,4 @@
-// types are picked up automatically (see tsconfig include for .d.ts files)
+// types are picked up automatically from declaration files in the project (no triple-slash references)
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
