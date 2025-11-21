@@ -1,5 +1,4 @@
-import { Response, NextFunction } from 'express';
-import type { Request } from '../types/express';
+import { Request, Response, NextFunction } from 'express';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';

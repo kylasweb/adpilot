@@ -1,11 +1,10 @@
-
 'use client'
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 import { useEffect } from "react";
-import { initializeDefaultProviders } from "./services/apiKeyManager";
+import { initializeDefaultProviders } from "../services/apiKeyManager";
 
-const App = ({ children }: { children: React.ReactNode }) => {
+export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Initialize API providers when app starts
     initializeDefaultProviders();
@@ -16,6 +15,4 @@ const App = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AuthProvider>
   );
-};
-
-export default App;
+}

@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authorize } from '../middleware/authorize.js';
+import { authorize } from '../middleware/authorize';
 
 const router = express.Router();
 const prisma = new PrismaClient();

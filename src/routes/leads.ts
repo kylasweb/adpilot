@@ -1,12 +1,12 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import { PrismaClient } from '@prisma/client';
 import {
     canAccessLead,
     filterLeadsByRole,
     logAccess,
     AuthenticatedRequest
-} from '../middleware/rbac.js';
-import { authorize as requireAuth } from '../middleware/authorize.js';
+} from '../middleware/rbac';
+import { authorize as requireAuth } from '../middleware/authorize';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -14,8 +14,7 @@ const prisma = new PrismaClient();
 // Apply authentication to all routes
 router.use(requireAuth());
 
-// GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads'), async (req: Request, res: Response) => {
+const getLeadsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { status, source, urgency, minScore, search, page = '1', limit = '20' } = req.query;
 
@@ -87,10 +86,12 @@ router.get('/', logAccess('leads'), async (req: Request, res: Response) => {
         console.error('Error fetching leads:', error);
         res.status(500).json({ error: 'Failed to fetch leads' });
     }
-});
+};
 
-// GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats'), async (req: Request, res: Response) => {
+// GET /api/leads - Get all leads (filtered by role)
+router.get('/', logAccess('leads') as any, getLeadsHandler as any);
+
+const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const roleFilter = await filterLeadsByRole(req);
 
@@ -124,10 +125,12 @@ router.get('/stats', logAccess('lead-stats'), async (req: Request, res: Response
         console.error('Error fetching lead stats:', error);
         res.status(500).json({ error: 'Failed to fetch statistics' });
     }
-});
+};
 
-// GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request, res: Response) => {
+// GET /api/leads/stats - Get lead statistics
+router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
+
+const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -155,7 +158,8 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request,
         });
 
         if (!lead) {
-            return res.status(404).json({ error: 'Lead not found' });
+            res.status(404).json({ error: 'Lead not found' });
+            return;
         }
 
         res.json(lead);
@@ -163,10 +167,12 @@ router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: Request,
         console.error('Error fetching lead:', error);
         res.status(500).json({ error: 'Failed to fetch lead' });
     }
-});
+};
 
-// POST /api/leads - Create new lead
-router.post('/', async (req: Request, res: Response) => {
+// GET /api/leads/:id - Get single lead
+router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
+
+const createLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {
             name,
@@ -185,9 +191,10 @@ router.post('/', async (req: Request, res: Response) => {
 
         // Validate required fields
         if (!name || !phone || !source) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: 'Missing required fields: name, phone, source'
             });
+            return;
         }
 
         const lead = await prisma.lead.create({
@@ -224,10 +231,12 @@ router.post('/', async (req: Request, res: Response) => {
         console.error('Error creating lead:', error);
         res.status(500).json({ error: 'Failed to create lead' });
     }
-});
+};
 
-// PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
+// POST /api/leads - Create new lead
+router.post('/', createLeadHandler as any);
+
+const updateLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -253,16 +262,19 @@ router.put('/:id', canAccessLead, async (req: Request, res: Response) => {
         console.error('Error updating lead:', error);
         res.status(500).json({ error: 'Failed to update lead' });
     }
-});
+};
 
-// POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => {
+// PUT /api/leads/:id - Update lead
+router.put('/:id', canAccessLead as any, updateLeadHandler as any);
+
+const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const { score, factors, confidence, notes } = req.body;
 
         if (!score || score < 0 || score > 100) {
-            return res.status(400).json({ error: 'Score must be between 0 and 100' });
+            res.status(400).json({ error: 'Score must be between 0 and 100' });
+            return;
         }
 
         // Create score record
@@ -303,10 +315,12 @@ router.post('/:id/score', canAccessLead, async (req: Request, res: Response) => 
         console.error('Error updating score:', error);
         res.status(500).json({ error: 'Failed to update score' });
     }
-});
+};
 
-// POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', async (req: Request, res: Response) => {
+// POST /api/leads/:id/score - Update lead score
+router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
+
+const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const {
@@ -352,10 +366,12 @@ router.post('/:id/ivr-transcript', async (req: Request, res: Response) => {
         console.error('Error creating IVR transcript:', error);
         res.status(500).json({ error: 'Failed to create transcript' });
     }
-});
+};
 
-// POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) => {
+// POST /api/leads/:id/ivr-transcript - Add IVR transcript
+router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
+
+const addActivityHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const { type, action, details, metadata } = req.body;
@@ -376,10 +392,12 @@ router.post('/:id/activity', canAccessLead, async (req: Request, res: Response) 
         console.error('Error creating activity:', error);
         res.status(500).json({ error: 'Failed to create activity' });
     }
-});
+};
 
-// DELETE /api/leads/:id - Delete lead (soft delete)
-router.delete('/:id', canAccessLead, async (req: Request, res: Response) => {
+// POST /api/leads/:id/activity - Add activity
+router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
+
+const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -393,6 +411,9 @@ router.delete('/:id', canAccessLead, async (req: Request, res: Response) => {
         console.error('Error deleting lead:', error);
         res.status(500).json({ error: 'Failed to delete lead' });
     }
-});
+};
+
+// DELETE /api/leads/:id - Delete lead (soft delete)
+router.delete('/:id', canAccessLead as any, deleteLeadHandler as any);
 
 export default router;
