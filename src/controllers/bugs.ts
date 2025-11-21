@@ -3,7 +3,25 @@ import type { AuthRequest } from '@/types/express-types';
 import { prisma } from "../lib/prisma";
 import { BugStatus, BugPriority } from "@prisma/client";
 
-export const createBug = async (req: AuthRequest, res: Response) => {
+type CreateBugBody = {
+  title: string;
+  description?: string | null;
+  projectId: string;
+  taskId?: string | null;
+  status?: BugStatus;
+  priority?: BugPriority;
+};
+
+type UpdateBugBody = {
+  title?: string;
+  description?: string | null;
+  status?: BugStatus;
+  priority?: BugPriority;
+};
+
+type BugParams = { id: string };
+
+export const createBug = async (req: AuthRequest<Record<string, never>, any, CreateBugBody>, res: Response) => {
   try {
     const { title, description, projectId, taskId, status, priority } = req.body;
 
@@ -25,7 +43,7 @@ export const createBug = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const getBug = async (req: AuthRequest, res: Response) => {
+export const getBug = async (req: AuthRequest<BugParams, any, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -47,7 +65,7 @@ export const getBug = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const updateBug = async (req: AuthRequest, res: Response) => {
+export const updateBug = async (req: AuthRequest<BugParams, any, UpdateBugBody>, res: Response) => {
   try {
     const { id } = req.params;
     const { title, description, status, priority } = req.body;
@@ -71,7 +89,7 @@ export const updateBug = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const deleteBug = async (req: AuthRequest, res: Response) => {
+export const deleteBug = async (req: AuthRequest<BugParams, any, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 
