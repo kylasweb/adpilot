@@ -1,9 +1,9 @@
 export class ApiError extends Error {
   statusCode: number;
   code: string;
-  details?: any;
+  details?: unknown;
 
-  constructor(statusCode: number, code: string, message: string, details?: any) {
+  constructor(statusCode: number, code: string, message: string, details?: unknown) {
     super(message);
     this.statusCode = statusCode;
     this.code = code;
@@ -23,7 +23,7 @@ export class ApiError extends Error {
     return new ApiError(404, 'NOT_FOUND', message);
   }
 
-  static badRequest(message = 'Bad request', details?: any) {
+  static badRequest(message = 'Bad request', details?: unknown) {
     return new ApiError(400, 'BAD_REQUEST', message, details);
   }
 
@@ -36,6 +36,6 @@ export type ApiErrorResponse = {
   error: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
 };

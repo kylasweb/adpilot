@@ -1,27 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Define the AuthenticatedRequest type
-export interface AuthenticatedRequest extends Request {
-    user?: {
-        id: string;
-        email: string;
-        name: string;
-        role: string;
-        staffRole?: 'ADMIN' | 'STAFF' | 'C_LEVEL' | 'MANAGER';
-    };
-}
-
 // Middleware to check staff role
 export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 'MANAGER')[]) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        // Cast req to access user property
-        const authReq = req as AuthenticatedRequest;
+    return async (req: import('express').Request, res: Response, next: NextFunction) => {
+        // Cast Request to AuthRequest for access to user property
+        const authReq = req as AuthRequest;
 
         if (!authReq.user) {
-            return res.status(401).json({ error: 'Authentication required' });
+            res.status(401).json({ error: 'Authentication required' });
+            return;
         }
 
         try {
@@ -31,19 +22,21 @@ export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 
             });
 
             if (!staffRole) {
-                return res.status(403).json({
+                res.status(403).json({
                     error: 'Access denied: No staff role assigned',
                     required: allowedRoles
                 });
+                return;
             }
 
             // Check if user's role is in allowed roles
             if (!allowedRoles.includes(staffRole.role)) {
-                return res.status(403).json({
+                res.status(403).json({
                     error: 'Access denied: Insufficient permissions',
                     userRole: staffRole.role,
                     required: allowedRoles
                 });
+                return;
             }
 
             // Add staff role to request for use in route handlers
@@ -52,6 +45,7 @@ export const requireStaffRole = (allowedRoles: ('STAFF' | 'C_LEVEL' | 'ADMIN' | 
         } catch (error) {
             console.error('Error checking staff role:', error);
             res.status(500).json({ error: 'Internal server error' });
+            return;
         }
     };
 };
@@ -61,15 +55,16 @@ export const requireCLevel = requireStaffRole(['C_LEVEL', 'ADMIN']);
 
 // Middleware to check if user can access specific lead
 export const canAccessLead = async (
-    req: Request,
+    req: import('express').Request,
     res: Response,
     next: NextFunction
 ) => {
-    // Cast req to access user property
-    const authReq = req as AuthenticatedRequest;
+    // Cast Request to AuthRequest for access to user property
+    const authReq = req as AuthRequest;
 
     if (!authReq.user) {
-        return res.status(401).json({ error: 'Authentication required' });
+        res.status(401).json({ error: 'Authentication required' });
+        return;
     }
 
     try {
@@ -94,28 +89,31 @@ export const canAccessLead = async (
         });
 
         if (!lead) {
-            return res.status(404).json({ error: 'Lead not found' });
+            res.status(404).json({ error: 'Lead not found' });
+            return;
         }
 
         if (lead.assignedTo !== authReq.user.id) {
-            return res.status(403).json({
+            res.status(403).json({
                 error: 'Access denied: Lead not assigned to you',
                 leadId,
                 assignedTo: lead.assignedTo
             });
+            return;
         }
 
         next();
     } catch (error) {
         console.error('Error checking lead access:', error);
         res.status(500).json({ error: 'Internal server error' });
+        return;
     }
 };
 
 // Middleware for lead filtering based on role
-export const filterLeadsByRole = async (req: Request) => {
-    // Cast req to access user property
-    const authReq = req as AuthenticatedRequest;
+export const filterLeadsByRole = async (req: import('express').Request) => {
+    // Cast Request to AuthRequest for access to user property
+    const authReq = req as AuthRequest;
 
     if (!authReq.user) {
         return {};
@@ -138,9 +136,9 @@ export const filterLeadsByRole = async (req: Request) => {
 
 // Log access for audit trail
 export const logAccess = (resource: string) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        // Cast req to access user property
-        const authReq = req as AuthenticatedRequest;
+    return async (req: import('express').Request, res: Response, next: NextFunction) => {
+        // Cast Request to AuthRequest for access to user property
+        const authReq = req as AuthRequest;
 
         if (authReq.user) {
             console.log(`[AUDIT] ${new Date().toISOString()} - User ${authReq.user.email} accessed ${resource} - Method: ${req.method} - Path: ${req.path}`);

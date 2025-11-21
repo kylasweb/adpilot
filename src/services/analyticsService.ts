@@ -1,11 +1,34 @@
 // Analytics service to fetch data from the API
 
+export type PerformanceTrend = {
+    date: string;
+    impressions: number;
+    clicks: number;
+    conversions: number;
+};
+
+export type PlacementEntry = { name: string; value: number; percent: number };
+
+export type CampaignRoasEntry = { name: string; value: number };
+
+export type PerformanceOverviewResponse = {
+    summary: {
+        totalImpressions?: number;
+        totalClicks?: number;
+        ctr?: number;
+        totalConversions?: number;
+    };
+    performanceTrends: PerformanceTrend[];
+    placementDistribution: PlacementEntry[];
+    campaignRoas: CampaignRoasEntry[];
+};
+
 // Get performance overview data
 export const getPerformanceOverview = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<any> => {
+} = {}): Promise<PerformanceOverviewResponse> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);
@@ -26,12 +49,34 @@ export const getPerformanceOverview = async (filters: {
     return response.json();
 };
 
+export type CampaignMetricsEntry = {
+    id: string;
+    name: string;
+    impressions?: number;
+    clicks?: number;
+    ctr?: number;
+    cpc?: number;
+    conversions?: number;
+    conversionRate?: number;
+    cpa?: number;
+    roas?: number;
+};
+
+export type CampaignMetricsResponse = {
+    campaignMetrics: CampaignMetricsEntry[];
+    meta?: {
+        total?: number;
+        page?: number;
+        limit?: number;
+    };
+};
+
 // Get campaign metrics
 export const getCampaignMetrics = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<any> => {
+} = {}): Promise<CampaignMetricsResponse> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);
@@ -52,12 +97,20 @@ export const getCampaignMetrics = async (filters: {
     return response.json();
 };
 
+export type AudienceInsightsResponse = {
+    ageDistribution: { name: string; value: number }[];
+    genderDistribution: { name: string; value: number }[];
+    deviceUsage: { name: string; value: number }[];
+    interestCategories: { name: string; value: number }[];
+    summary: { keyDemographics: string[]; recommendations: string[] };
+};
+
 // Get audience insights
 export const getAudienceInsights = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<any> => {
+} = {}): Promise<AudienceInsightsResponse> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);

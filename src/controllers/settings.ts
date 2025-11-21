@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
 import { serverOnly } from '../utils/server-only';
@@ -10,7 +11,7 @@ import {
 import bcrypt from 'bcryptjs';
 
 // Get user settings
-export const getUserSettings = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserSettings = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -48,7 +49,7 @@ export const getUserSettings = async (req: Request, res: Response, next: NextFun
 };
 
 // Update user profile
-export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUserProfile = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -110,7 +111,7 @@ export const updateUserProfile = async (req: Request, res: Response, next: NextF
 };
 
 // Update user password
-export const updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+export const updatePassword = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -161,7 +162,7 @@ export const updatePassword = async (req: Request, res: Response, next: NextFunc
 };
 
 // Update organization settings
-export const updateOrganizationSettings = async (req: Request, res: Response, next: NextFunction) => {
+export const updateOrganizationSettings = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -207,7 +208,7 @@ export const updateOrganizationSettings = async (req: Request, res: Response, ne
 };
 
 // Delete user account
-export const deleteAccount = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteAccount = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');

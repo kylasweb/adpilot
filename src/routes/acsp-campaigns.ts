@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient } from '@prisma/client';
 import { authorize } from '../middleware/authorize';
 
@@ -17,7 +18,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 // Simple logging middleware for this route
 const logAccess = (resource: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        const authReq = req as any;
+        const authReq = req as AuthRequest;
         if (authReq.user) {
             console.log(`[AUDIT] ${new Date().toISOString()} - User ${authReq.user.email} accessed ${resource} - Method: ${req.method} - Path: ${req.path}`);
         }
@@ -157,7 +158,7 @@ router.post('/', asyncHandler(async (req: Request, res: Response) => {
     }
 
     // Cast req to access user
-    const authReq = req as any;
+    const authReq = req as AuthRequest;
 
     const campaign = await prisma.aCSPCampaign.create({
         data: {

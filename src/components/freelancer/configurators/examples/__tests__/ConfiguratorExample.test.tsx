@@ -4,7 +4,7 @@ import {
   userActions,
   waitForAsync,
   mockResponse
-} from '../../../../../test-utils/test-utils.tsx';
+} from '../../../../../test-utils/test-utils.js';
 import { ConfiguratorExample } from '../ConfiguratorExample';
 
 describe('ConfiguratorExample', () => {

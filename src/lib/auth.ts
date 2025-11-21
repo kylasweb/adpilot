@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 // Secret keys should be in .env
-const JWT_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET || 'your-secret-key');
-const REFRESH_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_REFRESH_SECRET || 'refresh-secret-key');
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
+const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET || 'refresh-secret-key');
 
 // Enhanced cookie configuration for security
 const AUTH_COOKIE_OPTIONS = {

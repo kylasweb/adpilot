@@ -139,7 +139,8 @@ router.post('/', (async (req: Request, res: Response) => {
 
         // Validation
         if (!email || !name || !password) {
-            return res.status(400).json({ error: 'Email, name, and password are required' });
+            res.status(400).json({ error: 'Email, name, and password are required' });
+            return;
         }
 
         // Check if user already exists
@@ -148,7 +149,8 @@ router.post('/', (async (req: Request, res: Response) => {
         });
 
         if (existingUser) {
-            return res.status(409).json({ error: 'User with this email already exists' });
+            res.status(409).json({ error: 'User with this email already exists' });
+            return;
         }
 
         // In production, hash the password before storing
@@ -247,7 +249,8 @@ router.post('/bulk-action', (async (req: Request, res: Response) => {
         const { action, userIds } = req.body;
 
         if (!action || !userIds || !Array.isArray(userIds)) {
-            return res.status(400).json({ error: 'Action and userIds array are required' });
+            res.status(400).json({ error: 'Action and userIds array are required' });
+            return;
         }
 
         let result;
@@ -281,7 +284,8 @@ router.post('/bulk-action', (async (req: Request, res: Response) => {
                 break;
 
             default:
-                return res.status(400).json({ error: 'Invalid action' });
+                res.status(400).json({ error: 'Invalid action' });
+                return;
         }
 
         res.json({

@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { AuthRequest } from '@/types/express-types';
 import { PrismaClient } from '@prisma/client';
 import {
     canAccessLead,
     filterLeadsByRole,
-    logAccess,
-    AuthenticatedRequest
+    logAccess
 } from '../middleware/rbac';
 import { authorize as requireAuth } from '../middleware/authorize';
 
@@ -14,12 +14,13 @@ const prisma = new PrismaClient();
 // Apply authentication to all routes
 router.use(requireAuth());
 
+// --- Handler implementations ---
 const getLeadsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { status, source, urgency, minScore, search, page = '1', limit = '20' } = req.query;
 
         // Build filter based on user role
-        const roleFilter = await filterLeadsByRole(req);
+        const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
         const where: any = {
             ...roleFilter
@@ -88,12 +89,10 @@ const getLeadsHandler: RequestHandler = async (req: Request, res: Response, next
     }
 };
 
-// GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads') as any, getLeadsHandler as any);
-
+// GET /api/leads/stats - Get lead statistics
 const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const roleFilter = await filterLeadsByRole(req);
+        const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
         const [
             totalLeads,
@@ -127,9 +126,7 @@ const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, 
     }
 };
 
-// GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
-
+// GET /api/leads/:id - Get single lead
 const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -169,9 +166,7 @@ const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, n
     }
 };
 
-// GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
-
+// POST /api/leads - Create new lead
 const createLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {
@@ -222,7 +217,7 @@ const createLeadHandler: RequestHandler = async (req: Request, res: Response, ne
                 type: 'NOTE',
                 action: 'Lead created',
                 details: `Lead created from ${source}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -233,9 +228,7 @@ const createLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-// POST /api/leads - Create new lead
-router.post('/', createLeadHandler as any);
-
+// PUT /api/leads/:id - Update lead
 const updateLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -253,7 +246,7 @@ const updateLeadHandler: RequestHandler = async (req: Request, res: Response, ne
                 type: 'NOTE',
                 action: 'Lead updated',
                 details: `Fields updated: ${Object.keys(updateData).join(', ')}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -264,9 +257,7 @@ const updateLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-// PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead as any, updateLeadHandler as any);
-
+// POST /api/leads/:id/score - Update lead score
 const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -288,7 +279,7 @@ const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Respons
                 companySize: factors?.companySize,
                 industry: factors?.industry,
                 confidence,
-                calculatedBy: (req as AuthenticatedRequest).user?.id,
+                calculatedBy: (req as AuthRequest).user?.id,
                 notes
             }
         });
@@ -306,7 +297,7 @@ const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Respons
                 type: 'SCORE_UPDATE',
                 action: 'Score updated',
                 details: `Score changed to ${score}`,
-                performedBy: (req as AuthenticatedRequest).user?.id
+                performedBy: (req as AuthRequest).user?.id
             }
         });
 
@@ -317,9 +308,7 @@ const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Respons
     }
 };
 
-// POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
-
+// POST /api/leads/:id/ivr-transcript - Add IVR transcript
 const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -368,9 +357,7 @@ const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Respon
     }
 };
 
-// POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
-
+// POST /api/leads/:id/activity - Add activity
 const addActivityHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -382,7 +369,7 @@ const addActivityHandler: RequestHandler = async (req: Request, res: Response, n
                 type,
                 action,
                 details,
-                performedBy: (req as AuthenticatedRequest).user?.id,
+                performedBy: (req as AuthRequest).user?.id,
                 metadata
             }
         });
@@ -394,9 +381,7 @@ const addActivityHandler: RequestHandler = async (req: Request, res: Response, n
     }
 };
 
-// POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
-
+// DELETE /api/leads/:id - Delete lead (soft delete)
 const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -413,7 +398,15 @@ const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-// DELETE /api/leads/:id - Delete lead (soft delete)
+// Register routes
+router.get('/', logAccess('leads') as any, getLeadsHandler as any);
+router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
+router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
+router.post('/', createLeadHandler as any);
+router.put('/:id', canAccessLead as any, updateLeadHandler as any);
+router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
+router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
+router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
 router.delete('/:id', canAccessLead as any, deleteLeadHandler as any);
 
 export default router;

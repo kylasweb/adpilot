@@ -27,6 +27,12 @@ Configure the following in your Vercel project settings:
 4. **Install Command**: `npm install`
 5. **Node.js Version**: 18.x (or latest LTS)
 
+### Prisma note
+
+If you're using Prisma with Next.js API routes, make sure Prisma Client is generated during the install step. This repository uses the `postinstall` script in `package.json` to run `npx prisma generate`. This runs automatically during Vercel's install step.
+
+If you have a separate Express server or CLI utilities that compile to `/dist`, those are only required for local or non-Vercel deployments — Vercel uses Next.js serverless functions, not the compiled Express server.
+
 ## Deployment Configuration
 
 1. **Root Directory**: `./` (default)

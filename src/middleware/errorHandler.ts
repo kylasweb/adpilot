@@ -6,7 +6,7 @@ interface PrismaError extends Error {
   code: string;
   meta?: {
     target?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 

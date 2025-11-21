@@ -12,12 +12,19 @@ export interface Cohort {
 }
 
 // Get all cohorts
+export interface Meta {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+}
+
 export const getCohorts = async (params: {
     page?: number;
     limit?: number;
     sort?: string;
     order?: string;
-}): Promise<{ data: Cohort[]; meta: any }> => {
+}): Promise<{ data: Cohort[]; meta: Meta }> => {
     const searchParams = new URLSearchParams();
 
     if (params.page) searchParams.append('page', params.page.toString());
