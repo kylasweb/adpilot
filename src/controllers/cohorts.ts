@@ -9,7 +9,28 @@ import {
 } from '../schemas/cohort';
 
 // Get all cohorts with pagination and filters
-export const getCohorts = async (req: AuthRequest, res: Response, next: NextFunction) => {
+type GetCohortsQuery = {
+    page?: string;
+    limit?: string;
+    sort?: string;
+    order?: 'asc' | 'desc';
+};
+
+type CreateCohortBody = {
+    name: string;
+    description?: string | null;
+    criteria?: string | null;
+    audienceSize: string | number;
+};
+
+type UpdateCohortBody = Partial<{
+    name: string;
+    description: string | null;
+    criteria: string | null;
+    audienceSize: string | number;
+}>;
+
+export const getCohorts = async (req: AuthRequest<Record<string, never>, any, undefined, GetCohortsQuery>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -58,7 +79,7 @@ export const getCohorts = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Get cohort by ID
-export const getCohortById = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getCohortById = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
     try {
         const cohort = await prisma.cohort.findUnique({
             where: { id: req.params.id },
@@ -89,7 +110,7 @@ export const getCohortById = async (req: AuthRequest, res: Response, next: NextF
 };
 
 // Create new cohort
-export const createCohort = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createCohort = async (req: AuthRequest<Record<string, never>, any, CreateCohortBody>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -102,7 +123,7 @@ export const createCohort = async (req: AuthRequest, res: Response, next: NextFu
                 name,
                 description,
                 criteria,
-                audienceSize: parseInt(audienceSize),
+                audienceSize: typeof audienceSize === 'string' ? parseInt(audienceSize) : (audienceSize as number),
                 userId: req.user.id
             },
             include: {
@@ -123,9 +144,9 @@ export const createCohort = async (req: AuthRequest, res: Response, next: NextFu
 };
 
 // Update cohort
-export const updateCohort = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateCohort = async (req: AuthRequest<{ id: string }, any, UpdateCohortBody>, res: Response, next: NextFunction) => {
     try {
-        const { name, description, criteria, audienceSize } = req.body;
+        const { name, description, criteria, audienceSize } = req.body || {};
 
         // First, check if cohort exists and user has permission
         const existingCohort = await prisma.cohort.findUnique({
@@ -146,7 +167,7 @@ export const updateCohort = async (req: AuthRequest, res: Response, next: NextFu
                 ...(name && { name }),
                 ...(description && { description }),
                 ...(criteria && { criteria }),
-                ...(audienceSize && { audienceSize: parseInt(audienceSize) })
+                ...(audienceSize && { audienceSize: typeof audienceSize === 'string' ? parseInt(audienceSize) : (audienceSize as number) })
             },
             include: {
                 user: {
