@@ -1,4 +1,4 @@
-/// <reference path="./types/index.d.ts" />
+// types are picked up automatically (see tsconfig include for .d.ts files)
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

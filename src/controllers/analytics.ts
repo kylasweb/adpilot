@@ -69,7 +69,7 @@ export const getPerformanceOverview = async (req: AuthRequest, res: Response, ne
         // Calculate ROAS for each campaign
         const roasData = campaignRoasData.map((data: CampaignRoasRow) => ({
             name: data.name,
-            value: data.total_spend > 0 ? parseFloat((Number(data.total_value) / Number(data.total_spend)).toFixed(2)) : 0
+            value: Number(data.total_spend) > 0 ? parseFloat((Number(data.total_value) / Number(data.total_spend)).toFixed(2)) : 0
         }));
 
         // Get placement distribution data
@@ -149,7 +149,7 @@ export const getCampaignMetrics = async (req: AuthRequest, res: Response, next: 
 
         // Calculate metrics for each campaign
         type Perf = { impressions: number; clicks: number; conversions: number; spend?: number };
-        const campaignMetrics = campaigns.map((campaign: { performance?: Perf[] } ) => {
+        const campaignMetrics = campaigns.map((campaign: any) => {
             const totalImpressions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.impressions || 0), 0);
             const totalClicks = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.clicks || 0), 0);
             const totalConversions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.conversions || 0), 0);

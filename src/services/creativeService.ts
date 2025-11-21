@@ -8,7 +8,7 @@ export const getCreatives = async (params: {
     type?: string;
     campaignId?: string;
     sortBy?: string;
-} = {}): Promise<unknown> => {
+} = {}): Promise<any> => {
     const searchParams = new URLSearchParams();
 
     if (params.page) searchParams.append('page', params.page.toString());
@@ -34,7 +34,7 @@ export const getCreatives = async (params: {
 };
 
 // Get a single creative by ID
-export const getCreativeById = async (id: string): Promise<unknown> => {
+export const getCreativeById = async (id: string): Promise<any> => {
     const response = await fetch(`/api/creative/${id}`, {
         method: 'GET',
         headers: {
@@ -56,7 +56,7 @@ export const createCreative = async (data: {
     size: string;
     campaignId?: string;
     tags?: string[];
-}): Promise<unknown> => {
+}): Promise<any> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/creative`, {
         method: 'POST',
@@ -80,7 +80,7 @@ export const updateCreative = async (id: string, data: {
     size?: string;
     campaignId?: string;
     tags?: string[];
-}): Promise<unknown> => {
+}): Promise<any> => {
     const response = await fetch(`/api/creative/${id}`, {
         method: 'PUT',
         headers: {

@@ -5,8 +5,8 @@ import {
     canAccessLead,
     filterLeadsByRole,
     logAccess
-} from '../middleware/rbac.js';
-import { authorize as requireAuth } from '../middleware/authorize.js';
+} from '../middleware/rbac';
+import { authorize as requireAuth } from '../middleware/authorize';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -14,8 +14,8 @@ const prisma = new PrismaClient();
 // Apply authentication to all routes
 router.use(requireAuth());
 
-// GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads'), async (req: import('express').Request, res: Response, next: NextFunction) => {
+// --- Handler implementations ---
+const getLeadsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { status, source, urgency, minScore, search, page = '1', limit = '20' } = req.query;
 
@@ -89,15 +89,8 @@ router.get('/', logAccess('leads'), async (req: import('express').Request, res: 
     }
 };
 
-<<<<<<< HEAD
 // GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats'), async (req: import('express').Request, res: Response, next: NextFunction) => {
-=======
-// GET /api/leads - Get all leads (filtered by role)
-router.get('/', logAccess('leads') as any, getLeadsHandler as any);
-
 const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const roleFilter = await filterLeadsByRole(req as AuthRequest);
 
@@ -133,15 +126,8 @@ const getLeadStatsHandler: RequestHandler = async (req: Request, res: Response, 
     }
 };
 
-<<<<<<< HEAD
 // GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead, logAccess('lead-detail'), async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-=======
-// GET /api/leads/stats - Get lead statistics
-router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
-
 const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
 
@@ -170,10 +156,7 @@ const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, n
 
         if (!lead) {
             res.status(404).json({ error: 'Lead not found' });
-<<<<<<< HEAD
-=======
             return;
->>>>>>> origin/nextjs-migration
         }
 
         res.json(lead);
@@ -183,15 +166,8 @@ const getLeadByIdHandler: RequestHandler = async (req: Request, res: Response, n
     }
 };
 
-<<<<<<< HEAD
 // POST /api/leads - Create new lead
-router.post('/', async (req: import('express').Request, res: Response, next: NextFunction) => {
-=======
-// GET /api/leads/:id - Get single lead
-router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
-
 const createLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const {
             name,
@@ -252,15 +228,8 @@ const createLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-<<<<<<< HEAD
 // PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-=======
-// POST /api/leads - Create new lead
-router.post('/', createLeadHandler as any);
-
 const updateLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -288,25 +257,15 @@ const updateLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-<<<<<<< HEAD
 // POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-=======
-// PUT /api/leads/:id - Update lead
-router.put('/:id', canAccessLead as any, updateLeadHandler as any);
-
 const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const { score, factors, confidence, notes } = req.body;
 
         if (!score || score < 0 || score > 100) {
             res.status(400).json({ error: 'Score must be between 0 and 100' });
-<<<<<<< HEAD
-=======
             return;
->>>>>>> origin/nextjs-migration
         }
 
         // Create score record
@@ -349,15 +308,8 @@ const updateLeadScoreHandler: RequestHandler = async (req: Request, res: Respons
     }
 };
 
-<<<<<<< HEAD
 // POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', async (req: import('express').Request, res: Response, next: NextFunction) => {
-=======
-// POST /api/leads/:id/score - Update lead score
-router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
-
 const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const {
@@ -405,15 +357,8 @@ const addIvrTranscriptHandler: RequestHandler = async (req: Request, res: Respon
     }
 };
 
-<<<<<<< HEAD
 // POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-=======
-// POST /api/leads/:id/ivr-transcript - Add IVR transcript
-router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
-
 const addActivityHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
         const { type, action, details, metadata } = req.body;
@@ -436,15 +381,8 @@ const addActivityHandler: RequestHandler = async (req: Request, res: Response, n
     }
 };
 
-<<<<<<< HEAD
 // DELETE /api/leads/:id - Delete lead (soft delete)
-router.delete('/:id', canAccessLead, async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-=======
-// POST /api/leads/:id/activity - Add activity
-router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
-
 const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/nextjs-migration
     try {
         const { id } = req.params;
 
@@ -460,7 +398,15 @@ const deleteLeadHandler: RequestHandler = async (req: Request, res: Response, ne
     }
 };
 
-// DELETE /api/leads/:id - Delete lead (soft delete)
+// Register routes
+router.get('/', logAccess('leads') as any, getLeadsHandler as any);
+router.get('/stats', logAccess('lead-stats') as any, getLeadStatsHandler as any);
+router.get('/:id', canAccessLead as any, logAccess('lead-detail') as any, getLeadByIdHandler as any);
+router.post('/', createLeadHandler as any);
+router.put('/:id', canAccessLead as any, updateLeadHandler as any);
+router.post('/:id/score', canAccessLead as any, updateLeadScoreHandler as any);
+router.post('/:id/ivr-transcript', addIvrTranscriptHandler as any);
+router.post('/:id/activity', canAccessLead as any, addActivityHandler as any);
 router.delete('/:id', canAccessLead as any, deleteLeadHandler as any);
 
 export default router;

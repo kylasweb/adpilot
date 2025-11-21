@@ -11,7 +11,7 @@ export type AuthUser = {
 
 export type AuthRequest<
   P = import('express-serve-static-core').ParamsDictionary,
-  ResBody = unknown,
-  ReqBody = unknown,
+  ResBody = any,
+  ReqBody = any,
   ReqQuery = ParsedQs
 > = Request<P, ResBody, ReqBody, ReqQuery> & { user?: AuthUser; projectRole?: string };

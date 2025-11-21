@@ -5,7 +5,7 @@ export const getPerformanceOverview = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<unknown> => {
+} = {}): Promise<any> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);
@@ -31,7 +31,7 @@ export const getCampaignMetrics = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<unknown> => {
+} = {}): Promise<any> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);
@@ -57,7 +57,7 @@ export const getAudienceInsights = async (filters: {
     dateRange?: string;
     campaignId?: string;
     platform?: string;
-} = {}): Promise<unknown> => {
+} = {}): Promise<any> => {
     const searchParams = new URLSearchParams();
 
     if (filters.dateRange) searchParams.append('dateRange', filters.dateRange);

@@ -1,5 +1,5 @@
 // Get dashboard statistics
-export const getDashboardStats = async (): Promise<unknown> => {
+export const getDashboardStats = async (): Promise<any> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/dashboard/stats`, {
         method: 'GET',
@@ -16,7 +16,7 @@ export const getDashboardStats = async (): Promise<unknown> => {
 };
 
 // Get active campaigns
-export const getActiveCampaigns = async (limit: number = 5): Promise<unknown> => {
+export const getActiveCampaigns = async (limit: number = 5): Promise<any> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/campaigns?limit=${limit}&status=ACTIVE`, {
         method: 'GET',
@@ -33,7 +33,7 @@ export const getActiveCampaigns = async (limit: number = 5): Promise<unknown> =>
 };
 
 // Get top cohorts
-export const getTopCohorts = async (limit: number = 4): Promise<unknown> => {
+export const getTopCohorts = async (limit: number = 4): Promise<any> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/cohorts?limit=${limit}`, {
         method: 'GET',
@@ -50,7 +50,7 @@ export const getTopCohorts = async (limit: number = 4): Promise<unknown> => {
 };
 
 // Get recent activity
-export const getRecentActivity = async (limit: number = 5): Promise<unknown> => {
+export const getRecentActivity = async (limit: number = 5): Promise<any> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/activity/recent`, {
         method: 'GET',

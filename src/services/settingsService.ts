@@ -1,7 +1,7 @@
 // Settings service to fetch data from the API
 
 // Get user settings
-export const getUserSettings = async (): Promise<unknown> => {
+export const getUserSettings = async (): Promise<any> => {
     const response = await fetch('/api/settings', {
         method: 'GET',
         headers: {
@@ -20,7 +20,7 @@ export const getUserSettings = async (): Promise<unknown> => {
 export const updateUserProfile = async (data: {
     name: string;
     email: string;
-}): Promise<unknown> => {
+}): Promise<any> => {
     const response = await fetch('/api/settings/profile', {
         method: 'PUT',
         headers: {
@@ -41,7 +41,7 @@ export const updatePassword = async (data: {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
-}): Promise<unknown> => {
+}): Promise<any> => {
     const response = await fetch('/api/settings/password', {
         method: 'PUT',
         headers: {
@@ -61,7 +61,7 @@ export const updatePassword = async (data: {
 export const updateOrganizationSettings = async (data: {
     name: string;
     website?: string;
-}): Promise<unknown> => {
+}): Promise<any> => {
     const response = await fetch('/api/settings/organization', {
         method: 'PUT',
         headers: {
@@ -78,7 +78,7 @@ export const updateOrganizationSettings = async (data: {
 };
 
 // Delete account
-export const deleteAccount = async (): Promise<unknown> => {
+export const deleteAccount = async (): Promise<any> => {
     const response = await fetch('/api/settings/account', {
         method: 'DELETE',
         headers: {

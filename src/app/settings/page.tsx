@@ -43,7 +43,7 @@ const SettingsPage: React.FC = () => {
     const fetchSettings = async () => {
       try {
         setLoading(true);
-        const result = await getUserSettings();
+        const result: any = await getUserSettings();
         setSettings(result.user);
         setProfileForm({
           name: result.user.name,
@@ -67,7 +67,7 @@ const SettingsPage: React.FC = () => {
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await updateUserProfile(profileForm);
+      const result: any = await updateUserProfile(profileForm);
       setSettings(result.user);
       // Show success message
     } catch (err) {
@@ -95,7 +95,7 @@ const SettingsPage: React.FC = () => {
   const handleOrgSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await updateOrganizationSettings(orgForm);
+      const result: any = await updateOrganizationSettings(orgForm);
       setSettings({
         ...settings,
         organization: result.organization
