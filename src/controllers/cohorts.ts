@@ -30,7 +30,7 @@ type UpdateCohortBody = Partial<{
     audienceSize: string | number;
 }>;
 
-export const getCohorts = async (req: AuthRequest<Record<string, never>, any, undefined, GetCohortsQuery>, res: Response, next: NextFunction) => {
+export const getCohorts = async (req: AuthRequest<Record<string, never>, unknown, undefined, GetCohortsQuery>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -79,7 +79,7 @@ export const getCohorts = async (req: AuthRequest<Record<string, never>, any, un
 };
 
 // Get cohort by ID
-export const getCohortById = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const getCohortById = async (req: AuthRequest<{ id: string }, unknown, undefined>, res: Response, next: NextFunction) => {
     try {
         const cohort = await prisma.cohort.findUnique({
             where: { id: req.params.id },
@@ -110,7 +110,7 @@ export const getCohortById = async (req: AuthRequest<{ id: string }, any, undefi
 };
 
 // Create new cohort
-export const createCohort = async (req: AuthRequest<Record<string, never>, any, CreateCohortBody>, res: Response, next: NextFunction) => {
+export const createCohort = async (req: AuthRequest<Record<string, never>, unknown, CreateCohortBody>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -144,7 +144,7 @@ export const createCohort = async (req: AuthRequest<Record<string, never>, any, 
 };
 
 // Update cohort
-export const updateCohort = async (req: AuthRequest<{ id: string }, any, UpdateCohortBody>, res: Response, next: NextFunction) => {
+export const updateCohort = async (req: AuthRequest<{ id: string }, unknown, UpdateCohortBody>, res: Response, next: NextFunction) => {
     try {
         const { name, description, criteria, audienceSize } = req.body || {};
 

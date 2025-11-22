@@ -1,4 +1,5 @@
 import { Response, NextFunction } from 'express';
+import type { Campaign, CampaignPerformance } from '@prisma/client';
 import type { AuthRequest } from '@/types/express-types';
 import { ApiError } from '../utils/ApiError';
 import { prisma } from '../lib/prisma';
@@ -149,7 +150,9 @@ export const getCampaignMetrics = async (req: AuthRequest, res: Response, next: 
 
         // Calculate metrics for each campaign
         type Perf = { impressions: number; clicks: number; conversions: number; spend?: number };
-        const campaignMetrics = campaigns.map((campaign: any) => {
+        type CampaignWithPerf = Campaign & { performance?: CampaignPerformance[] };
+
+        const campaignMetrics = campaigns.map((campaign: CampaignWithPerf) => {
             const totalImpressions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.impressions || 0), 0);
             const totalClicks = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.clicks || 0), 0);
             const totalConversions = (campaign.performance || []).reduce((sum: number, perf: Perf) => sum + (perf.conversions || 0), 0);

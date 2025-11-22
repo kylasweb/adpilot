@@ -21,7 +21,7 @@ type UpdateBugBody = {
 
 type BugParams = { id: string };
 
-export const createBug = async (req: AuthRequest<Record<string, never>, any, CreateBugBody>, res: Response) => {
+export const createBug = async (req: AuthRequest<Record<string, never>, unknown, CreateBugBody>, res: Response) => {
   try {
     const { title, description, projectId, taskId, status, priority } = req.body;
 
@@ -43,7 +43,7 @@ export const createBug = async (req: AuthRequest<Record<string, never>, any, Cre
   }
 };
 
-export const getBug = async (req: AuthRequest<BugParams, any, undefined>, res: Response) => {
+export const getBug = async (req: AuthRequest<BugParams, unknown, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -65,7 +65,7 @@ export const getBug = async (req: AuthRequest<BugParams, any, undefined>, res: R
   }
 };
 
-export const updateBug = async (req: AuthRequest<BugParams, any, UpdateBugBody>, res: Response) => {
+export const updateBug = async (req: AuthRequest<BugParams, unknown, UpdateBugBody>, res: Response) => {
   try {
     const { id } = req.params;
     const { title, description, status, priority } = req.body;
@@ -89,7 +89,7 @@ export const updateBug = async (req: AuthRequest<BugParams, any, UpdateBugBody>,
   }
 };
 
-export const deleteBug = async (req: AuthRequest<BugParams, any, undefined>, res: Response) => {
+export const deleteBug = async (req: AuthRequest<BugParams, unknown, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 

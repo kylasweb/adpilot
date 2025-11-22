@@ -37,7 +37,7 @@ type UpdateCampaignBody = Partial<{
     status: string;
 }>;
 
-export const getCampaigns = async (req: AuthRequest<Record<string, never>, any, undefined, GetCampaignsQuery>, res: Response, next: NextFunction) => {
+export const getCampaigns = async (req: AuthRequest<Record<string, never>, unknown, undefined, GetCampaignsQuery>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -87,7 +87,7 @@ export const getCampaigns = async (req: AuthRequest<Record<string, never>, any, 
 };
 
 // Get campaign by ID
-export const getCampaignById = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const getCampaignById = async (req: AuthRequest<{ id: string }, unknown, undefined>, res: Response, next: NextFunction) => {
     try {
         const campaign = await prisma.campaign.findUnique({
             where: { id: req.params.id },
@@ -118,7 +118,7 @@ export const getCampaignById = async (req: AuthRequest<{ id: string }, any, unde
 };
 
 // Create new campaign
-export const createCampaign = async (req: AuthRequest<Record<string, never>, any, CreateCampaignBody>, res: Response, next: NextFunction) => {
+export const createCampaign = async (req: AuthRequest<Record<string, never>, unknown, CreateCampaignBody>, res: Response, next: NextFunction) => {
     try {
         if (!req.user) {
             throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -155,7 +155,7 @@ export const createCampaign = async (req: AuthRequest<Record<string, never>, any
 };
 
 // Update campaign
-export const updateCampaign = async (req: AuthRequest<{ id: string }, any, UpdateCampaignBody>, res: Response, next: NextFunction) => {
+export const updateCampaign = async (req: AuthRequest<{ id: string }, unknown, UpdateCampaignBody>, res: Response, next: NextFunction) => {
     try {
         const { name, description, objective, budget, status, startDate, endDate } = req.body || {};
 
@@ -201,7 +201,7 @@ export const updateCampaign = async (req: AuthRequest<{ id: string }, any, Updat
 };
 
 // Delete campaign
-export const deleteCampaign = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const deleteCampaign = async (req: AuthRequest<{ id: string }, unknown, undefined>, res: Response, next: NextFunction) => {
     try {
         // First, check if campaign exists and user has permission
         const existingCampaign = await prisma.campaign.findUnique({

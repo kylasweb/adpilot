@@ -35,7 +35,7 @@ type UpdateProjectBody = Partial<{
   endDate: string | null;
 }>;
 
-export const getProjects = async (req: AuthRequest<Record<string, never>, any, undefined, GetProjectsQuery>, res: Response, next: NextFunction) => {
+export const getProjects = async (req: AuthRequest<Record<string, never>, unknown, undefined, GetProjectsQuery>, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -50,7 +50,7 @@ export const getProjects = async (req: AuthRequest<Record<string, never>, any, u
           userId: req.user.id
         }
       },
-      ...(status && { status: status as any })
+      ...(status && { status: status as ProjectStatus })
     };
 
     const [projects, total] = await Promise.all([
@@ -99,7 +99,7 @@ export const getProjects = async (req: AuthRequest<Record<string, never>, any, u
 };
 
 // Get project by ID
-export const getProjectById = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const getProjectById = async (req: AuthRequest<{ id: string }, unknown, undefined>, res: Response, next: NextFunction) => {
   try {
     const project = await prisma.project.findUnique({
       where: { id: req.params.id },
@@ -135,7 +135,7 @@ export const getProjectById = async (req: AuthRequest<{ id: string }, any, undef
 };
 
 // Create new project
-export const createProject = async (req: AuthRequest<Record<string, never>, any, CreateProjectBody>, res: Response, next: NextFunction) => {
+export const createProject = async (req: AuthRequest<Record<string, never>, unknown, CreateProjectBody>, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
@@ -182,7 +182,7 @@ export const createProject = async (req: AuthRequest<Record<string, never>, any,
 };
 
 // Update project
-export const updateProject = async (req: AuthRequest<{ id: string }, any, UpdateProjectBody>, res: Response, next: NextFunction) => {
+export const updateProject = async (req: AuthRequest<{ id: string }, unknown, UpdateProjectBody>, res: Response, next: NextFunction) => {
   try {
     const { name, description, status, startDate, endDate } = req.body || {};
 
@@ -218,7 +218,7 @@ export const updateProject = async (req: AuthRequest<{ id: string }, any, Update
 };
 
 // Delete project
-export const deleteProject = async (req: AuthRequest<{ id: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const deleteProject = async (req: AuthRequest<{ id: string }, unknown, undefined>, res: Response, next: NextFunction) => {
   try {
     await prisma.project.delete({
       where: { id: req.params.id }
@@ -231,7 +231,7 @@ export const deleteProject = async (req: AuthRequest<{ id: string }, any, undefi
 };
 
 // Add project member
-export const addProjectMember = async (req: AuthRequest<{ id: string }, any, { userId: string; role: ProjectRole }>, res: Response, next: NextFunction) => {
+export const addProjectMember = async (req: AuthRequest<{ id: string }, unknown, { userId: string; role: ProjectRole }>, res: Response, next: NextFunction) => {
   try {
     const { userId, role } = req.body;
 
@@ -259,7 +259,7 @@ export const addProjectMember = async (req: AuthRequest<{ id: string }, any, { u
 };
 
 // Update project member role
-export const updateProjectMember = async (req: AuthRequest<{ id: string; userId: string }, any, { role: ProjectRole }>, res: Response, next: NextFunction) => {
+export const updateProjectMember = async (req: AuthRequest<{ id: string; userId: string }, unknown, { role: ProjectRole }>, res: Response, next: NextFunction) => {
   try {
     const { role } = req.body;
 
@@ -289,7 +289,7 @@ export const updateProjectMember = async (req: AuthRequest<{ id: string; userId:
 };
 
 // Remove project member
-export const removeProjectMember = async (req: AuthRequest<{ id: string; userId: string }, any, undefined>, res: Response, next: NextFunction) => {
+export const removeProjectMember = async (req: AuthRequest<{ id: string; userId: string }, unknown, undefined>, res: Response, next: NextFunction) => {
   try {
     await prisma.projectMember.delete({
       where: {

@@ -1,5 +1,21 @@
 // Creative service to fetch data from the API
 
+export type CreativeSummary = {
+    id: string;
+    title: string;
+    type: string;
+    size: string;
+    campaignId?: string | null;
+    campaignName?: string | null;
+    lastUpdated?: string;
+    previewUrl?: string | null;
+    tags?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+};
+
+type ApiListResponse<T> = { data: T[]; meta?: { page?: number; limit?: number; total?: number; totalPages?: number } };
+
 // Get all creatives with filtering and pagination
 export const getCreatives = async (params: {
     page?: number;
@@ -8,7 +24,7 @@ export const getCreatives = async (params: {
     type?: string;
     campaignId?: string;
     sortBy?: string;
-} = {}): Promise<any> => {
+} = {}): Promise<ApiListResponse<CreativeSummary>> => {
     const searchParams = new URLSearchParams();
 
     if (params.page) searchParams.append('page', params.page.toString());
@@ -34,7 +50,7 @@ export const getCreatives = async (params: {
 };
 
 // Get a single creative by ID
-export const getCreativeById = async (id: string): Promise<any> => {
+export const getCreativeById = async (id: string): Promise<CreativeSummary> => {
     const response = await fetch(`/api/creative/${id}`, {
         method: 'GET',
         headers: {
@@ -56,7 +72,7 @@ export const createCreative = async (data: {
     size: string;
     campaignId?: string;
     tags?: string[];
-}): Promise<any> => {
+}): Promise<CreativeSummary> => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const response = await fetch(`${apiUrl}/creative`, {
         method: 'POST',
@@ -80,7 +96,7 @@ export const updateCreative = async (id: string, data: {
     size?: string;
     campaignId?: string;
     tags?: string[];
-}): Promise<any> => {
+}): Promise<CreativeSummary> => {
     const response = await fetch(`/api/creative/${id}`, {
         method: 'PUT',
         headers: {

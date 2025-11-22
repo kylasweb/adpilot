@@ -15,7 +15,7 @@ type UpdateRoadmapBody = Partial<{
 }>;
 import { prisma } from "../lib/prisma";
 
-export const createRoadmap = async (req: AuthRequest<Record<string, never>, any, CreateRoadmapBody>, res: Response) => {
+export const createRoadmap = async (req: AuthRequest<Record<string, never>, unknown, CreateRoadmapBody>, res: Response) => {
   try {
     const { name, description, projectId } = req.body;
 
@@ -34,7 +34,7 @@ export const createRoadmap = async (req: AuthRequest<Record<string, never>, any,
   }
 };
 
-export const getRoadmap = async (req: AuthRequest<RoadmapParams, any, undefined>, res: Response) => {
+export const getRoadmap = async (req: AuthRequest<RoadmapParams, unknown, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -57,7 +57,7 @@ export const getRoadmap = async (req: AuthRequest<RoadmapParams, any, undefined>
   }
 };
 
-export const updateRoadmap = async (req: AuthRequest<RoadmapParams, any, UpdateRoadmapBody>, res: Response) => {
+export const updateRoadmap = async (req: AuthRequest<RoadmapParams, unknown, UpdateRoadmapBody>, res: Response) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body || {};
@@ -79,7 +79,7 @@ export const updateRoadmap = async (req: AuthRequest<RoadmapParams, any, UpdateR
   }
 };
 
-export const deleteRoadmap = async (req: AuthRequest<RoadmapParams, any, undefined>, res: Response) => {
+export const deleteRoadmap = async (req: AuthRequest<RoadmapParams, unknown, undefined>, res: Response) => {
   try {
     const { id } = req.params;
 

@@ -40,24 +40,24 @@ router.post(
 );
 
 router.get("/:id", async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      await getRoadmap(req as AuthReqAny, res);
+  try {
+    await getRoadmap(req as AuthReqAny, res);
   } catch (error) {
     next(error);
   }
 });
 
 router.put("/:id", async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      await updateRoadmap(req as AuthReqAny, res);
+  try {
+    await updateRoadmap(req as AuthReqAny, res);
   } catch (error) {
     next(error);
   }
 });
 
 router.delete("/:id", async (req: import('express').Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      await deleteRoadmap(req as AuthReqAny, res);
+  try {
+    await deleteRoadmap(req as AuthReqAny, res);
   } catch (error) {
     next(error);
   }
